@@ -9,24 +9,12 @@ namespace BusinessLayer
     public class CustomerBUS
     {
         private readonly DataAccessLayer.CustomerDAL customerRepository = new DataAccessLayer.CustomerDAL();
-        public List<Entity.Customer> GetAllCustomers()
+        public List<Entity.Customer> GetCustomers(string searchTerm)
         {
-            return customerRepository.GetAllCustomers();
+            return customerRepository.getCustomers(searchTerm);
         }
-        public List<Entity.Customer> GetCustomersByNameOrId(string searchTerm)
+        public Entity.Customer AddCustomer(in Entity.Customer customer)
         {
-            return customerRepository.getCustomersByNameOrId(searchTerm);
-        }
-        public Entity.Customer CreateCustomer(String fullName, String email, String phone)
-        {
-            String emailLower = email.ToLower();
-            String fullNameTrimmed = fullName.Trim();
-            Entity.Customer customer = new Entity.Customer
-            {
-                FullName = fullNameTrimmed,
-                Email = emailLower,
-                PhoneNumber = phone
-            };
             return customerRepository.createCustomer(customer);
         }
         public Entity.Customer UpdateCustomer(Entity.Customer customer)

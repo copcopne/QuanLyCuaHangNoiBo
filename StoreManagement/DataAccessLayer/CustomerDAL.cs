@@ -11,23 +11,18 @@ namespace DataAccessLayer
     {
         private readonly salesysdbEntities context = new salesysdbEntities();
 
-        public List<Customer> GetAllCustomers()
-        {
-            return context.Customers.ToList();
-        }
-
-        public List<Customer> getCustomersByNameOrId(string searchTerm)
+        public List<Customer> getCustomers(string searchTerm)
         {
             if (string.IsNullOrEmpty(searchTerm))
             {
                 return context.Customers.ToList();
             }
             return context.Customers
-                .Where(c => c.FullName.Contains(searchTerm) || c.CustomerID.ToString() == searchTerm)
+                .Where(c => c.FullName.Contains(searchTerm) || c.Email.Contains(searchTerm))
                 .ToList();
         }
 
-        public Customer createCustomer(Customer customer)
+        public Customer createCustomer(in Customer customer)
         {
             context.Customers.Add(customer);
             context.SaveChanges();
@@ -43,6 +38,10 @@ namespace DataAccessLayer
                 existingCustomer.PhoneNumber = customer.PhoneNumber;
                 existingCustomer.Email = customer.Email;
                 context.SaveChanges();
+            }
+            else
+            {
+                throw new Exception("Customer not found");
             }
             return existingCustomer;
         }
