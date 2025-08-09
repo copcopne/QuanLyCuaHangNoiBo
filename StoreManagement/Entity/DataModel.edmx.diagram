@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="d31ebea64b5d48b8a6b81a94c5b0c0e7" Name="Diagram1">
+        <EntityTypeShape EntityType="salesysdbModel.Category" Width="1.5" PointX="0.75" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="salesysdbModel.Customer" Width="1.5" PointX="0.75" PointY="14" IsExpanded="true" />
+        <EntityTypeShape EntityType="salesysdbModel.Delivery" Width="1.5" PointX="5.25" PointY="11.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="salesysdbModel.Employee" Width="1.5" PointX="0.75" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="salesysdbModel.InvoiceDetail" Width="1.5" PointX="9.25" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="salesysdbModel.Invoice" Width="1.5" PointX="3" PointY="13.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="salesysdbModel.Product" Width="1.5" PointX="3" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="salesysdbModel.StockIn" Width="1.5" PointX="3" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="salesysdbModel.StockInDetail" Width="1.5" PointX="7.5" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="salesysdbModel.StockRequestDetail" Width="1.5" PointX="5.25" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="salesysdbModel.StockRequest" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="salesysdbModel.Unit" Width="1.5" PointX="5.875" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="salesysdbModel.UserAccount" Width="1.5" PointX="3" PointY="17.875" IsExpanded="true" />
+        <AssociationConnector Association="salesysdbModel.FK__Products__Catego__4CA06362" ManuallyRouted="false" />
+        <AssociationConnector Association="salesysdbModel.FK__Invoices__Custom__44FF419A" ManuallyRouted="false" />
+        <AssociationConnector Association="salesysdbModel.FK__Deliverie__Assig__571DF1D5" ManuallyRouted="false" />
+        <AssociationConnector Association="salesysdbModel.FK__Deliverie__Invoi__5629CD9C" ManuallyRouted="false" />
+        <AssociationConnector Association="salesysdbModel.FK__Invoices__Employ__45F365D3" ManuallyRouted="false" />
+        <AssociationConnector Association="salesysdbModel.FK__StockIn__Employe__6477ECF3" ManuallyRouted="false" />
+        <AssociationConnector Association="salesysdbModel.FK__UserAccou__Emplo__3E52440B" ManuallyRouted="false" />
+        <AssociationConnector Association="salesysdbModel.FK_StockRequests_Employees" ManuallyRouted="false" />
+        <AssociationConnector Association="salesysdbModel.FK__InvoiceDe__Invoi__5165187F" ManuallyRouted="false" />
+        <AssociationConnector Association="salesysdbModel.FK__InvoiceDe__Produ__52593CB8" ManuallyRouted="false" />
+        <AssociationConnector Association="salesysdbModel.FK__Products__UnitID__4D94879B" ManuallyRouted="false" />
+        <AssociationConnector Association="salesysdbModel.FK__StockInDe__Produ__693CA210" ManuallyRouted="false" />
+        <AssociationConnector Association="salesysdbModel.FK_StockRequestDetails_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="salesysdbModel.FK__StockInDe__Stock__68487DD7" ManuallyRouted="false" />
+        <AssociationConnector Association="salesysdbModel.FK_StockRequestDetails_Requests" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

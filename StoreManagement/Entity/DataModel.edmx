@@ -1,0 +1,976 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="salesysdbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Categories">
+          <Key>
+            <PropertyRef Name="CategoryID" />
+          </Key>
+          <Property Name="CategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Customers">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="PhoneNumber" Type="varchar" MaxLength="15" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Deliveries">
+          <Key>
+            <PropertyRef Name="DeliveryID" />
+          </Key>
+          <Property Name="DeliveryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InvoiceID" Type="int" Nullable="false" />
+          <Property Name="DeliveryDate" Type="date" />
+          <Property Name="DeliveryAddress" Type="nvarchar" MaxLength="255" />
+          <Property Name="AssignedStaffID" Type="int" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" />
+          <Property Name="Notes" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Employees">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Position" Type="nvarchar" MaxLength="50" />
+          <Property Name="Phone" Type="varchar" MaxLength="15" />
+          <Property Name="Address" Type="nvarchar" MaxLength="255" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="InvoiceDetails">
+          <Key>
+            <PropertyRef Name="InvoiceID" />
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="InvoiceID" Type="int" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="UnitPrice" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Invoices">
+          <Key>
+            <PropertyRef Name="InvoiceID" />
+          </Key>
+          <Property Name="InvoiceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerID" Type="int" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="InvoiceDate" Type="datetime" Nullable="false" />
+          <Property Name="TotalAmount" Type="bigint" Nullable="false" />
+          <Property Name="DeliveryRequired" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="ProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductName" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="CategoryID" Type="int" />
+          <Property Name="UnitPrice" Type="bigint" Nullable="false" />
+          <Property Name="UnitID" Type="int" Nullable="false" />
+          <Property Name="StockQuantity" Type="int" Nullable="false" />
+          <Property Name="MinStockLevel" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StockIn">
+          <Key>
+            <PropertyRef Name="StockInID" />
+          </Key>
+          <Property Name="StockInID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeeID" Type="int" Nullable="false" />
+          <Property Name="StockInDate" Type="datetime" Nullable="false" />
+          <Property Name="TotalAmount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StockInDetails">
+          <Key>
+            <PropertyRef Name="StockInID" />
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="StockInID" Type="int" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="UnitCost" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StockRequestDetails">
+          <Key>
+            <PropertyRef Name="RequestID" />
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="RequestID" Type="int" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StockRequests">
+          <Key>
+            <PropertyRef Name="RequestID" />
+          </Key>
+          <Property Name="RequestID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RequestDate" Type="datetime" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="RequestedBy" Type="int" Nullable="false" />
+          <Property Name="Notes" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Units">
+          <Key>
+            <PropertyRef Name="UnitID" />
+          </Key>
+          <Property Name="UnitID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UnitName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserAccounts">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="int" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PasswordHash" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Role" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Deliverie__Assig__571DF1D5">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <End Role="Deliveries" Type="Self.Deliveries" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="Deliveries">
+              <PropertyRef Name="AssignedStaffID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Deliverie__Invoi__5629CD9C">
+          <End Role="Invoices" Type="Self.Invoices" Multiplicity="1" />
+          <End Role="Deliveries" Type="Self.Deliveries" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Invoices">
+              <PropertyRef Name="InvoiceID" />
+            </Principal>
+            <Dependent Role="Deliveries">
+              <PropertyRef Name="InvoiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__InvoiceDe__Invoi__5165187F">
+          <End Role="Invoices" Type="Self.Invoices" Multiplicity="1" />
+          <End Role="InvoiceDetails" Type="Self.InvoiceDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Invoices">
+              <PropertyRef Name="InvoiceID" />
+            </Principal>
+            <Dependent Role="InvoiceDetails">
+              <PropertyRef Name="InvoiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__InvoiceDe__Produ__52593CB8">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="InvoiceDetails" Type="Self.InvoiceDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="InvoiceDetails">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Invoices__Custom__44FF419A">
+          <End Role="Customers" Type="Self.Customers" Multiplicity="0..1" />
+          <End Role="Invoices" Type="Self.Invoices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="Invoices">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Invoices__Employ__45F365D3">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <End Role="Invoices" Type="Self.Invoices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="Invoices">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Products__Catego__4CA06362">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="CategoryID" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Products__UnitID__4D94879B">
+          <End Role="Units" Type="Self.Units" Multiplicity="1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Units">
+              <PropertyRef Name="UnitID" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="UnitID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__StockIn__Employe__6477ECF3">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="1" />
+          <End Role="StockIn" Type="Self.StockIn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="StockIn">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__StockInDe__Produ__693CA210">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="StockInDetails" Type="Self.StockInDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="StockInDetails">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__StockInDe__Stock__68487DD7">
+          <End Role="StockIn" Type="Self.StockIn" Multiplicity="1" />
+          <End Role="StockInDetails" Type="Self.StockInDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StockIn">
+              <PropertyRef Name="StockInID" />
+            </Principal>
+            <Dependent Role="StockInDetails">
+              <PropertyRef Name="StockInID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserAccou__Emplo__3E52440B">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="1" />
+          <End Role="UserAccounts" Type="Self.UserAccounts" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="UserAccounts">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockRequestDetails_Products">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="StockRequestDetails" Type="Self.StockRequestDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="StockRequestDetails">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockRequestDetails_Requests">
+          <End Role="StockRequests" Type="Self.StockRequests" Multiplicity="1" />
+          <End Role="StockRequestDetails" Type="Self.StockRequestDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StockRequests">
+              <PropertyRef Name="RequestID" />
+            </Principal>
+            <Dependent Role="StockRequestDetails">
+              <PropertyRef Name="RequestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockRequests_Employees">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="1" />
+          <End Role="StockRequests" Type="Self.StockRequests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="StockRequests">
+              <PropertyRef Name="RequestedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="salesysdbModelStoreContainer">
+          <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Deliveries" EntityType="Self.Deliveries" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employees" EntityType="Self.Employees" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InvoiceDetails" EntityType="Self.InvoiceDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Invoices" EntityType="Self.Invoices" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StockIn" EntityType="Self.StockIn" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StockInDetails" EntityType="Self.StockInDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StockRequestDetails" EntityType="Self.StockRequestDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StockRequests" EntityType="Self.StockRequests" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Units" EntityType="Self.Units" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserAccounts" EntityType="Self.UserAccounts" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Deliverie__Assig__571DF1D5" Association="Self.FK__Deliverie__Assig__571DF1D5">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Deliveries" EntitySet="Deliveries" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Deliverie__Invoi__5629CD9C" Association="Self.FK__Deliverie__Invoi__5629CD9C">
+            <End Role="Invoices" EntitySet="Invoices" />
+            <End Role="Deliveries" EntitySet="Deliveries" />
+          </AssociationSet>
+          <AssociationSet Name="FK__InvoiceDe__Invoi__5165187F" Association="Self.FK__InvoiceDe__Invoi__5165187F">
+            <End Role="Invoices" EntitySet="Invoices" />
+            <End Role="InvoiceDetails" EntitySet="InvoiceDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__InvoiceDe__Produ__52593CB8" Association="Self.FK__InvoiceDe__Produ__52593CB8">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="InvoiceDetails" EntitySet="InvoiceDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Invoices__Custom__44FF419A" Association="Self.FK__Invoices__Custom__44FF419A">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Invoices" EntitySet="Invoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Invoices__Employ__45F365D3" Association="Self.FK__Invoices__Employ__45F365D3">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Invoices" EntitySet="Invoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Products__Catego__4CA06362" Association="Self.FK__Products__Catego__4CA06362">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Products__UnitID__4D94879B" Association="Self.FK__Products__UnitID__4D94879B">
+            <End Role="Units" EntitySet="Units" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__StockIn__Employe__6477ECF3" Association="Self.FK__StockIn__Employe__6477ECF3">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="StockIn" EntitySet="StockIn" />
+          </AssociationSet>
+          <AssociationSet Name="FK__StockInDe__Produ__693CA210" Association="Self.FK__StockInDe__Produ__693CA210">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="StockInDetails" EntitySet="StockInDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__StockInDe__Stock__68487DD7" Association="Self.FK__StockInDe__Stock__68487DD7">
+            <End Role="StockIn" EntitySet="StockIn" />
+            <End Role="StockInDetails" EntitySet="StockInDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserAccou__Emplo__3E52440B" Association="Self.FK__UserAccou__Emplo__3E52440B">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="UserAccounts" EntitySet="UserAccounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StockRequestDetails_Products" Association="Self.FK_StockRequestDetails_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="StockRequestDetails" EntitySet="StockRequestDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StockRequestDetails_Requests" Association="Self.FK_StockRequestDetails_Requests">
+            <End Role="StockRequests" EntitySet="StockRequests" />
+            <End Role="StockRequestDetails" EntitySet="StockRequestDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StockRequests_Employees" Association="Self.FK_StockRequests_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="StockRequests" EntitySet="StockRequests" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="salesysdbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="CategoryID" />
+          </Key>
+          <Property Name="CategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Products" Relationship="Self.FK__Products__Catego__4CA06362" FromRole="Categories" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FullName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Invoices" Relationship="Self.FK__Invoices__Custom__44FF419A" FromRole="Customers" ToRole="Invoices" />
+        </EntityType>
+        <EntityType Name="Delivery">
+          <Key>
+            <PropertyRef Name="DeliveryID" />
+          </Key>
+          <Property Name="DeliveryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InvoiceID" Type="Int32" Nullable="false" />
+          <Property Name="DeliveryDate" Type="DateTime" Precision="0" />
+          <Property Name="DeliveryAddress" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="AssignedStaffID" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Notes" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK__Deliverie__Assig__571DF1D5" FromRole="Deliveries" ToRole="Employees" />
+          <NavigationProperty Name="Invoice" Relationship="Self.FK__Deliverie__Invoi__5629CD9C" FromRole="Deliveries" ToRole="Invoices" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FullName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Position" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Deliveries" Relationship="Self.FK__Deliverie__Assig__571DF1D5" FromRole="Employees" ToRole="Deliveries" />
+          <NavigationProperty Name="Invoices" Relationship="Self.FK__Invoices__Employ__45F365D3" FromRole="Employees" ToRole="Invoices" />
+          <NavigationProperty Name="StockIns" Relationship="Self.FK__StockIn__Employe__6477ECF3" FromRole="Employees" ToRole="StockIn" />
+          <NavigationProperty Name="UserAccount" Relationship="Self.FK__UserAccou__Emplo__3E52440B" FromRole="Employees" ToRole="UserAccounts" />
+          <NavigationProperty Name="StockRequests" Relationship="Self.FK_StockRequests_Employees" FromRole="Employees" ToRole="StockRequests" />
+        </EntityType>
+        <EntityType Name="InvoiceDetail">
+          <Key>
+            <PropertyRef Name="InvoiceID" />
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="InvoiceID" Type="Int32" Nullable="false" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="UnitPrice" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Invoice" Relationship="Self.FK__InvoiceDe__Invoi__5165187F" FromRole="InvoiceDetails" ToRole="Invoices" />
+          <NavigationProperty Name="Product" Relationship="Self.FK__InvoiceDe__Produ__52593CB8" FromRole="InvoiceDetails" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="Invoice">
+          <Key>
+            <PropertyRef Name="InvoiceID" />
+          </Key>
+          <Property Name="InvoiceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerID" Type="Int32" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="InvoiceDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TotalAmount" Type="Int64" Nullable="false" />
+          <Property Name="DeliveryRequired" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK__Invoices__Custom__44FF419A" FromRole="Invoices" ToRole="Customers" />
+          <NavigationProperty Name="Deliveries" Relationship="Self.FK__Deliverie__Invoi__5629CD9C" FromRole="Invoices" ToRole="Deliveries" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK__Invoices__Employ__45F365D3" FromRole="Invoices" ToRole="Employees" />
+          <NavigationProperty Name="InvoiceDetails" Relationship="Self.FK__InvoiceDe__Invoi__5165187F" FromRole="Invoices" ToRole="InvoiceDetails" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="ProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CategoryID" Type="Int32" />
+          <Property Name="UnitPrice" Type="Int64" Nullable="false" />
+          <Property Name="UnitID" Type="Int32" Nullable="false" />
+          <Property Name="StockQuantity" Type="Int32" Nullable="false" />
+          <Property Name="MinStockLevel" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Category" Relationship="Self.FK__Products__Catego__4CA06362" FromRole="Products" ToRole="Categories" />
+          <NavigationProperty Name="InvoiceDetails" Relationship="Self.FK__InvoiceDe__Produ__52593CB8" FromRole="Products" ToRole="InvoiceDetails" />
+          <NavigationProperty Name="Unit" Relationship="Self.FK__Products__UnitID__4D94879B" FromRole="Products" ToRole="Units" />
+          <NavigationProperty Name="StockInDetails" Relationship="Self.FK__StockInDe__Produ__693CA210" FromRole="Products" ToRole="StockInDetails" />
+          <NavigationProperty Name="StockRequestDetails" Relationship="Self.FK_StockRequestDetails_Products" FromRole="Products" ToRole="StockRequestDetails" />
+        </EntityType>
+        <EntityType Name="StockIn">
+          <Key>
+            <PropertyRef Name="StockInID" />
+          </Key>
+          <Property Name="StockInID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+          <Property Name="StockInDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK__StockIn__Employe__6477ECF3" FromRole="StockIn" ToRole="Employees" />
+          <NavigationProperty Name="StockInDetails" Relationship="Self.FK__StockInDe__Stock__68487DD7" FromRole="StockIn" ToRole="StockInDetails" />
+        </EntityType>
+        <EntityType Name="StockInDetail">
+          <Key>
+            <PropertyRef Name="StockInID" />
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="StockInID" Type="Int32" Nullable="false" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="UnitCost" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Product" Relationship="Self.FK__StockInDe__Produ__693CA210" FromRole="StockInDetails" ToRole="Products" />
+          <NavigationProperty Name="StockIn" Relationship="Self.FK__StockInDe__Stock__68487DD7" FromRole="StockInDetails" ToRole="StockIn" />
+        </EntityType>
+        <EntityType Name="StockRequestDetail">
+          <Key>
+            <PropertyRef Name="RequestID" />
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="RequestID" Type="Int32" Nullable="false" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_StockRequestDetails_Products" FromRole="StockRequestDetails" ToRole="Products" />
+          <NavigationProperty Name="StockRequest" Relationship="Self.FK_StockRequestDetails_Requests" FromRole="StockRequestDetails" ToRole="StockRequests" />
+        </EntityType>
+        <EntityType Name="StockRequest">
+          <Key>
+            <PropertyRef Name="RequestID" />
+          </Key>
+          <Property Name="RequestID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RequestDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RequestedBy" Type="Int32" Nullable="false" />
+          <Property Name="Notes" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_StockRequests_Employees" FromRole="StockRequests" ToRole="Employees" />
+          <NavigationProperty Name="StockRequestDetails" Relationship="Self.FK_StockRequestDetails_Requests" FromRole="StockRequests" ToRole="StockRequestDetails" />
+        </EntityType>
+        <EntityType Name="Unit">
+          <Key>
+            <PropertyRef Name="UnitID" />
+          </Key>
+          <Property Name="UnitID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UnitName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Products" Relationship="Self.FK__Products__UnitID__4D94879B" FromRole="Units" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="UserAccount">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK__UserAccou__Emplo__3E52440B" FromRole="UserAccounts" ToRole="Employees" />
+        </EntityType>
+        <Association Name="FK__Products__Catego__4CA06362">
+          <End Role="Categories" Type="Self.Category" Multiplicity="0..1" />
+          <End Role="Products" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="CategoryID" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Invoices__Custom__44FF419A">
+          <End Role="Customers" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Invoices" Type="Self.Invoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="Invoices">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Deliverie__Assig__571DF1D5">
+          <End Role="Employees" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Deliveries" Type="Self.Delivery" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="Deliveries">
+              <PropertyRef Name="AssignedStaffID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Deliverie__Invoi__5629CD9C">
+          <End Role="Invoices" Type="Self.Invoice" Multiplicity="1" />
+          <End Role="Deliveries" Type="Self.Delivery" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Invoices">
+              <PropertyRef Name="InvoiceID" />
+            </Principal>
+            <Dependent Role="Deliveries">
+              <PropertyRef Name="InvoiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Invoices__Employ__45F365D3">
+          <End Role="Employees" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Invoices" Type="Self.Invoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="Invoices">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__StockIn__Employe__6477ECF3">
+          <End Role="Employees" Type="Self.Employee" Multiplicity="1" />
+          <End Role="StockIn" Type="Self.StockIn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="StockIn">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserAccou__Emplo__3E52440B">
+          <End Role="Employees" Type="Self.Employee" Multiplicity="1" />
+          <End Role="UserAccounts" Type="Self.UserAccount" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="UserAccounts">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockRequests_Employees">
+          <End Role="Employees" Type="Self.Employee" Multiplicity="1" />
+          <End Role="StockRequests" Type="Self.StockRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="StockRequests">
+              <PropertyRef Name="RequestedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__InvoiceDe__Invoi__5165187F">
+          <End Role="Invoices" Type="Self.Invoice" Multiplicity="1" />
+          <End Role="InvoiceDetails" Type="Self.InvoiceDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Invoices">
+              <PropertyRef Name="InvoiceID" />
+            </Principal>
+            <Dependent Role="InvoiceDetails">
+              <PropertyRef Name="InvoiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__InvoiceDe__Produ__52593CB8">
+          <End Role="Products" Type="Self.Product" Multiplicity="1" />
+          <End Role="InvoiceDetails" Type="Self.InvoiceDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="InvoiceDetails">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Products__UnitID__4D94879B">
+          <End Role="Units" Type="Self.Unit" Multiplicity="1" />
+          <End Role="Products" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Units">
+              <PropertyRef Name="UnitID" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="UnitID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__StockInDe__Produ__693CA210">
+          <End Role="Products" Type="Self.Product" Multiplicity="1" />
+          <End Role="StockInDetails" Type="Self.StockInDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="StockInDetails">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockRequestDetails_Products">
+          <End Role="Products" Type="Self.Product" Multiplicity="1" />
+          <End Role="StockRequestDetails" Type="Self.StockRequestDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="StockRequestDetails">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__StockInDe__Stock__68487DD7">
+          <End Role="StockIn" Type="Self.StockIn" Multiplicity="1" />
+          <End Role="StockInDetails" Type="Self.StockInDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StockIn">
+              <PropertyRef Name="StockInID" />
+            </Principal>
+            <Dependent Role="StockInDetails">
+              <PropertyRef Name="StockInID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockRequestDetails_Requests">
+          <End Role="StockRequests" Type="Self.StockRequest" Multiplicity="1" />
+          <End Role="StockRequestDetails" Type="Self.StockRequestDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StockRequests">
+              <PropertyRef Name="RequestID" />
+            </Principal>
+            <Dependent Role="StockRequestDetails">
+              <PropertyRef Name="RequestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="salesysdbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Categories" EntityType="Self.Category" />
+          <EntitySet Name="Customers" EntityType="Self.Customer" />
+          <EntitySet Name="Deliveries" EntityType="Self.Delivery" />
+          <EntitySet Name="Employees" EntityType="Self.Employee" />
+          <EntitySet Name="InvoiceDetails" EntityType="Self.InvoiceDetail" />
+          <EntitySet Name="Invoices" EntityType="Self.Invoice" />
+          <EntitySet Name="Products" EntityType="Self.Product" />
+          <EntitySet Name="StockIns" EntityType="Self.StockIn" />
+          <EntitySet Name="StockInDetails" EntityType="Self.StockInDetail" />
+          <EntitySet Name="StockRequestDetails" EntityType="Self.StockRequestDetail" />
+          <EntitySet Name="StockRequests" EntityType="Self.StockRequest" />
+          <EntitySet Name="Units" EntityType="Self.Unit" />
+          <EntitySet Name="UserAccounts" EntityType="Self.UserAccount" />
+          <AssociationSet Name="FK__Products__Catego__4CA06362" Association="Self.FK__Products__Catego__4CA06362">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Invoices__Custom__44FF419A" Association="Self.FK__Invoices__Custom__44FF419A">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Invoices" EntitySet="Invoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Deliverie__Assig__571DF1D5" Association="Self.FK__Deliverie__Assig__571DF1D5">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Deliveries" EntitySet="Deliveries" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Deliverie__Invoi__5629CD9C" Association="Self.FK__Deliverie__Invoi__5629CD9C">
+            <End Role="Invoices" EntitySet="Invoices" />
+            <End Role="Deliveries" EntitySet="Deliveries" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Invoices__Employ__45F365D3" Association="Self.FK__Invoices__Employ__45F365D3">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Invoices" EntitySet="Invoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK__StockIn__Employe__6477ECF3" Association="Self.FK__StockIn__Employe__6477ECF3">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="StockIn" EntitySet="StockIns" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserAccou__Emplo__3E52440B" Association="Self.FK__UserAccou__Emplo__3E52440B">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="UserAccounts" EntitySet="UserAccounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StockRequests_Employees" Association="Self.FK_StockRequests_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="StockRequests" EntitySet="StockRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK__InvoiceDe__Invoi__5165187F" Association="Self.FK__InvoiceDe__Invoi__5165187F">
+            <End Role="Invoices" EntitySet="Invoices" />
+            <End Role="InvoiceDetails" EntitySet="InvoiceDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__InvoiceDe__Produ__52593CB8" Association="Self.FK__InvoiceDe__Produ__52593CB8">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="InvoiceDetails" EntitySet="InvoiceDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Products__UnitID__4D94879B" Association="Self.FK__Products__UnitID__4D94879B">
+            <End Role="Units" EntitySet="Units" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__StockInDe__Produ__693CA210" Association="Self.FK__StockInDe__Produ__693CA210">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="StockInDetails" EntitySet="StockInDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StockRequestDetails_Products" Association="Self.FK_StockRequestDetails_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="StockRequestDetails" EntitySet="StockRequestDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__StockInDe__Stock__68487DD7" Association="Self.FK__StockInDe__Stock__68487DD7">
+            <End Role="StockIn" EntitySet="StockIns" />
+            <End Role="StockInDetails" EntitySet="StockInDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StockRequestDetails_Requests" Association="Self.FK_StockRequestDetails_Requests">
+            <End Role="StockRequests" EntitySet="StockRequests" />
+            <End Role="StockRequestDetails" EntitySet="StockRequestDetails" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="salesysdbModelStoreContainer" CdmEntityContainer="salesysdbEntities">
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="salesysdbModel.Category">
+              <MappingFragment StoreEntitySet="Categories">
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="salesysdbModel.Customer">
+              <MappingFragment StoreEntitySet="Customers">
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Deliveries">
+            <EntityTypeMapping TypeName="salesysdbModel.Delivery">
+              <MappingFragment StoreEntitySet="Deliveries">
+                <ScalarProperty Name="DeliveryID" ColumnName="DeliveryID" />
+                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
+                <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
+                <ScalarProperty Name="DeliveryAddress" ColumnName="DeliveryAddress" />
+                <ScalarProperty Name="AssignedStaffID" ColumnName="AssignedStaffID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="salesysdbModel.Employee">
+              <MappingFragment StoreEntitySet="Employees">
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InvoiceDetails">
+            <EntityTypeMapping TypeName="salesysdbModel.InvoiceDetail">
+              <MappingFragment StoreEntitySet="InvoiceDetails">
+                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Invoices">
+            <EntityTypeMapping TypeName="salesysdbModel.Invoice">
+              <MappingFragment StoreEntitySet="Invoices">
+                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="DeliveryRequired" ColumnName="DeliveryRequired" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="salesysdbModel.Product">
+              <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="UnitID" ColumnName="UnitID" />
+                <ScalarProperty Name="StockQuantity" ColumnName="StockQuantity" />
+                <ScalarProperty Name="MinStockLevel" ColumnName="MinStockLevel" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StockIns">
+            <EntityTypeMapping TypeName="salesysdbModel.StockIn">
+              <MappingFragment StoreEntitySet="StockIn">
+                <ScalarProperty Name="StockInID" ColumnName="StockInID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="StockInDate" ColumnName="StockInDate" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StockInDetails">
+            <EntityTypeMapping TypeName="salesysdbModel.StockInDetail">
+              <MappingFragment StoreEntitySet="StockInDetails">
+                <ScalarProperty Name="StockInID" ColumnName="StockInID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="UnitCost" ColumnName="UnitCost" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StockRequestDetails">
+            <EntityTypeMapping TypeName="salesysdbModel.StockRequestDetail">
+              <MappingFragment StoreEntitySet="StockRequestDetails">
+                <ScalarProperty Name="RequestID" ColumnName="RequestID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StockRequests">
+            <EntityTypeMapping TypeName="salesysdbModel.StockRequest">
+              <MappingFragment StoreEntitySet="StockRequests">
+                <ScalarProperty Name="RequestID" ColumnName="RequestID" />
+                <ScalarProperty Name="RequestDate" ColumnName="RequestDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="RequestedBy" ColumnName="RequestedBy" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Units">
+            <EntityTypeMapping TypeName="salesysdbModel.Unit">
+              <MappingFragment StoreEntitySet="Units">
+                <ScalarProperty Name="UnitID" ColumnName="UnitID" />
+                <ScalarProperty Name="UnitName" ColumnName="UnitName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserAccounts">
+            <EntityTypeMapping TypeName="salesysdbModel.UserAccount">
+              <MappingFragment StoreEntitySet="UserAccounts">
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
