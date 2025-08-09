@@ -52,7 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomerDAL.cs" />
+    <Compile Include="EmployeeDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserAccountDAL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Entity\DataObjects.csproj">
