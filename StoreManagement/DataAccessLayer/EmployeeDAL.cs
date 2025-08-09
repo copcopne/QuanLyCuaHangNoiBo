@@ -49,7 +49,7 @@ namespace DataAccessLayer
         {
             if (employee == null)
             {
-                throw new ArgumentNullException("Đối tượng nhân viên là bắt buộc!");
+                throw new Exception("Đối tượng nhân viên là bắt buộc!");
             }
             var existingEmployee = context.Employees.FirstOrDefault(e => e.EmployeeID == employee.EmployeeID);
             if (existingEmployee != null)
@@ -74,7 +74,7 @@ namespace DataAccessLayer
             }
             else
             {
-                throw new KeyNotFoundException("Nhân viên không tồn tại.");
+                throw new Exception("Nhân viên không tồn tại.");
             }
         }
 

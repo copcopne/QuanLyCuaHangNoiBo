@@ -19,7 +19,7 @@ namespace DataAccessLayer
             employeeDAL = new EmployeeDAL(context);
         }
 
-        static string GetHashedString(string input)
+        private static string GetHashedString(string input)
         {
             using (MD5 md5 = MD5.Create())
             {
@@ -34,7 +34,7 @@ namespace DataAccessLayer
             }
         }
 
-        static Boolean Authenticate(String username, String password)
+        public static Boolean Authenticate(String username, String password)
         {
             using (salesysdbEntities context = new salesysdbEntities())
             {
@@ -69,7 +69,7 @@ namespace DataAccessLayer
         {
             if (account == null)
             {
-                throw new ArgumentNullException("Đối tượng nhân viên và người dùng là bắt buộc!");
+                throw new Exception("Đối tượng nhân viên và người dùng là bắt buộc!");
             }
 
             employeeDAL.AddEmployee(employee);
@@ -85,7 +85,7 @@ namespace DataAccessLayer
         {
             if (account == null)
             {
-                throw new ArgumentNullException("Đối tượng nhân viên là bắt buộc!");
+                throw new Exception("Đối tượng nhân viên là bắt buộc!");
             }
             var existingUser = context.UserAccounts.FirstOrDefault(u => u.Username == account.Username);
             if (existingUser != null)
@@ -110,7 +110,7 @@ namespace DataAccessLayer
             }
             else
             {
-                throw new KeyNotFoundException("Tài khoản không tồn tại.");
+                throw new Exception("Tài khoản không tồn tại.");
             }
         }
     }
