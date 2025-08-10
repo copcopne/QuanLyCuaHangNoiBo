@@ -8,31 +8,22 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer
 {
-    internal class UserAccountDAL
+    public class UserAccountDAL
     {
         private readonly salesysdbEntities context;
         private readonly EmployeeDAL employeeDAL;
 
+        public UserAccountDAL()
+        {
+            this.context = new salesysdbEntities();
+            this.employeeDAL = new EmployeeDAL(this.context);
+        }
         public UserAccountDAL(salesysdbEntities context)
         {
             this.context = context;
-            employeeDAL = new EmployeeDAL(context);
+            this.employeeDAL = new EmployeeDAL(context);
         }
 
-        private static string GetHashedString(string input)
-        {
-            using (MD5 md5 = MD5.Create())
-            {
-                byte[] inputBytes = Encoding.UTF8.GetBytes(input);
-                byte[] hashBytes = md5.ComputeHash(inputBytes);
-
-                StringBuilder sb = new StringBuilder();
-                foreach (byte b in hashBytes)
-                    sb.Append(b.ToString("x2"));
-
-                return sb.ToString();
-            }
-        }
 
         public static Boolean Authenticate(String username, String password)
         {
@@ -41,7 +32,7 @@ namespace DataAccessLayer
                 var user = context.UserAccounts.FirstOrDefault(u => u.Username == username);
                 if (user != null)
                 {
-                    return user.PasswordHash == GetHashedString(password);
+                    return user.PasswordHash == password;
                 }
                 return false;
             }
@@ -60,7 +51,7 @@ namespace DataAccessLayer
             }
         }
 
-        public UserAccount GetByUserName(String username)
+        public UserAccount GetByUsername(String username)
         {
             return context.UserAccounts.FirstOrDefault(u => u.Username == username);
         }

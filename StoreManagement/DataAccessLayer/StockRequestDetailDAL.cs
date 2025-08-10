@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer
 {
-    internal class StockRequestDetailDAL
+    public class StockRequestDetailDAL
     {
     }
 }
