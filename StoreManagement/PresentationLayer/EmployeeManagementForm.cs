@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace PresentationLayer
 {
     public partial class EmployeeManagementForm : Form
@@ -17,10 +18,12 @@ namespace PresentationLayer
 
         private const String DEFAULT_SEARCH_TEXT = "Tìm kiếm theo tên hoặc email...";
         private readonly EmployeeBUS employeeBUS;
+        private readonly UserAccountBUS userAccountBUS;
         private Timer debounceTimer;
         public EmployeeManagementForm()
         {
-            employeeBUS = new EmployeeBUS();
+        employeeBUS = new EmployeeBUS();
+            userAccountBUS = new UserAccountBUS();
             InitializeComponent();
 
             this.gridViewEmployee.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
@@ -30,6 +33,7 @@ namespace PresentationLayer
                 Interval = 300
             };
             debounceTimer.Tick += DebounceTimer_Tick;
+            loadData();
         }
 
         public void loadData()
@@ -94,7 +98,7 @@ namespace PresentationLayer
 
         private void EmployeeManagementForm_Load(object sender, EventArgs e)
         {
-            loadData();
+
         }
 
         private void EmployeeGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -108,7 +112,6 @@ namespace PresentationLayer
 
             if (columnName == "btnEdit")
             {
-                MessageBox.Show($"Sửa nhân viên ID: {employeeId}");
                 EmployeeForm eForm = new EmployeeForm((int)employeeId);
                 eForm.ShowDialog();
 
@@ -117,16 +120,20 @@ namespace PresentationLayer
             }
             else if (columnName == "btnDelete")
             {
-                var confirm = MessageBox.Show($"Xóa nhân viên ID: {employeeId}?", "Xác nhận", MessageBoxButtons.YesNo);
+                var confirm = MessageBox.Show($"Xác nhận xóa nhân viên với ID: {employeeId}?", "Xác nhận", MessageBoxButtons.YesNo);
                 if (confirm == DialogResult.Yes)
                 {
-                    //employeeBUS.Delete((int)employeeId);
-                    //employeeGridView.DataSource = employeeBUS.Get(null); // refresh
+                    employeeBUS.Delete((int)employeeId);
+                    MessageBox.Show("Xóa nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    loadData();
                 }
             }
             else if (columnName == "btnUserAcc")
             {
-                
+                UserForm uForm = new UserForm((int)employeeId);
+                uForm.ShowDialog();
+
+                loadData();
             }
         }
 
@@ -155,6 +162,8 @@ namespace PresentationLayer
         {
             EmployeeForm eForm = new EmployeeForm(-1);
             eForm.ShowDialog();
+
+            loadData();
         }
     }
 }

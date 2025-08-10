@@ -10,20 +10,12 @@ namespace DataAccessLayer
 {
     public class UserAccountDAL
     {
-        private readonly salesysdbEntities context;
         private readonly EmployeeDAL employeeDAL;
 
         public UserAccountDAL()
         {
-            this.context = new salesysdbEntities();
-            this.employeeDAL = new EmployeeDAL(this.context);
+            this.employeeDAL = new EmployeeDAL();
         }
-        public UserAccountDAL(salesysdbEntities context)
-        {
-            this.context = context;
-            this.employeeDAL = new EmployeeDAL(context);
-        }
-
 
         public static Boolean Authenticate(String username, String password)
         {
@@ -39,67 +31,87 @@ namespace DataAccessLayer
         }
         public List<UserAccount> Get(String keyword)
         {
-            if (string.IsNullOrEmpty(keyword))
+            using (salesysdbEntities context = new salesysdbEntities())
             {
-                return context.UserAccounts.ToList();
+                if (string.IsNullOrEmpty(keyword))
+                {
+                    return context.UserAccounts.ToList();
+                }
+                else
+                {
+                    return context.UserAccounts
+                        .Where(e => e.Username.Contains(keyword))
+                        .ToList();
+                }
             }
-            else
-            {
-                return context.UserAccounts
-                    .Where(e => e.Username.Contains(keyword))
-                    .ToList();
-            }
-        }
 
+        }
+        public UserAccount GetByEmployeeID(int employeeID)
+        {
+            using (salesysdbEntities context = new salesysdbEntities())
+                return context.UserAccounts.FirstOrDefault(u => u.EmployeeID == employeeID);
+        }
         public UserAccount GetByUsername(String username)
         {
-            return context.UserAccounts.FirstOrDefault(u => u.Username == username);
+            using (salesysdbEntities context = new salesysdbEntities())
+                return context.UserAccounts.FirstOrDefault(u => u.Username == username);
         }
 
         public void Add(UserAccount account, Employee employee)
         {
-            if (account == null || employee == null)
+            using (salesysdbEntities context = new salesysdbEntities())
             {
-                throw new Exception("Đối tượng nhân viên và người dùng là bắt buộc!");
+                if (account == null || employee == null)
+                {
+                    throw new Exception("Đối tượng nhân viên và người dùng là bắt buộc!");
+                }
+
+                employeeDAL.Add(employee);
+                account.EmployeeID = employee.EmployeeID;
+                context.UserAccounts.Add(account);
+                context.SaveChanges();
             }
 
-            employeeDAL.Add(employee);
-            account.EmployeeID = employee.EmployeeID;
-            context.UserAccounts.Add(account);
-            context.SaveChanges();
         }
 
         public void Update(UserAccount account)
         {
-            if (account == null)
+            using (salesysdbEntities context = new salesysdbEntities())
             {
-                throw new Exception("Đối tượng người dùng là bắt buộc!");
-            }
-            var existingUser = context.UserAccounts.FirstOrDefault(u => u.Username == account.Username);
-            if (existingUser != null)
-            {
+                if (account == null)
+                {
+                    throw new Exception("Đối tượng người dùng là bắt buộc!");
+                }
+                var existingUser = context.UserAccounts.FirstOrDefault(u => u.Username == account.Username);
+                if (existingUser != null)
+                {
 
-                existingUser.PasswordHash = account.PasswordHash;
-                existingUser.Role = account.Role;
-                existingUser.IsActive = account.IsActive;
+                    existingUser.PasswordHash = account.PasswordHash;
+                    existingUser.Role = account.Role;
+                    existingUser.IsActive = account.IsActive;
 
-                context.SaveChanges();
+                    context.SaveChanges();
+                }
             }
+
         }
 
-        public void Delete(String username)
+        public void Delete(int id)
         {
-            var user = context.UserAccounts.FirstOrDefault(u => u.Username == username);
-            if (user != null)
+            using (salesysdbEntities context = new salesysdbEntities())
             {
-                employeeDAL.Delete(user.EmployeeID);
-                context.UserAccounts.Remove(user);
-                context.SaveChanges();
+                var user = context.UserAccounts.FirstOrDefault(u => u.EmployeeID == id);
+                if (user != null)
+                {
+                    context.UserAccounts.Remove(user);
+                    context.SaveChanges();
+                }
+                else
+                {
+                    throw new Exception("Tài khoản không tồn tại.");
+                }
             }
-            else
-            {
-                throw new Exception("Tài khoản không tồn tại.");
-            }
+
         }
     }
 }

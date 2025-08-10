@@ -12,9 +12,14 @@ namespace PresentationLayer
 {
     public partial class UserAccountForm : Form
     {
-        public UserAccountForm()
+        private int employeeId;
+        public UserAccountForm(int employeeId)
         {
             InitializeComponent();
+            if (employeeId > 0)
+            {
+                this.employeeId = employeeId;
+            }
         }
     }
 }
