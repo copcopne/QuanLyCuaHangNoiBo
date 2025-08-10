@@ -7,10 +7,15 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer
 {
-    internal class StockInDetailDAL
+    public class StockInDetailDAL
     {
         private readonly salesysdbEntities context;
         private readonly StockInDAL stockInDAL;
+        public StockInDetailDAL()
+        {
+            this.context = new salesysdbEntities();
+            this.stockInDAL = new StockInDAL();
+        }
         public StockInDetailDAL(salesysdbEntities context)
         {
             this.context = context;

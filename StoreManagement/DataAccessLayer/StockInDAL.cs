@@ -7,13 +7,18 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer
 {
-    internal class StockInDAL
+    public class StockInDAL
     {
         private readonly salesysdbEntities context;
+        public StockInDAL()
+        {
+            this.context = new salesysdbEntities();
+        }
         public StockInDAL(salesysdbEntities context)
         {
             this.context = context;
         }
+
         public List<StockIn> Get()
         {
             return context.StockIns.ToList();

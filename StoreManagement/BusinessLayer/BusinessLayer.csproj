@@ -54,6 +54,7 @@
     <Compile Include="StockRequestBUS.cs" />
     <Compile Include="StockRequestDetailBUS.cs" />
     <Compile Include="UserAccountBUS.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj">

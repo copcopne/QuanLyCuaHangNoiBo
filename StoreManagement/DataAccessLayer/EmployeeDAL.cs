@@ -7,9 +7,14 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer
 {
-    internal class EmployeeDAL
+    public class EmployeeDAL
     {
         private readonly salesysdbEntities context;
+
+        public EmployeeDAL()
+        {
+            this.context = new salesysdbEntities();
+        }
 
         public EmployeeDAL(salesysdbEntities context)
         {
@@ -25,7 +30,7 @@ namespace DataAccessLayer
             else
             {
                 return context.Employees
-                    .Where(e => e.FullName.Contains(keyword))
+                    .Where(e => e.FullName.Contains(keyword) || e.Email.StartsWith(keyword))
                     .ToList();
             }
         }
@@ -37,20 +42,12 @@ namespace DataAccessLayer
 
         public void Add(Employee employee)
         {
-            if (employee == null)
-            {
-                throw new Exception("Đối tượng nhân viên là bắt buộc!");
-            }
             context.Employees.Add(employee);
             context.SaveChanges();
         }
 
         public void Update(Employee employee)
         {
-            if (employee == null)
-            {
-                throw new Exception("Đối tượng nhân viên là bắt buộc!");
-            }
             var existingEmployee = context.Employees.FirstOrDefault(e => e.EmployeeID == employee.EmployeeID);
             if (existingEmployee != null)
             {

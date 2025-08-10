@@ -7,10 +7,13 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer
 {
-    internal class ProductDAL
+    public class ProductDAL
     {
         private readonly salesysdbEntities context;
-
+        public ProductDAL()
+        {
+            this.context = new salesysdbEntities();
+        }
         public ProductDAL(salesysdbEntities context)
         {
             this.context = context;
