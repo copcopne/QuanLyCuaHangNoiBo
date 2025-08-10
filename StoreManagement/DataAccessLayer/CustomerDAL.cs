@@ -9,17 +9,21 @@ namespace DataAccessLayer
 {
     public class CustomerDAL
     {
-        private readonly salesysdbEntities context = new salesysdbEntities();
+        private readonly salesysdbEntities context;
+        public CustomerDAL(salesysdbEntities context)
+        {
+            this.context = context;
+        }
 
         public List<Customer> getCustomers(string searchTerm)
         {
-            if (string.IsNullOrEmpty(searchTerm))
+            // Lấy danh sách khách hàng từ cơ sở dữ liệu trừ các khách hàng đã bị xóa
+            var query = context.Customers.AsQueryable();
+            if (!string.IsNullOrEmpty(searchTerm))
             {
-                return context.Customers.ToList();
+                query = query.Where(c => c.FullName.Contains(searchTerm) || c.PhoneNumber.Contains(searchTerm) || c.Email.Contains(searchTerm));
             }
-            return context.Customers
-                .Where(c => c.FullName.Contains(searchTerm) || c.Email.Contains(searchTerm))
-                .ToList();
+            return query.Where(c => c.IsDeleted == 0).ToList();
         }
 
         public Customer createCustomer(in Customer customer)
@@ -46,5 +50,18 @@ namespace DataAccessLayer
             return existingCustomer;
         }
 
+        public void deleteCustomer(int customerId)
+        {
+            var customer = context.Customers.Find(customerId);
+            if (customer != null)
+            {
+                customer.IsDeleted = 1; // Đánh dấu là đã xóa
+                context.SaveChanges();
+            }
+            else
+            {
+                throw new Exception("Customer not found");
+            }
+        }
     }
 }

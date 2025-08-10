@@ -14,15 +14,18 @@ namespace PresentationLayer
 {
     public partial class CustomerForm : Form
     {
-        private CustomerBUS CustomerService = new CustomerBUS();
+        private CustomerBUS CustomerService;
         private Customer customer = new Customer();
+        private readonly salesysdbEntities context = new salesysdbEntities();
         public CustomerForm()
         {
             InitializeComponent();
+            this.CustomerService = new CustomerBUS(context);
         }
         public CustomerForm(Customer customer)
         {
             InitializeComponent();
+            this.CustomerService = new CustomerBUS(context);
             this.txtFullName.Text = customer.FullName;
             this.txtEmail.Text = customer.Email;
             this.txtPhone.Text = customer.PhoneNumber;

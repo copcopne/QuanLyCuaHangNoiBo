@@ -1,4 +1,5 @@
 ﻿using BusinessLayer;
+using Entity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,12 +14,15 @@ namespace PresentationLayer
 {
     public partial class CustomerManagementForm : Form
     {
-        private CustomerBUS CustomerService = new CustomerBUS();
+        private readonly salesysdbEntities context;
+        private readonly CustomerBUS customerService;
         private Timer debounceTimer;
         private String defaultSearchText = "Tìm kiếm theo tên hoặc email...";
         public CustomerManagementForm()
         {
             InitializeComponent();
+            this.context = new salesysdbEntities();
+            this.customerService = new CustomerBUS(context);
 
             // Khởi tạo Timer để debounce
             debounceTimer = new Timer();
@@ -27,28 +31,44 @@ namespace PresentationLayer
         }
         private void CustomerManagementForm_Load(object sender, EventArgs e)
         {
-            dataGridView.DataSource = CustomerService.GetCustomers(null);
+            dataGridView.DataSource = customerService.GetCustomers(null);
             dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView.Columns["Invoices"].Visible = false;
 
             this.txtKeyword.Text = defaultSearchText;
             this.txtKeyword.ForeColor = Color.Gray;
 
-            // Thêm cột nút sửa
-            DataGridViewButtonColumn editButtonColumn = new DataGridViewButtonColumn();
-            editButtonColumn.Name = "btnEdit";
-            editButtonColumn.HeaderText = "Sửa";
-            editButtonColumn.Text = "Sửa";
-            editButtonColumn.UseColumnTextForButtonValue = true;
-            dataGridView.Columns.Add(editButtonColumn);
+            
+            // cho cột sửa và xóa nằm chung một cột
+            dataGridView.Columns.Add(new DataGridViewButtonColumn()
+            {
+                Name = "btnEdit",
+                HeaderText = "Sửa",
+                Text = "Sửa",
+                UseColumnTextForButtonValue = true,
+                Width = 100
+            });
+            dataGridView.Columns.Add(new DataGridViewButtonColumn()
+            {
+                Name = "btnDelete",
+                HeaderText = "Xóa",
+                Text = "Xóa",
+                UseColumnTextForButtonValue = true,
+                Width = 100
+            });
+            // Đăng ký sự kiện CellClick cho DataGridView
             dataGridView.CellClick += DataGridView_CellClick;
+            dataGridView.CellContentClick += DataGridView_CellClick;
+
+
+
 
         }
         private void DataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0 && e.ColumnIndex == dataGridView.Columns["btnEdit"].Index)
             {
-                // Lấy thông tin khách hàng từ dòng đã chọn
+                // Lấy thông tin
                 var selectedRow = dataGridView.Rows[e.RowIndex];
                 var customer = (Entity.Customer)selectedRow.DataBoundItem;
                 if (customer == null)
@@ -57,14 +77,35 @@ namespace PresentationLayer
                     return;
                 }
 
-                // Mở form sửa thông tin khách hàng
+                // Mở form sửa
                 CustomerForm editCustomerForm = new CustomerForm(customer);
                 editCustomerForm.ShowDialog();
 
-                // Cập nhật lại danh sách khách hàng sau khi thoát form
-                dataGridView.DataSource = CustomerService.GetCustomers(null);
+                // Cập nhật
+                dataGridView.DataSource = customerService.GetCustomers(null);
+            }
+            else if (e.RowIndex >= 0 && e.ColumnIndex == dataGridView.Columns["btnDelete"].Index)
+            {
+                // Lấy thông tin
+                var selectedRow = dataGridView.Rows[e.RowIndex];
+                var customer = (Entity.Customer)selectedRow.DataBoundItem;
+                if (customer == null)
+                {
+                    MessageBox.Show("Không tìm thấy thông tin khách hàng.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                // Xác nhận xóa
+                DialogResult result = MessageBox.Show($"Bạn có chắc chắn muốn xóa khách hàng {customer.FullName}?", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    // Thực hiện xóa
+                    customerService.DeleteCustomer(customer.CustomerID);
+                    // Cập nhật lại
+                    dataGridView.DataSource = customerService.GetCustomers(null);
+                }
             }
         }
+
 
         private void txtKeyword_TextChanged(object sender, EventArgs e)
         {
@@ -76,10 +117,10 @@ namespace PresentationLayer
             debounceTimer.Stop();
             if (string.IsNullOrWhiteSpace(txtKeyword.Text) || txtKeyword.Text == defaultSearchText)
             {
-                dataGridView.DataSource = CustomerService.GetCustomers(null);
+                dataGridView.DataSource = customerService.GetCustomers(null);
                 return;
             }
-            dataGridView.DataSource = CustomerService.GetCustomers(txtKeyword.Text);
+            dataGridView.DataSource = customerService.GetCustomers(txtKeyword.Text);
         }
 
         private void btnAddCustomer_Click(object sender, EventArgs e)
@@ -88,7 +129,7 @@ namespace PresentationLayer
             addCustomerForm.ShowDialog();
 
             // Cập nhật lại danh sách khách hàng sau khi thoát form
-            dataGridView.DataSource = CustomerService.GetCustomers(null);
+            dataGridView.DataSource = customerService.GetCustomers(null);
 
         }
 
@@ -107,7 +148,7 @@ namespace PresentationLayer
             {
                 txtKeyword.Text = defaultSearchText;
                 txtKeyword.ForeColor = Color.Gray;
-                dataGridView.DataSource = CustomerService.GetCustomers(null);
+                dataGridView.DataSource = customerService.GetCustomers(null);
             }
         }
     }

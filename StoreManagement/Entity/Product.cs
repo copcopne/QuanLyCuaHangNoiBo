@@ -29,6 +29,7 @@ namespace Entity
         public string Unit { get; set; }
         public int StockQuantity { get; set; }
         public int MinStockLevel { get; set; }
+        public byte isDeleted { get; set; }
     
         public virtual Category Category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

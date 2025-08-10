@@ -78,6 +78,7 @@
           <Property Name="Unit" Type="nvarchar" MaxLength="50" />
           <Property Name="StockQuantity" Type="int" Nullable="false" />
           <Property Name="MinStockLevel" Type="int" Nullable="false" />
+          <Property Name="isDeleted" Type="tinyint" Nullable="false" />
         </EntityType>
         <EntityType Name="StockIn">
           <Key>
@@ -461,6 +462,7 @@
           <NavigationProperty Name="InvoiceDetails" Relationship="Self.FK__InvoiceDe__Produ__52593CB8" FromRole="Products" ToRole="InvoiceDetails" />
           <NavigationProperty Name="StockInDetails" Relationship="Self.FK__StockInDe__Produ__693CA210" FromRole="Products" ToRole="StockInDetails" />
           <NavigationProperty Name="StockRequestDetails" Relationship="Self.FK_StockRequestDetails_Products" FromRole="Products" ToRole="StockRequestDetails" />
+          <Property Name="isDeleted" Type="Byte" Nullable="false" />
         </EntityType>
         <EntityType Name="StockIn">
           <Key>
@@ -833,6 +835,7 @@
           <EntitySetMapping Name="Products">
             <EntityTypeMapping TypeName="salesysdbModel.Product">
               <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="ProductName" ColumnName="ProductName" />
                 <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
