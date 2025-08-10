@@ -7,11 +7,11 @@ using Entity;
 
 namespace DataAccessLayer
 {
-    internal class InvoiceDAL
+    public class InvoiceDAL
     {
         DeliveryDAL deliveryDAL;
         private readonly salesysdbEntities context;
-        public InvoiceDAL()
+        public InvoiceDAL(salesysdbEntities context)
         {
             this.context = new salesysdbEntities();
             this.deliveryDAL = new DeliveryDAL(context);

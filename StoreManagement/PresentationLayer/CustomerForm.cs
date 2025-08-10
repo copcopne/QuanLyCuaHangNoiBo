@@ -30,6 +30,10 @@ namespace PresentationLayer
             this.txtEmail.Text = customer.Email;
             this.txtPhone.Text = customer.PhoneNumber;
             this.customer = customer;
+            this.label.Text = "Sửa thông tin khách hàng";
+            // Đặt tựa đề vào giữa màn hình
+
+
         }
 
         private bool ValidateInput(TextBox txt, string message)
