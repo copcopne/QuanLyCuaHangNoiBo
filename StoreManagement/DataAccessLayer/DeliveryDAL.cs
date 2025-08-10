@@ -7,7 +7,7 @@ using Entity;
 
 namespace DataAccessLayer
 {
-    internal class DeliveryDAL
+    public class DeliveryDAL
     {
         private readonly salesysdbEntities context;
         public DeliveryDAL(salesysdbEntities context)

@@ -35,8 +35,8 @@
             this.txtEmail = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
             this.btnReturn = new System.Windows.Forms.Button();
+            this.label = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -111,16 +111,6 @@
             this.btnSave.UseVisualStyleBackColor = false;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(157, 9);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(355, 37);
-            this.label4.TabIndex = 7;
-            this.label4.Text = "Thêm khách hàng mới";
-            // 
             // btnReturn
             // 
             this.btnReturn.BackColor = System.Drawing.SystemColors.GrayText;
@@ -135,13 +125,23 @@
             this.btnReturn.UseVisualStyleBackColor = false;
             this.btnReturn.Click += new System.EventHandler(this.btnReturn_Click);
             // 
+            // label
+            // 
+            this.label.AutoSize = true;
+            this.label.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label.Location = new System.Drawing.Point(120, 18);
+            this.label.Name = "label";
+            this.label.Size = new System.Drawing.Size(433, 37);
+            this.label.TabIndex = 10;
+            this.label.Text = "Thêm thông tin khách hàng";
+            // 
             // CustomerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(661, 444);
+            this.Controls.Add(this.label);
             this.Controls.Add(this.btnReturn);
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.txtEmail);
             this.Controls.Add(this.label3);
@@ -168,7 +168,7 @@
         private System.Windows.Forms.TextBox txtEmail;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnSave;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnReturn;
+        private System.Windows.Forms.Label label;
     }
 }

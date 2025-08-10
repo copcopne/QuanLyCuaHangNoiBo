@@ -34,9 +34,10 @@ namespace PresentationLayer
             dataGridView.DataSource = customerService.GetCustomers(null);
             dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView.Columns["Invoices"].Visible = false;
+            dataGridView.Columns["IsDeleted"].Visible = false;
 
-            this.txtKeyword.Text = defaultSearchText;
-            this.txtKeyword.ForeColor = Color.Gray;
+            txtKeyword.Text = defaultSearchText;
+            txtKeyword.ForeColor = Color.Gray;
 
             
             // cho cột sửa và xóa nằm chung một cột
@@ -58,11 +59,6 @@ namespace PresentationLayer
             });
             // Đăng ký sự kiện CellClick cho DataGridView
             dataGridView.CellClick += DataGridView_CellClick;
-            dataGridView.CellContentClick += DataGridView_CellClick;
-
-
-
-
         }
         private void DataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -98,9 +94,7 @@ namespace PresentationLayer
                 DialogResult result = MessageBox.Show($"Bạn có chắc chắn muốn xóa khách hàng {customer.FullName}?", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (result == DialogResult.Yes)
                 {
-                    // Thực hiện xóa
                     customerService.DeleteCustomer(customer.CustomerID);
-                    // Cập nhật lại
                     dataGridView.DataSource = customerService.GetCustomers(null);
                 }
             }
@@ -128,7 +122,7 @@ namespace PresentationLayer
             CustomerForm addCustomerForm = new CustomerForm();
             addCustomerForm.ShowDialog();
 
-            // Cập nhật lại danh sách khách hàng sau khi thoát form
+            // Cập nhật lại danh sách sau khi thoát form
             dataGridView.DataSource = customerService.GetCustomers(null);
 
         }
