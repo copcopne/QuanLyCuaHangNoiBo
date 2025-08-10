@@ -16,7 +16,7 @@ namespace DataAccessLayer
             this.context = context;
         }
 
-        public List<Employee> GetEmployees(String keyword)
+        public List<Employee> Get(String keyword)
         {
             if (string.IsNullOrEmpty(keyword))
             {
@@ -30,22 +30,22 @@ namespace DataAccessLayer
             }
         }
 
-        public Employee GetEmployeeById(int employeeId)
+        public Employee Get(int employeeId)
         {
             return context.Employees.FirstOrDefault(e => e.EmployeeID == employeeId);
         }
 
-        public void AddEmployee(Employee employee)
+        public void Add(Employee employee)
         {
             if (employee == null)
             {
-                throw new ArgumentNullException("Đối tượng nhân viên là bắt buộc!");
+                throw new Exception("Đối tượng nhân viên là bắt buộc!");
             }
             context.Employees.Add(employee);
             context.SaveChanges();
         }
 
-        public void UpdateEmployee(Employee employee)
+        public void Update(Employee employee)
         {
             if (employee == null)
             {
@@ -64,7 +64,7 @@ namespace DataAccessLayer
             }
         }
 
-        public void DeleteEmployee(int employeeId)
+        public void Delete(int employeeId)
         {
             var employee = context.Employees.FirstOrDefault(e => e.EmployeeID == employeeId);
             if (employee != null)

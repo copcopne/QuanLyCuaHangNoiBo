@@ -53,6 +53,8 @@ namespace DataAccessLayer
                 existingProduct.CategoryID = product.CategoryID;
                 existingProduct.StockQuantity = product.StockQuantity;
                 existingProduct.MinStockLevel = product.MinStockLevel;
+                existingProduct.Unit = product.Unit;
+
                 context.SaveChanges();
             }
         }

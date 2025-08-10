@@ -14,33 +14,33 @@ namespace DataAccessLayer
         {
             this.context = context;
         }
-        public List<StockIn> GetStockIns()
+        public List<StockIn> Get()
         {
-                return context.StockIns.ToList();
+            return context.StockIns.ToList();
         }
-        public void AddStockIn(StockIn stockIn)
+        public StockIn Get(int stockInId)
+        {
+            return context.StockIns.FirstOrDefault(s => s.StockInID == stockInId)
+                ?? throw new Exception("Không tìm thấy đơn nhập hàng!");
+        }
+
+        public void Add(StockIn stockIn)
         {
             context.StockIns.Add(stockIn);
             context.SaveChanges();
         }
-        public void UpdateStockIn(StockIn stockIn)
+        public void Update(StockIn stockIn)
         {
-            var existingStockIn = context.StockIns.FirstOrDefault(s => s.StockInID == stockIn.StockInID);
-            if (existingStockIn == null)
-            {
-                throw new Exception("StockIn not found");
-            }
-            /// 
+            var existingStockIn = context.StockIns.FirstOrDefault(s => s.StockInID == stockIn.StockInID)
+                ?? throw new Exception("Không tìm thấy đơn nhập hàng!");
+
+            int total = context.StockInDetails
+                .Where(d => d.StockInID == stockIn.StockInID)
+                .Select(d => (int?)d.Quantity)
+                .Sum() ?? 0;
+
+            existingStockIn.TotalAmount = total;
             context.SaveChanges();
-        }
-        public void DeleteStockIn(int id)
-        {
-            var stockIn = context.StockIns.Find(id);
-            if (stockIn != null)
-            {
-                context.StockIns.Remove(stockIn);
-                context.SaveChanges();
-            }
         }
     }
 }
