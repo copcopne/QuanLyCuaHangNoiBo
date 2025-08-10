@@ -26,14 +26,13 @@ namespace Entity
         public string ProductName { get; set; }
         public Nullable<int> CategoryID { get; set; }
         public long UnitPrice { get; set; }
-        public int UnitID { get; set; }
+        public string Unit { get; set; }
         public int StockQuantity { get; set; }
         public int MinStockLevel { get; set; }
     
         public virtual Category Category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<InvoiceDetail> InvoiceDetails { get; set; }
-        public virtual Unit Unit { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StockInDetail> StockInDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

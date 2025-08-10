@@ -36,7 +36,6 @@ namespace Entity
         public virtual DbSet<StockInDetail> StockInDetails { get; set; }
         public virtual DbSet<StockRequestDetail> StockRequestDetails { get; set; }
         public virtual DbSet<StockRequest> StockRequests { get; set; }
-        public virtual DbSet<Unit> Units { get; set; }
         public virtual DbSet<UserAccount> UserAccounts { get; set; }
     }
 }

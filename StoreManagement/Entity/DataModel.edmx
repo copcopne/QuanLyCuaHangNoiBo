@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="salesysdbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="salesysdbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Categories">
           <Key>
             <PropertyRef Name="CategoryID" />
@@ -20,6 +20,7 @@
           <Property Name="FullName" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="PhoneNumber" Type="varchar" MaxLength="15" />
           <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="IsDeleted" Type="tinyint" Nullable="false" />
         </EntityType>
         <EntityType Name="Deliveries">
           <Key>
@@ -74,7 +75,7 @@
           <Property Name="ProductName" Type="nvarchar" MaxLength="150" Nullable="false" />
           <Property Name="CategoryID" Type="int" />
           <Property Name="UnitPrice" Type="bigint" Nullable="false" />
-          <Property Name="UnitID" Type="int" Nullable="false" />
+          <Property Name="Unit" Type="nvarchar" MaxLength="50" />
           <Property Name="StockQuantity" Type="int" Nullable="false" />
           <Property Name="MinStockLevel" Type="int" Nullable="false" />
         </EntityType>
@@ -115,13 +116,6 @@
           <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="RequestedBy" Type="int" Nullable="false" />
           <Property Name="Notes" Type="nvarchar" MaxLength="255" />
-        </EntityType>
-        <EntityType Name="Units">
-          <Key>
-            <PropertyRef Name="UnitID" />
-          </Key>
-          <Property Name="UnitID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UnitName" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="UserAccounts">
           <Key>
@@ -214,18 +208,6 @@
             </Principal>
             <Dependent Role="Products">
               <PropertyRef Name="CategoryID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Products__UnitID__4D94879B">
-          <End Role="Units" Type="Self.Units" Multiplicity="1" />
-          <End Role="Products" Type="Self.Products" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Units">
-              <PropertyRef Name="UnitID" />
-            </Principal>
-            <Dependent Role="Products">
-              <PropertyRef Name="UnitID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -325,7 +307,6 @@
           <EntitySet Name="StockInDetails" EntityType="Self.StockInDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StockRequestDetails" EntityType="Self.StockRequestDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StockRequests" EntityType="Self.StockRequests" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Units" EntityType="Self.Units" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserAccounts" EntityType="Self.UserAccounts" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__Deliverie__Assig__571DF1D5" Association="Self.FK__Deliverie__Assig__571DF1D5">
             <End Role="Employees" EntitySet="Employees" />
@@ -353,10 +334,6 @@
           </AssociationSet>
           <AssociationSet Name="FK__Products__Catego__4CA06362" Association="Self.FK__Products__Catego__4CA06362">
             <End Role="Categories" EntitySet="Categories" />
-            <End Role="Products" EntitySet="Products" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Products__UnitID__4D94879B" Association="Self.FK__Products__UnitID__4D94879B">
-            <End Role="Units" EntitySet="Units" />
             <End Role="Products" EntitySet="Products" />
           </AssociationSet>
           <AssociationSet Name="FK__StockIn__Employe__6477ECF3" Association="Self.FK__StockIn__Employe__6477ECF3">
@@ -388,8 +365,7 @@
             <End Role="StockRequests" EntitySet="StockRequests" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="salesysdbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -410,6 +386,7 @@
           <Property Name="PhoneNumber" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Invoices" Relationship="Self.FK__Invoices__Custom__44FF419A" FromRole="Customers" ToRole="Invoices" />
+          <Property Name="IsDeleted" Type="Byte" Nullable="false" />
         </EntityType>
         <EntityType Name="Delivery">
           <Key>
@@ -477,12 +454,11 @@
           <Property Name="ProductName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="CategoryID" Type="Int32" />
           <Property Name="UnitPrice" Type="Int64" Nullable="false" />
-          <Property Name="UnitID" Type="Int32" Nullable="false" />
+          <Property Name="Unit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="StockQuantity" Type="Int32" Nullable="false" />
           <Property Name="MinStockLevel" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Category" Relationship="Self.FK__Products__Catego__4CA06362" FromRole="Products" ToRole="Categories" />
           <NavigationProperty Name="InvoiceDetails" Relationship="Self.FK__InvoiceDe__Produ__52593CB8" FromRole="Products" ToRole="InvoiceDetails" />
-          <NavigationProperty Name="Unit" Relationship="Self.FK__Products__UnitID__4D94879B" FromRole="Products" ToRole="Units" />
           <NavigationProperty Name="StockInDetails" Relationship="Self.FK__StockInDe__Produ__693CA210" FromRole="Products" ToRole="StockInDetails" />
           <NavigationProperty Name="StockRequestDetails" Relationship="Self.FK_StockRequestDetails_Products" FromRole="Products" ToRole="StockRequestDetails" />
         </EntityType>
@@ -531,14 +507,6 @@
           <Property Name="Notes" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Employee" Relationship="Self.FK_StockRequests_Employees" FromRole="StockRequests" ToRole="Employees" />
           <NavigationProperty Name="StockRequestDetails" Relationship="Self.FK_StockRequestDetails_Requests" FromRole="StockRequests" ToRole="StockRequestDetails" />
-        </EntityType>
-        <EntityType Name="Unit">
-          <Key>
-            <PropertyRef Name="UnitID" />
-          </Key>
-          <Property Name="UnitID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UnitName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Products" Relationship="Self.FK__Products__UnitID__4D94879B" FromRole="Units" ToRole="Products" />
         </EntityType>
         <EntityType Name="UserAccount">
           <Key>
@@ -671,18 +639,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Products__UnitID__4D94879B">
-          <End Role="Units" Type="Self.Unit" Multiplicity="1" />
-          <End Role="Products" Type="Self.Product" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Units">
-              <PropertyRef Name="UnitID" />
-            </Principal>
-            <Dependent Role="Products">
-              <PropertyRef Name="UnitID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__StockInDe__Produ__693CA210">
           <End Role="Products" Type="Self.Product" Multiplicity="1" />
           <End Role="StockInDetails" Type="Self.StockInDetail" Multiplicity="*" />
@@ -743,7 +699,6 @@
           <EntitySet Name="StockInDetails" EntityType="Self.StockInDetail" />
           <EntitySet Name="StockRequestDetails" EntityType="Self.StockRequestDetail" />
           <EntitySet Name="StockRequests" EntityType="Self.StockRequest" />
-          <EntitySet Name="Units" EntityType="Self.Unit" />
           <EntitySet Name="UserAccounts" EntityType="Self.UserAccount" />
           <AssociationSet Name="FK__Products__Catego__4CA06362" Association="Self.FK__Products__Catego__4CA06362">
             <End Role="Categories" EntitySet="Categories" />
@@ -785,10 +740,6 @@
             <End Role="Products" EntitySet="Products" />
             <End Role="InvoiceDetails" EntitySet="InvoiceDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK__Products__UnitID__4D94879B" Association="Self.FK__Products__UnitID__4D94879B">
-            <End Role="Units" EntitySet="Units" />
-            <End Role="Products" EntitySet="Products" />
-          </AssociationSet>
           <AssociationSet Name="FK__StockInDe__Produ__693CA210" Association="Self.FK__StockInDe__Produ__693CA210">
             <End Role="Products" EntitySet="Products" />
             <End Role="StockInDetails" EntitySet="StockInDetails" />
@@ -823,6 +774,7 @@
           <EntitySetMapping Name="Customers">
             <EntityTypeMapping TypeName="salesysdbModel.Customer">
               <MappingFragment StoreEntitySet="Customers">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
@@ -885,7 +837,7 @@
                 <ScalarProperty Name="ProductName" ColumnName="ProductName" />
                 <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
                 <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
-                <ScalarProperty Name="UnitID" ColumnName="UnitID" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
                 <ScalarProperty Name="StockQuantity" ColumnName="StockQuantity" />
                 <ScalarProperty Name="MinStockLevel" ColumnName="MinStockLevel" />
               </MappingFragment>
@@ -928,14 +880,6 @@
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="RequestedBy" ColumnName="RequestedBy" />
                 <ScalarProperty Name="Notes" ColumnName="Notes" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Units">
-            <EntityTypeMapping TypeName="salesysdbModel.Unit">
-              <MappingFragment StoreEntitySet="Units">
-                <ScalarProperty Name="UnitID" ColumnName="UnitID" />
-                <ScalarProperty Name="UnitName" ColumnName="UnitName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

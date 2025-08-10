@@ -54,3 +54,4 @@ TestResult.xml
 nunit-*.xml
 **/.vs
 /StoreManagement/PresentationLayer/App.config
+/StoreManagement/Entity/App.Config

@@ -103,9 +103,6 @@
     <Compile Include="StockRequestDetail.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Unit.cs">
-      <DependentUpon>DataModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="UserAccount.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
