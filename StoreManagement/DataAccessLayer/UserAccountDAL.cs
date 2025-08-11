@@ -15,6 +15,7 @@ namespace DataAccessLayer
         public UserAccountDAL()
         {
             this.employeeDAL = new EmployeeDAL();
+
         }
 
         public static Boolean Authenticate(String username, String password)
@@ -33,16 +34,17 @@ namespace DataAccessLayer
         {
             using (salesysdbEntities context = new salesysdbEntities())
             {
-                if (string.IsNullOrEmpty(keyword))
+                var query = context.UserAccounts
+            .Include("Employee");
+
+                if (!string.IsNullOrWhiteSpace(keyword))
                 {
-                    return context.UserAccounts.ToList();
+                    query = (System.Data.Entity.Infrastructure.DbQuery<UserAccount>)query.Where(u => u.Username.Contains(keyword)
+                                  || u.Employee.FullName.Contains(keyword)
+                                  || u.Employee.Email.StartsWith(keyword));
                 }
-                else
-                {
-                    return context.UserAccounts
-                        .Where(e => e.Username.Contains(keyword))
-                        .ToList();
-                }
+
+                return query.ToList();
             }
 
         }

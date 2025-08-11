@@ -22,7 +22,7 @@ namespace PresentationLayer
         private Timer debounceTimer;
         public EmployeeManagementForm()
         {
-        employeeBUS = new EmployeeBUS();
+            employeeBUS = new EmployeeBUS();
             userAccountBUS = new UserAccountBUS();
             InitializeComponent();
 
@@ -41,7 +41,7 @@ namespace PresentationLayer
             this.gridViewEmployee.Columns.Clear();
             this.gridViewEmployee.DataSource = null;
 
-            this.txtSearch.Text = String.IsNullOrEmpty(txtSearch.Text) ? DEFAULT_SEARCH_TEXT : txtSearch.Text;
+            this.txtSearch.Text = DEFAULT_SEARCH_TEXT;
             this.txtSearch.ForeColor = Color.Gray;
 
             this.gridViewEmployee.DataSource = employeeBUS.Get(null);
@@ -120,7 +120,7 @@ namespace PresentationLayer
             }
             else if (columnName == "btnDelete")
             {
-                var confirm = MessageBox.Show($"Xác nhận xóa nhân viên với ID: {employeeId}?", "Xác nhận", MessageBoxButtons.YesNo);
+                var confirm = MessageBox.Show($"Xác nhận xóa nhân viên với ID: {employeeId}?\nNếu có tài khoản cũng sẽ xóa luôn tài khoản.", "Xác nhận", MessageBoxButtons.YesNo);
                 if (confirm == DialogResult.Yes)
                 {
                     employeeBUS.Delete((int)employeeId);

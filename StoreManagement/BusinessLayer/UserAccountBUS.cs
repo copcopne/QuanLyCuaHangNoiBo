@@ -70,5 +70,13 @@ namespace BusinessLayer
             }
             userDAL.Update(account);
         }
+        public void Delete(int employeeId)
+        {
+            if (employeeId <= 0)
+            {
+                throw new Exception("ID nhân viên là bắt buộc!");
+            }
+            userDAL.Delete(employeeId);
+        }
     }
 }
