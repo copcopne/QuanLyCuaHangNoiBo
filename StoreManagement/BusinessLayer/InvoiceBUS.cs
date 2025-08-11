@@ -1,4 +1,5 @@
 ﻿using Entity;
+using DataAccessLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,22 +10,33 @@ namespace BusinessLayer
 {
     public class InvoiceBUS
     {
-        private readonly DataAccessLayer.InvoiceDAL invoiceDAL;
+        private readonly InvoiceDAL invoiceDAL;
         public InvoiceBUS(salesysdbEntities context)
         {
-            this.invoiceDAL = new DataAccessLayer.InvoiceDAL(context);
+            this.invoiceDAL = new InvoiceDAL(context);
         }
-        public List<Entity.Invoice> GetInvoices()
+        public List<Invoice> GetInvoicesFiltered(string keyword, string employeeName, bool? deliveryRequired, DateTime? startDate, DateTime? endDate)
         {
-            return invoiceDAL.GetInvoices();
+            return invoiceDAL.GetInvoicesFiltered(keyword, employeeName, deliveryRequired, startDate, endDate);
+
         }
-        public void AddInvoice(Entity.Invoice invoice)
+        public Invoice GetInvoiceById(int invoiceId)
+        {
+            if (invoiceId <= 0)
+            {
+                throw new ArgumentException("Mã đơn hàng không được bé hơn 0", nameof(invoiceId));
+            }
+            return invoiceDAL.GetInvoiceById(invoiceId);
+        }
+        public void AddInvoice(Invoice invoice)
         {
             if (invoice == null)
             {
-                throw new ArgumentNullException(nameof(invoice), "Invoice cannot be null");
+                throw new ArgumentNullException(nameof(invoice), "Mã đơn hàng không được null");
             }
             invoiceDAL.AddInvoice(invoice);
         }
+
+
     }
 }

@@ -24,7 +24,6 @@ namespace PresentationLayer
             this.context = new salesysdbEntities();
             this.customerService = new CustomerBUS(context);
 
-            // Khởi tạo Timer để debounce
             debounceTimer = new Timer();
             debounceTimer.Interval = 300;
             debounceTimer.Tick += DebounceTimer_Tick;
@@ -39,8 +38,6 @@ namespace PresentationLayer
             txtKeyword.Text = defaultSearchText;
             txtKeyword.ForeColor = Color.Gray;
 
-            
-            // cho cột sửa và xóa nằm chung một cột
             dataGridView.Columns.Add(new DataGridViewButtonColumn()
             {
                 Name = "btnEdit",
@@ -57,7 +54,6 @@ namespace PresentationLayer
                 UseColumnTextForButtonValue = true,
                 Width = 100
             });
-            // Đăng ký sự kiện CellClick cho DataGridView
             dataGridView.CellClick += DataGridView_CellClick;
         }
         private void DataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -77,7 +73,6 @@ namespace PresentationLayer
                 CustomerForm editCustomerForm = new CustomerForm(customer);
                 editCustomerForm.ShowDialog();
 
-                // Cập nhật
                 dataGridView.DataSource = customerService.GetCustomers(null);
             }
             else if (e.RowIndex >= 0 && e.ColumnIndex == dataGridView.Columns["btnDelete"].Index)

@@ -99,6 +99,8 @@
             this.txtKeyword.Size = new System.Drawing.Size(1174, 44);
             this.txtKeyword.TabIndex = 1;
             this.txtKeyword.TextChanged += new System.EventHandler(this.txtKeyword_TextChanged);
+            this.txtKeyword.Enter += new System.EventHandler(this.txtKeyword_Enter);
+            this.txtKeyword.Leave += new System.EventHandler(this.txtKeyword_Leave);
             // 
             // dtpFromDate
             // 
@@ -136,8 +138,10 @@
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.Location = new System.Drawing.Point(0, 124);
             this.dataGridView.Name = "dataGridView";
+            this.dataGridView.ReadOnly = true;
             this.dataGridView.Size = new System.Drawing.Size(1200, 568);
             this.dataGridView.TabIndex = 2;
+            this.dataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellClick);
             // 
             // panel2
             // 
