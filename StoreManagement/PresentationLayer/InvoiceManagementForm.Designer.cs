@@ -63,7 +63,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(932, 80);
+            this.label2.Location = new System.Drawing.Point(883, 82);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(99, 24);
             this.label2.TabIndex = 4;
@@ -73,18 +73,19 @@
             // 
             this.dtpToDay.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dtpToDay.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dtpToDay.Location = new System.Drawing.Point(613, 78);
+            this.dtpToDay.Location = new System.Drawing.Point(627, 78);
             this.dtpToDay.Name = "dtpToDay";
-            this.dtpToDay.Size = new System.Drawing.Size(304, 29);
+            this.dtpToDay.Size = new System.Drawing.Size(223, 29);
             this.dtpToDay.TabIndex = 5;
             // 
             // cbStatus
             // 
+            this.cbStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbStatus.FormattingEnabled = true;
-            this.cbStatus.Location = new System.Drawing.Point(1037, 76);
+            this.cbStatus.Location = new System.Drawing.Point(988, 76);
             this.cbStatus.Name = "cbStatus";
-            this.cbStatus.Size = new System.Drawing.Size(150, 32);
+            this.cbStatus.Size = new System.Drawing.Size(199, 32);
             this.cbStatus.TabIndex = 3;
             // 
             // txtKeyword
@@ -103,18 +104,19 @@
             // 
             this.dtpFromDate.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dtpFromDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dtpFromDate.Location = new System.Drawing.Point(291, 78);
+            this.dtpFromDate.Location = new System.Drawing.Point(367, 78);
             this.dtpFromDate.Name = "dtpFromDate";
-            this.dtpFromDate.Size = new System.Drawing.Size(304, 29);
+            this.dtpFromDate.Size = new System.Drawing.Size(223, 29);
             this.dtpFromDate.TabIndex = 4;
             // 
             // cbEmployee
             // 
+            this.cbEmployee.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbEmployee.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbEmployee.FormattingEnabled = true;
             this.cbEmployee.Location = new System.Drawing.Point(120, 76);
             this.cbEmployee.Name = "cbEmployee";
-            this.cbEmployee.Size = new System.Drawing.Size(147, 32);
+            this.cbEmployee.Size = new System.Drawing.Size(210, 32);
             this.cbEmployee.TabIndex = 2;
             // 
             // label1
@@ -145,7 +147,7 @@
             this.panel2.Size = new System.Drawing.Size(1200, 51);
             this.panel2.TabIndex = 3;
             // 
-            // InvoiceManagement
+            // InvoiceManagementForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -155,7 +157,7 @@
             this.Controls.Add(this.panel1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Name = "InvoiceManagement";
+            this.Name = "InvoiceManagementForm";
             this.Text = "InvoiceManagement";
             this.Load += new System.EventHandler(this.InvoiceManagement_Load);
             this.panel1.ResumeLayout(false);

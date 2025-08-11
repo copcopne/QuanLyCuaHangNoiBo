@@ -30,16 +30,39 @@ namespace PresentationLayer
 
         private void InvoiceManagement_Load(object sender, EventArgs e)
         {
-            dataGridView.DataSource = invoiceService.GetInvoices();
+            dataGridView.DataSource = invoiceService.GetInvoices().Select(i => new
+            {
+                i.InvoiceID,
+                CustomerName = i.Customer != null ? i.Customer.FullName : "N/A",
+                EmployeeName = i.Employee != null ? i.Employee.FullName : "N/A",
+                i.TotalAmount,
+                InvoiceDate = i.InvoiceDate.ToString("dd/MM/yyyy"),
+                i.DeliveryRequired
+            }).ToList();
             dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-            // ẩn cột không cần thiết
-            dataGridView.Columns["Customer"].Visible = false;
-            dataGridView.Columns["Deliveries"].Visible = false;
-            dataGridView.Columns["Employee"].Visible = false;
-            dataGridView.Columns["InvoiceDetails"].Visible = false;
+            var employees = context.Employees.AsNoTracking().Select(emp => emp.FullName).ToList();
+            employees.Insert(0, string.Empty);
+            cbEmployee.DataSource = employees;
 
+            dtpFromDate.Format = DateTimePickerFormat.Custom;
+            dtpFromDate.CustomFormat = "'Từ ngày:' dd/MM/yyyy";
+            dtpToDay.Format = DateTimePickerFormat.Custom;
+            dtpToDay.CustomFormat = "'Đến ngày:' dd/MM/yyyy";
+
+            var statuses = new List<string> { "Tất cả", "Cần giao hàng", "Không giao hàng" };
+            var selectedStatus = cbStatus.SelectedItem as string;
+            cbStatus.DataSource = statuses;
+
+            if (selectedStatus != null)
+                cbStatus.SelectedItem = selectedStatus;
+            else
+                cbStatus.SelectedIndex = 0; // Default to "Tất cả"
+
+            dtpToDay.Value = DateTime.Today;
+            dtpFromDate.Value = DateTime.Today.AddDays(-30);
 
         }
+
     }
 }
