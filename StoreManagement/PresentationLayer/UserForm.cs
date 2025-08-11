@@ -57,7 +57,7 @@ namespace PresentationLayer
             }
             try
             {
-                userAccountBUS.Update(userAccount);
+                userAccountBUS.Update(userAccount, checkBoxChangePassword.Checked);
                 MessageBox.Show("Cập nhật tài khoản người dùng thành công.");
                 this.Close();
             }
@@ -87,7 +87,6 @@ namespace PresentationLayer
             {
                 MessageBox.Show("Không tìm thấy tài khoản người dùng cho nhân viên này.");
                 this.Close();
-
             }
         }
     }

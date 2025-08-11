@@ -38,6 +38,17 @@ namespace DataAccessLayer
                 return context.Employees.FirstOrDefault(e => e.Email == email);
         }
 
+        public List<Employee> GetEmplyeesWithoutAccount()
+        {
+            using (salesysdbEntities context = new salesysdbEntities())
+            {
+                return context.Employees
+                    .Where(e => !context.UserAccounts
+                        .Any(u => u.EmployeeID == e.EmployeeID))
+                    .ToList();
+            }
+        }
+
         public void Add(Employee employee)
         {
             using (salesysdbEntities context = new salesysdbEntities())

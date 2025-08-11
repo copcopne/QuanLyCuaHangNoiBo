@@ -30,7 +30,11 @@ namespace BusinessLayer
 
             return employeeDAL.GetByEmail(email);
         }
-
+        
+        public List<Entity.Employee> GetEmplyeesWithoutAccount()
+        {
+            return employeeDAL.GetEmplyeesWithoutAccount();
+        }
         public Entity.Employee Get(int employeeId)
         {
             if (employeeId <= 0)
