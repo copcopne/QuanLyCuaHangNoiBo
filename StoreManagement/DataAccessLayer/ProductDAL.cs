@@ -23,11 +23,12 @@ namespace DataAccessLayer
         {
             if (string.IsNullOrEmpty(keyword))
             {
-                return context.Products.ToList();
+                return context.Products.AsNoTracking().ToList();
             }
             else
             {
                 return context.Products
+                    .AsNoTracking()
                     .Where(p => p.ProductName.Contains(keyword))
                     .ToList();
             }
@@ -59,9 +60,7 @@ namespace DataAccessLayer
             {
                 existingProduct.ProductName = product.ProductName;
                 existingProduct.UnitPrice = product.UnitPrice;
-                existingProduct.StockQuantity = product.StockQuantity;
                 existingProduct.CategoryID = product.CategoryID;
-                existingProduct.StockQuantity = product.StockQuantity;
                 existingProduct.MinStockLevel = product.MinStockLevel;
                 existingProduct.Unit = product.Unit;
 
