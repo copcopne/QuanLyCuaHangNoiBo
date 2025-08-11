@@ -14,20 +14,20 @@ namespace PresentationLayer
     {
         private readonly BusinessLayer.EmployeeBUS employeeBUS;
         private readonly BusinessLayer.UserAccountBUS userAccountBUS;
+        private Entity.Employee employee;
         private Boolean isEditMode = false;
-        private int employeeId = -1;
         public EmployeeForm(int employeeId)
         {
             employeeBUS = new BusinessLayer.EmployeeBUS();
+            userAccountBUS = new BusinessLayer.UserAccountBUS();
             InitializeComponent();
-            if(employeeId > 0)
+            if (employeeId > 0)
             {
-                this.employeeId = employeeId;
                 isEditMode = true;
 
                 this.checkHaveAccount.Visible = false;
                 this.grpBoxAccount.Visible = false;
-                var employee = employeeBUS.Get(employeeId);
+                employee = employeeBUS.Get(employeeId);
                 if (employee != null)
                 {
                     txtFullName.Text = employee.FullName;
@@ -40,10 +40,12 @@ namespace PresentationLayer
                 else
                 {
                     MessageBox.Show("Nhân viên không tồn tại.");
+                    this.Close();
                 }
             }
             else
             {
+                employee = new Entity.Employee();
                 txtFullName.Clear();
                 txtEmail.Clear();
             }
@@ -69,26 +71,37 @@ namespace PresentationLayer
                 MessageBox.Show("Họ tên và email là bắt buộc.");
                 return;
             }
-            Entity.Employee employee = new Entity.Employee
+            if (!isEditMode && employeeBUS.GetByEmail(txtEmail.Text.Trim()) != null ||
+                isEditMode && (employee.Email.ToLower() != txtEmail.Text.ToLower().Trim() &&
+                                employeeBUS.GetByEmail(txtEmail.Text.Trim()) != null))
             {
-                FullName = txtFullName.Text,
-                Email = txtEmail.Text,
-                Address = txtAddress.Text,
-                Phone = txtPhone.Text,
-                Position = txtPosition.Text,
-                Status = txtStatus.Text
-            };
+                MessageBox.Show("Email đã tồn tại.");
+                return;
+            }
+
+            employee.FullName = txtFullName.Text.Trim();
+            employee.Email = txtEmail.Text.Trim();
+            employee.Address = txtAddress.Text.Trim();
+            employee.Phone = txtPhone.Text.Trim();
+            employee.Position = txtPosition.Text.Trim();
+            employee.Status = txtStatus.Text.Trim();
             if (isEditMode)
             {
-                employee.EmployeeID = this.employeeId;
-                employeeBUS.Update(employee);
-                MessageBox.Show("Cập nhật nhân viên thành công.");
+                try
+                {
+                    employeeBUS.Update(employee);
+                    MessageBox.Show("Cập nhật nhân viên thành công.");
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show($"Lỗi khi cập nhật nhân viên!");
+                }
 
-                btnCancel_CLick(sender, e);
+                this.Close();
             }
             else
             {
-                if(checkHaveAccount.Checked)
+                if (checkHaveAccount.Checked)
                 {
                     if (string.IsNullOrWhiteSpace(txtUsername.Text) || string.IsNullOrWhiteSpace(txtPassword.Text) || string.IsNullOrWhiteSpace(txtRole.Text))
                     {
@@ -97,16 +110,32 @@ namespace PresentationLayer
                     }
                     Entity.UserAccount userAccount = new Entity.UserAccount
                     {
-                        Username = txtUsername.Text,
-                        PasswordHash = txtPassword.Text,
-                        Role = txtRole.Text
+                        Username = txtUsername.Text.Trim(),
+                        PasswordHash = txtPassword.Text.Trim(),
+                        Role = txtRole.Text.ToUpper().Trim()
                     };
-                    userAccountBUS.Add(userAccount, employee);
+                    try
+                    {
+                        userAccountBUS.Add(userAccount, employee);
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show($"Lỗi khi tạo tài khoản cho nhân viên!");
+                        return;
+                    }
                 }
-                employeeBUS.Add(employee);
-                MessageBox.Show("Thêm nhân viên thành công.");
-
-                btnCancel_CLick(sender, e);
+                else
+                    try
+                    {
+                        employeeBUS.Add(employee);
+                        MessageBox.Show("Thêm nhân viên thành công.");
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show($"Lỗi khi thêm nhân viên!");
+                        return;
+                    }
+                this.Close();
             }
         }
 
