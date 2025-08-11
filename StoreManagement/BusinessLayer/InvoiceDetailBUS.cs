@@ -32,5 +32,13 @@ namespace BusinessLayer
             }
             invoiceDetailDAL.UpdateInvoiceDetail(invoiceDetail);
         }
+        public void DeleteInvoiceDetail(int invoiceId, int productId)
+        {
+            if (invoiceId <= 0 || productId <= 0)
+            {
+                throw new ArgumentException("Mã đơn hàng và mã sản phẩm phải lớn hơn 0");
+            }
+            invoiceDetailDAL.DeleteInvoiceDetail(invoiceId, productId);
+        }
     }
 }

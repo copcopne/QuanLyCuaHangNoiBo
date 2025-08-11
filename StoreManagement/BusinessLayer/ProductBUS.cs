@@ -21,6 +21,10 @@ namespace BusinessLayer
         {
             return productDAL.GetProducts(keyword);
         }
+        public List<Product> GetActiveProducts()
+        {
+            return productDAL.GetActiveProduct();
+        }
         public Product GetProductById(int productId)
         {
             return productDAL.GetProductById(productId);
@@ -41,9 +45,9 @@ namespace BusinessLayer
         {
             productDAL.DeleteProduct(productId);
         }
-        public void updateProductQuantity(int productId, int quantity)
+        public void UpdateProductQuantity(int productId, int quantity)
         {
-            productDAL.updateStockQuantity(productId, quantity);
+            productDAL.UpdateStockQuantity(productId, quantity);
         }
     }
 }

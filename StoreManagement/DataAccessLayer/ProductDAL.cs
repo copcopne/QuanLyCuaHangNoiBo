@@ -33,6 +33,13 @@ namespace DataAccessLayer
             }
         }
 
+        public List<Product> GetActiveProduct()
+        {
+            return context.Products
+                .Where(p => p.isDeleted == 0)
+                .ToList();
+        }
+
         public Product GetProductById(int productId)
         {
             return context.Products.FirstOrDefault(p => p.ProductID == productId);
@@ -84,7 +91,7 @@ namespace DataAccessLayer
             }
         }
 
-        public void updateStockQuantity(int productId, int quantity)
+        public void UpdateStockQuantity(int productId, int quantity)
         {
             var product = context.Products.FirstOrDefault(p => p.ProductID == productId);
             if (product != null)

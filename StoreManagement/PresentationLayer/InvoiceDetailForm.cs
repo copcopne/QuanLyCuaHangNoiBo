@@ -66,7 +66,7 @@ namespace PresentationLayer
             cbCategory.DataSource = categories;
             cbCategory.DisplayMember = "CategoryName";
             cbCategory.SelectedIndex = 0;
-            cbProductName.DataSource = productBUS.GetProducts(null);
+            cbProductName.DataSource = productBUS.GetActiveProducts();
             cbProductName.DisplayMember = "ProductName";
             cbProductName.ValueMember = "ProductID";
         }
@@ -81,7 +81,7 @@ namespace PresentationLayer
                 cbProductName.DataSource = productsInCategory;
                 return;
             }
-            cbProductName.DataSource = productBUS.GetProducts(null);
+            cbProductName.DataSource = productBUS.GetActiveProducts();
         }
 
         private void txtAmount_KeyPress(object sender, KeyPressEventArgs e)
@@ -110,8 +110,19 @@ namespace PresentationLayer
                 MessageBox.Show("Vui lòng nhập số lượng và đơn giá.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            if (invoiceDetail == null)
+
+            int selectedProductId = (int)cbProductName.SelectedValue;
+            int quantity = int.Parse(txtAmount.Text);
+            long unitPrice = long.Parse(txtUnitPrice.Text);
+            var product = productBUS.GetProductById(selectedProductId);
+
+            if (invoiceDetail == null) // Thêm mới
             {
+                if (quantity > product.StockQuantity)
+                {
+                    MessageBox.Show($"Số lượng tồn kho không đủ. Hiện tại: {product.StockQuantity}", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
                 var existingDetail = invoiceDetailBUS.GetInvoiceDetails(invoice.InvoiceID)
                     .FirstOrDefault(id => id.ProductID == (int)cbProductName.SelectedValue);
                 if (existingDetail != null)
@@ -128,13 +139,25 @@ namespace PresentationLayer
                     UnitPrice = long.Parse(txtUnitPrice.Text),
                 };
                 invoiceDetailBUS.AddInvoiceDetail(invoiceDetail);
+                productBUS.UpdateProductQuantity(selectedProductId, -quantity);
                 MessageBox.Show("Thêm chi tiết hóa đơn thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            else
+            else // Cập nhật
             {
+                int oldQuantity = invoiceDetail.Quantity;
+                int difference = quantity - oldQuantity;
+                if (difference > 0 && difference > product.StockQuantity)
+                {
+                    MessageBox.Show($"Số lượng tồn kho không đủ. Hiện tại: {product.StockQuantity}", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 invoiceDetail.Quantity = int.Parse(txtAmount.Text);
                 invoiceDetail.UnitPrice = long.Parse(txtUnitPrice.Text);
                 invoiceDetailBUS.UpdateInvoiceDetail(invoiceDetail);
+                if (difference != 0)
+                    productBUS.UpdateProductQuantity(selectedProductId, -difference);
+
                 MessageBox.Show("Cập nhật chi tiết hóa đơn thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             this.Close();
