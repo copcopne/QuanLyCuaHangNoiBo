@@ -50,12 +50,12 @@
             // 
             // btnAddCustomer
             // 
-            this.btnAddCustomer.Location = new System.Drawing.Point(1015, 14);
+            this.btnAddCustomer.Location = new System.Drawing.Point(1124, 14);
             this.btnAddCustomer.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnAddCustomer.Name = "btnAddCustomer";
-            this.btnAddCustomer.Size = new System.Drawing.Size(159, 44);
+            this.btnAddCustomer.Size = new System.Drawing.Size(50, 44);
             this.btnAddCustomer.TabIndex = 2;
-            this.btnAddCustomer.Text = "Thêm khách hàng";
+            this.btnAddCustomer.Text = "+";
             this.btnAddCustomer.UseVisualStyleBackColor = true;
             this.btnAddCustomer.Click += new System.EventHandler(this.btnAddCustomer_Click);
             // 
@@ -67,7 +67,7 @@
             this.txtKeyword.Location = new System.Drawing.Point(13, 14);
             this.txtKeyword.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtKeyword.Name = "txtKeyword";
-            this.txtKeyword.Size = new System.Drawing.Size(965, 44);
+            this.txtKeyword.Size = new System.Drawing.Size(1083, 44);
             this.txtKeyword.TabIndex = 1;
             this.txtKeyword.TextChanged += new System.EventHandler(this.txtKeyword_TextChanged);
             this.txtKeyword.Enter += new System.EventHandler(this.txtKeyword_Enter);

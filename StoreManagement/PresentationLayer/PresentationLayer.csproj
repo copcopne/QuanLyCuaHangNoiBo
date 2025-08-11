@@ -68,11 +68,17 @@
     <Compile Include="CustomerManagementForm.Designer.cs">
       <DependentUpon>CustomerManagementForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="InvoiceEditForm.cs">
+    <Compile Include="InvoiceDetailForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="InvoiceEditForm.Designer.cs">
-      <DependentUpon>InvoiceEditForm.cs</DependentUpon>
+    <Compile Include="InvoiceDetailForm.Designer.cs">
+      <DependentUpon>InvoiceDetailForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InvoiceDetailManagementForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="InvoiceDetailManagementForm.Designer.cs">
+      <DependentUpon>InvoiceDetailManagementForm.cs</DependentUpon>
     </Compile>
     <Compile Include="EmployeeForm.cs">
       <SubType>Form</SubType>
@@ -117,6 +123,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CustomerManagementForm.resx">
       <DependentUpon>CustomerManagementForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InvoiceDetailForm.resx">
+      <DependentUpon>InvoiceDetailForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InvoiceDetailManagementForm.resx">
+      <DependentUpon>InvoiceDetailManagementForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InvoiceManagementForm.resx">
       <DependentUpon>InvoiceManagementForm.cs</DependentUpon>

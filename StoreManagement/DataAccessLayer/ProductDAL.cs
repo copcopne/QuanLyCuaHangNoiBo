@@ -38,6 +38,13 @@ namespace DataAccessLayer
             return context.Products.FirstOrDefault(p => p.ProductID == productId);
         }
 
+        public List<Product> GetProductsByCategory(int categoryId)
+        {
+            return context.Products
+                .Where(p => p.CategoryID == categoryId)
+                .ToList();
+        }
+
 
         public void AddProduct(Product product)
         {

@@ -2,13 +2,9 @@
 using Entity;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PresentationLayer
@@ -39,6 +35,7 @@ namespace PresentationLayer
         private void InvoiceManagement_Load(object sender, EventArgs e)
         {
             LoadInvoices();
+            setHeader();
             LoadComboBox();
             LoadDateTimePicker();
             dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
@@ -55,12 +52,28 @@ namespace PresentationLayer
             dataGridView.Columns.Add(new DataGridViewButtonColumn()
             {
                 Name = "btnEdit",
-                HeaderText = "Sửa",
-                Text = "Sửa",
+                HeaderText = "Hành động",
+                Text = "Xem chi tiết",
                 UseColumnTextForButtonValue = true,
                 Width = 100
             });
 
+        }
+        private void setHeader()
+        {
+            dataGridView.Columns["InvoiceID"].HeaderText = "Mã hóa đơn";
+            dataGridView.Columns["CustomerName"].HeaderText = "Tên khách hàng";
+            dataGridView.Columns["EmployeeName"].HeaderText = "Tên nhân viên";
+            dataGridView.Columns["TotalAmount"].HeaderText = "Tổng tiền";
+            dataGridView.Columns["DeliveryRequired"].HeaderText = "Cần giao hàng";
+            dataGridView.Columns["InvoiceDate"].HeaderText = "Ngày lập hóa đơn";
+
+            dataGridView.Columns["InvoiceID"].Width = 100;
+            dataGridView.Columns["CustomerName"].Width = 150;
+            dataGridView.Columns["EmployeeName"].Width = 150;
+            dataGridView.Columns["TotalAmount"].Width = 100;
+            dataGridView.Columns["DeliveryRequired"].Width = 120;
+            dataGridView.Columns["InvoiceDate"].Width = 120;
         }
         private void dataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -70,7 +83,7 @@ namespace PresentationLayer
                 var invoiceId = (int)selectedRow.Cells["InvoiceID"].Value;
                 var invoice = invoiceService.GetInvoiceById(invoiceId);
 
-                var editForm = new InvoiceEditForm(invoice);
+                var editForm = new InvoiceDetailManagementForm(invoice);
                 editForm.ShowDialog();
 
                 LoadInvoices();
@@ -97,14 +110,14 @@ namespace PresentationLayer
                     deliveryRequired = false;
                 }
             }
-            DateTime? startDate = null;
-            DateTime? endDate = null;
+            DateTime? startDate = dtpFromDate.Value;
+            DateTime? endDate = dtpToDay.Value;
             var invoices = invoiceService.GetInvoicesFiltered(keyword, employeeName, deliveryRequired, startDate, endDate);
             dataGridView.DataSource = invoices.Select(i => new
             {
                 i.InvoiceID,
-                CustomerName = i.Customer.FullName,
-                EmployeeName = i.Employee.FullName,
+                CustomerName =  i.Customer.FullName != null ? i.Customer.FullName : "Khách",
+                EmployeeName = i.Employee.FullName != null ? i.Employee.FullName : "Không rõ",
                 TotalAmount = i.TotalAmount,
                 i.DeliveryRequired,
                 InvoiceDate = i.InvoiceDate,
