@@ -1,36 +1,34 @@
 ﻿using Entity;
 using System;
+using DataAccessLayer;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessLayer
 {
     public class InvoiceDetailBUS
     {
-        private readonly DataAccessLayer.InvoiceDetailDAL invoiceDetailDAL;
+        private readonly InvoiceDetailDAL invoiceDetailDAL;
         public InvoiceDetailBUS(salesysdbEntities context)
         {
             this.invoiceDetailDAL = new DataAccessLayer.InvoiceDetailDAL(context);
         }
-        public List<Entity.InvoiceDetail> GetInvoiceDetails(int invoiceId)
+        public List<InvoiceDetail> GetInvoiceDetails(int invoiceId)
         {
             return invoiceDetailDAL.GetInvoiceDetails(invoiceId);
         }
-        public void AddInvoiceDetail(Entity.InvoiceDetail invoiceDetail)
+        public void AddInvoiceDetail(InvoiceDetail invoiceDetail)
         {
             if (invoiceDetail == null)
             {
-                throw new ArgumentNullException(nameof(invoiceDetail), "Invoice detail cannot be null");
+                throw new ArgumentNullException(nameof(invoiceDetail), "Chi tiết hóa đơn không được null");
             }
             invoiceDetailDAL.AddInvoiceDetail(invoiceDetail);
         }
-        public void UpdateInvoiceDetail(Entity.InvoiceDetail invoiceDetail)
+        public void UpdateInvoiceDetail(InvoiceDetail invoiceDetail)
         {
             if (invoiceDetail == null)
             {
-                throw new ArgumentNullException(nameof(invoiceDetail), "Invoice detail cannot be null");
+                throw new ArgumentNullException(nameof(invoiceDetail), "Chi tiết hóa đơn không được null");
             }
             invoiceDetailDAL.UpdateInvoiceDetail(invoiceDetail);
         }

@@ -124,6 +124,7 @@ namespace PresentationLayer
             }).ToList();
 
         }
+
         private void dataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (dataGridView.Columns[e.ColumnIndex].Name == "InvoiceDate")
@@ -152,6 +153,7 @@ namespace PresentationLayer
                 cbStatus.SelectedIndex = 0;
 
         }
+
         private void DebounceTimer_Tick(object sender, EventArgs e)
         {
             debounceTimer.Stop();
@@ -168,7 +170,6 @@ namespace PresentationLayer
             dtpToDay.Value = DateTime.Today;
             dtpFromDate.Value = DateTime.Today.AddDays(-30);
         }
-
 
         private void txtKeyword_Enter(object sender, EventArgs e)
         {

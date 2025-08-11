@@ -1,6 +1,7 @@
-﻿using System;
-using Entity;
+﻿using Entity;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace DataAccessLayer
         }
         public List<InvoiceDetail> GetInvoiceDetails(int invoiceId)
         {
-            return context.InvoiceDetails.Where(id => id.InvoiceID == invoiceId).ToList();
+            return context.InvoiceDetails.Where(id => id.InvoiceID == invoiceId).AsNoTracking().ToList();
         }
         public void AddInvoiceDetail(InvoiceDetail invoiceDetail)
         {
@@ -25,17 +26,17 @@ namespace DataAccessLayer
         }
         public void UpdateInvoiceDetail(InvoiceDetail invoiceDetail)
         {
-            var existingDetail = context.InvoiceDetails.Find(invoiceDetail.InvoiceID);
+
+            var existingDetail = context.InvoiceDetails.FirstOrDefault(id => id.InvoiceID == invoiceDetail.InvoiceID && id.ProductID == invoiceDetail.ProductID);
             if (existingDetail != null)
             {
                 existingDetail.Quantity = invoiceDetail.Quantity;
                 existingDetail.UnitPrice = invoiceDetail.UnitPrice;
-                existingDetail.ProductID = invoiceDetail.ProductID;
                 context.SaveChanges();
             }
             else
             {
-                throw new Exception("Invoice detail not found");
+                throw new Exception("Chi tiết hóa đơn không tồn tại.");
             }
         }
     }

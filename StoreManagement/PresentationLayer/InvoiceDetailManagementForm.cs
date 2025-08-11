@@ -55,6 +55,7 @@ namespace PresentationLayer
             }
             var displayDetails = invoiceDetails.Select(id => new
             {
+                id.ProductID,
                 ProductName = id.Product != null ? id.Product.ProductName : "Không rõ",
                 Quantity = id.Quantity,
                 UnitPrice = id.UnitPrice,
@@ -62,23 +63,25 @@ namespace PresentationLayer
             }).ToList();
             dataGridView.DataSource = displayDetails;
             dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView.Font = new System.Drawing.Font("Arial", 12);
         }
         private void DataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
             if (dataGridView.Columns[e.ColumnIndex].Name == "btnEdit")
             {
-                int productID = ((InvoiceDetail)dataGridView.Rows[e.RowIndex].DataBoundItem).ProductID;
+                int productID = (int)dataGridView.Rows[e.RowIndex].Cells["ProductID"].Value;
                 InvoiceDetailForm editForm = new InvoiceDetailForm(invoice, productID);
                 editForm.ShowDialog();
-
                 LoadInvoiceDetails(invoice.InvoiceID);
             }
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            
+            InvoiceDetailForm addForm = new InvoiceDetailForm(invoice);
+            addForm.ShowDialog();
+            LoadInvoiceDetails(invoice.InvoiceID);
         }
 
         private void btnReturn_Click(object sender, EventArgs e)

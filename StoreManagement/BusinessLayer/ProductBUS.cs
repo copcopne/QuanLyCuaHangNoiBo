@@ -37,5 +37,13 @@ namespace BusinessLayer
         {
             productDAL.UpdateProduct(product);
         }
+        public void DeleteProduct(int productId)
+        {
+            productDAL.DeleteProduct(productId);
+        }
+        public void updateProductQuantity(int productId, int quantity)
+        {
+            productDAL.updateStockQuantity(productId, quantity);
+        }
     }
 }

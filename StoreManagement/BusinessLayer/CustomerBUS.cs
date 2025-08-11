@@ -15,15 +15,15 @@ namespace BusinessLayer
         {
             customerRepository = new CustomerDAL(context);
         }
-        public List<Entity.Customer> GetCustomers(string searchTerm)
+        public List<Customer> GetCustomers(string searchTerm)
         {
             return customerRepository.getCustomers(searchTerm);
         }
-        public Entity.Customer AddCustomer(in Entity.Customer customer)
+        public Customer AddCustomer(Customer customer)
         {
             return customerRepository.createCustomer(customer);
         }
-        public Entity.Customer UpdateCustomer(Entity.Customer customer)
+        public Customer UpdateCustomer(Customer customer)
         {
             return customerRepository.updateCustomer(customer);
         }

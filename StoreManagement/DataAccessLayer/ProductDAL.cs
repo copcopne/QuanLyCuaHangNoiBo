@@ -71,11 +71,30 @@ namespace DataAccessLayer
 
         public void DeleteProduct(int productId)
         {
+            // xóa mềm
             var product = context.Products.FirstOrDefault(p => p.ProductID == productId);
             if (product != null)
             {
-                context.Products.Remove(product);
+                product.isDeleted = 1;
                 context.SaveChanges();
+            }
+            else
+            {
+                throw new Exception("Sản phẩm không tồn tại.");
+            }
+        }
+
+        public void updateStockQuantity(int productId, int quantity)
+        {
+            var product = context.Products.FirstOrDefault(p => p.ProductID == productId);
+            if (product != null)
+            {
+                product.StockQuantity += quantity;
+                context.SaveChanges();
+            }
+            else
+            {
+                throw new Exception("Sản phẩm không tồn tại.");
             }
         }
     }
