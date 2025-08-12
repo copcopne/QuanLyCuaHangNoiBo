@@ -403,7 +403,8 @@ namespace PresentationLayer
             {
                 InvoiceDate = DateTime.Now,
                 CustomerID = this.customer?.CustomerID,
-                InvoiceDetails = new List<InvoiceDetail>()
+                InvoiceDetails = new List<InvoiceDetail>(),
+                EmployeeID = AuthenticateBUS.CurrentUser.EmployeeID,
             };
 
             // Tạo chi tiết hóa đơn từ DataGridView
@@ -455,7 +456,16 @@ namespace PresentationLayer
 
         private void btnAddNewCustomer_Click(object sender, EventArgs e)
         {
-
+            using (var addCustomerForm = new CustomerForm())
+            {
+                if (addCustomerForm.ShowDialog() == DialogResult.OK)
+                {
+                    // Lấy khách hàng mới được thêm
+                    this.customer = addCustomerForm.Tag as Customer;
+                    txtCustomer.Text = this.customer.CustomerID.ToString();
+                    txtCustomerName.Text = this.customer.FullName;
+                }
+            }
         }
     }
 }
