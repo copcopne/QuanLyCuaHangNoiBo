@@ -10,6 +10,7 @@ namespace BusinessLayer
     public static class AuthenticateBUS
     {
         private static Entity.UserAccount currentUser;
+        private static readonly UserAccountBUS userAccountBUS = new UserAccountBUS();
 
         public static Entity.UserAccount CurrentUser
         {
@@ -22,7 +23,7 @@ namespace BusinessLayer
             {
                 throw new Exception("Tên đăng nhập và mật khẩu là bắt buộc!");
             }
-            var user = UserAccountDAL.Authenticate(username, password);
+            var user = userAccountBUS.Authenticate(username, password);
             if (user != null)
             {
                 currentUser = user;
