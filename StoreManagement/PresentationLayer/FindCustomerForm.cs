@@ -30,6 +30,14 @@ namespace PresentationLayer
         private void FindCustomerForm_Load(object sender, EventArgs e)
         {
             LoadCustomers();
+            this.ActiveControl = dataGridView;
+            txtKeyword.Text = defaultSearchText;
+            txtKeyword.ForeColor = SystemColors.GrayText;
+            txtKeyword.Enter += txtKeyword_Enter;
+            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView.MultiSelect = false;
+            dataGridView.Font = new Font("Segoe UI", 12);
         }
 
         private void LoadCustomers()
@@ -38,7 +46,13 @@ namespace PresentationLayer
             {
                 customerBUS = new CustomerBUS(context);
                 List<Customer> customers = customerBUS.GetCustomers(null);
-                dataGridView.DataSource = customers;
+                dataGridView.DataSource = customers.Select(c => new
+                {
+                    c.CustomerID,
+                    c.FullName,
+                    c.PhoneNumber,
+                    c.Email
+                }).ToList();
             }
         }
 
@@ -47,11 +61,21 @@ namespace PresentationLayer
             if (dataGridView.SelectedRows.Count > 0)
             {
                 // Lấy khách hàng đã chọn
-                if (dataGridView.SelectedRows[0].DataBoundItem is Customer selectedCustomer)
+                int selectedCustomerId = (int)dataGridView.SelectedRows[0].Cells["CustomerID"].Value;
+                using (salesysdbEntities context = new salesysdbEntities())
                 {
-                    DialogResult = DialogResult.OK;
-                    Tag = selectedCustomer;
-                    Close();
+                    customerBUS = new CustomerBUS(context);
+                    Customer selectedCustomer = customerBUS.GetCustomerById(selectedCustomerId);
+                    if (selectedCustomer != null)
+                    {
+                        DialogResult = DialogResult.OK;
+                        Tag = selectedCustomer; // Trả về đối tượng khách hàng đã chọn
+                        Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Không tìm thấy khách hàng đã chọn.");
+                    }
                 }
             }
             else
@@ -74,7 +98,13 @@ namespace PresentationLayer
                 {
                     customerBUS = new CustomerBUS(context);
                     List<Customer> customers = customerBUS.GetCustomers(keyword);
-                    dataGridView.DataSource = customers;
+                    dataGridView.DataSource = customers.Select(c => new
+                    {
+                        c.CustomerID,
+                        c.FullName,
+                        c.PhoneNumber,
+                        c.Email
+                    }).ToList();
                 }
             }
 

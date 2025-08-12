@@ -45,7 +45,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(800, 47);
+            this.panel1.Size = new System.Drawing.Size(941, 47);
             this.panel1.TabIndex = 0;
             // 
             // txtKeyword
@@ -56,10 +56,9 @@
             this.txtKeyword.Location = new System.Drawing.Point(4, 7);
             this.txtKeyword.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtKeyword.Name = "txtKeyword";
-            this.txtKeyword.Size = new System.Drawing.Size(792, 35);
+            this.txtKeyword.Size = new System.Drawing.Size(933, 35);
             this.txtKeyword.TabIndex = 2;
             this.txtKeyword.TextChanged += new System.EventHandler(this.txtKeyword_TextChanged);
-            this.txtKeyword.Enter += new System.EventHandler(this.txtKeyword_Enter);
             this.txtKeyword.Leave += new System.EventHandler(this.txtKeyword_Leave);
             // 
             // panel2
@@ -67,9 +66,9 @@
             this.panel2.Controls.Add(this.btnSelect);
             this.panel2.Controls.Add(this.btnReturn);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 403);
+            this.panel2.Location = new System.Drawing.Point(0, 467);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(800, 47);
+            this.panel2.Size = new System.Drawing.Size(941, 47);
             this.panel2.TabIndex = 1;
             // 
             // btnSelect
@@ -106,14 +105,14 @@
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.Location = new System.Drawing.Point(0, 47);
             this.dataGridView.Name = "dataGridView";
-            this.dataGridView.Size = new System.Drawing.Size(800, 356);
+            this.dataGridView.Size = new System.Drawing.Size(941, 420);
             this.dataGridView.TabIndex = 2;
             // 
             // FindCustomerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(941, 514);
             this.Controls.Add(this.dataGridView);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);

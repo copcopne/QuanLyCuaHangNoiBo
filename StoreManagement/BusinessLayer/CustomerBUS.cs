@@ -17,23 +17,31 @@ namespace BusinessLayer
         }
         public List<Customer> GetCustomers(string searchTerm)
         {
-            return customerDAL.getCustomers(searchTerm);
+            return customerDAL.GetCustomers(searchTerm);
         }
         public Customer AddCustomer(Customer customer)
         {
-            return customerDAL.createCustomer(customer);
+            return customerDAL.CreateCustomer(customer);
         }
         public Customer UpdateCustomer(Customer customer)
         {
-            return customerDAL.updateCustomer(customer);
+            return customerDAL.UpdateCustomer(customer);
         }
         public void DeleteCustomer(int customerId)
         {
-            customerDAL.deleteCustomer(customerId);
+            customerDAL.DeleteCustomer(customerId);
         }
         public Customer GetCustomerByIdOrPhone(string searchTerm)
         {
             return customerDAL.GetCustomerByIdOrPhone(searchTerm);
+        }
+        public Customer GetCustomerById(int customerId)
+        {
+            if (customerId <= 0)
+            {
+                throw new ArgumentException("Mã khách hàng không được bé hơn 0", nameof(customerId));
+            }
+            return customerDAL.GetCustomerById(customerId);
         }
     }
 }
