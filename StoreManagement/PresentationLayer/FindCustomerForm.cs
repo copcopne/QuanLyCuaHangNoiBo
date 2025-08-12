@@ -15,9 +15,16 @@ namespace PresentationLayer
     public partial class FindCustomerForm : Form
     {
         private CustomerBUS customerBUS;
+        private Timer debounceTimer;
+        private String defaultSearchText = "Tìm kiếm theo tên, mã, số điện thoại hoặc email...";
         public FindCustomerForm()
         {
             InitializeComponent();
+            debounceTimer = new Timer
+            {
+                Interval = 300
+            };
+            debounceTimer.Tick += DebounceTimer_Tick;
         }
 
         private void FindCustomerForm_Load(object sender, EventArgs e)
@@ -40,13 +47,11 @@ namespace PresentationLayer
             if (dataGridView.SelectedRows.Count > 0)
             {
                 // Lấy khách hàng đã chọn
-                Customer selectedCustomer = dataGridView.SelectedRows[0].DataBoundItem as Customer;
-                if (selectedCustomer != null)
+                if (dataGridView.SelectedRows[0].DataBoundItem is Customer selectedCustomer)
                 {
-                    // Trả về khách hàng đã chọn
-                    this.DialogResult = DialogResult.OK;
-                    this.Tag = selectedCustomer; // Lưu khách hàng đã chọn vào Tag
-                    this.Close();
+                    DialogResult = DialogResult.OK;
+                    Tag = selectedCustomer;
+                    Close();
                 }
             }
             else
@@ -55,8 +60,63 @@ namespace PresentationLayer
             }
         }
 
+        private void DebounceTimer_Tick(object sender, EventArgs e)
+        {
+            debounceTimer.Stop();
+            string keyword = txtKeyword.Text.Trim();
+            if (string.IsNullOrWhiteSpace(keyword) || keyword == defaultSearchText)
+            {
+                LoadCustomers();
+            }
+            else
+            {
+                using (salesysdbEntities context = new salesysdbEntities())
+                {
+                    customerBUS = new CustomerBUS(context);
+                    List<Customer> customers = customerBUS.GetCustomers(keyword);
+                    dataGridView.DataSource = customers;
+                }
+            }
 
-        // Trả về khách hàng đã chọn khi chọn một hàng trong DataGridView
+        }
 
+        private void btnReturn_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
+
+        private void txtKeyword_TextChanged(object sender, EventArgs e)
+        {
+            debounceTimer.Stop();
+            debounceTimer.Start();
+        }
+
+        private void txtKeyword_Enter(object sender, EventArgs e)
+        {
+            dataGridView.ClearSelection();
+            if (txtKeyword.Text == defaultSearchText)
+            {
+                txtKeyword.Text = string.Empty;
+                txtKeyword.ForeColor = SystemColors.WindowText;
+            }
+
+        }
+
+        private void txtKeyword_Leave(object sender, EventArgs e)
+        {
+            dataGridView.ClearSelection();
+            if (string.IsNullOrWhiteSpace(txtKeyword.Text))
+            {
+                txtKeyword.Text = defaultSearchText;
+                txtKeyword.ForeColor = SystemColors.GrayText;
+                LoadCustomers();
+            }
+            else
+            {
+                debounceTimer.Stop();
+                debounceTimer.Start();
+            }
+        }
     }
 }

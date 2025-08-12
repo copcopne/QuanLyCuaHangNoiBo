@@ -58,6 +58,9 @@
             this.txtKeyword.Name = "txtKeyword";
             this.txtKeyword.Size = new System.Drawing.Size(792, 35);
             this.txtKeyword.TabIndex = 2;
+            this.txtKeyword.TextChanged += new System.EventHandler(this.txtKeyword_TextChanged);
+            this.txtKeyword.Enter += new System.EventHandler(this.txtKeyword_Enter);
+            this.txtKeyword.Leave += new System.EventHandler(this.txtKeyword_Leave);
             // 
             // panel2
             // 
@@ -95,6 +98,7 @@
             this.btnReturn.TabIndex = 17;
             this.btnReturn.Text = "Quay về";
             this.btnReturn.UseVisualStyleBackColor = false;
+            this.btnReturn.Click += new System.EventHandler(this.btnReturn_Click);
             // 
             // dataGridView
             // 
