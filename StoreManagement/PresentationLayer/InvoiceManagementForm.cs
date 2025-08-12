@@ -51,9 +51,17 @@ namespace PresentationLayer
 
             dataGridView.Columns.Add(new DataGridViewButtonColumn()
             {
-                Name = "btnEdit",
+                Name = "btnDetails",
                 HeaderText = "Hành động",
                 Text = "Xem chi tiết",
+                UseColumnTextForButtonValue = true,
+                Width = 100
+            });
+            dataGridView.Columns.Add(new DataGridViewButtonColumn()
+            {
+                Name = "btnEdit",
+                HeaderText = "Hành động",
+                Text = "Sửa",
                 UseColumnTextForButtonValue = true,
                 Width = 100
             });
@@ -67,17 +75,10 @@ namespace PresentationLayer
             dataGridView.Columns["TotalAmount"].HeaderText = "Tổng tiền";
             dataGridView.Columns["DeliveryRequired"].HeaderText = "Cần giao hàng";
             dataGridView.Columns["InvoiceDate"].HeaderText = "Ngày lập hóa đơn";
-
-            dataGridView.Columns["InvoiceID"].Width = 100;
-            dataGridView.Columns["CustomerName"].Width = 150;
-            dataGridView.Columns["EmployeeName"].Width = 150;
-            dataGridView.Columns["TotalAmount"].Width = 100;
-            dataGridView.Columns["DeliveryRequired"].Width = 120;
-            dataGridView.Columns["InvoiceDate"].Width = 120;
         }
         private void dataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0 && e.ColumnIndex == dataGridView.Columns["btnEdit"].Index)
+            if (e.RowIndex >= 0 && e.ColumnIndex == dataGridView.Columns["btnDetails"].Index)
             {
                 var selectedRow = dataGridView.Rows[e.RowIndex];
                 var invoiceId = (int)selectedRow.Cells["InvoiceID"].Value;
@@ -87,6 +88,20 @@ namespace PresentationLayer
                 editForm.ShowDialog();
 
                 LoadInvoices();
+            }
+            if (e.RowIndex >= 0 && e.ColumnIndex == dataGridView.Columns["DeliveryRequired"].Index)
+            {
+                if (MessageBox.Show("Bạn có chắc chắn muốn thay đổi trạng thái giao hàng không?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                    return;
+                var selectedRow = dataGridView.Rows[e.RowIndex];
+                var invoiceId = (int)selectedRow.Cells["InvoiceID"].Value;
+                var invoice = invoiceService.GetInvoiceById(invoiceId);
+                if (invoice != null)
+                {
+                    invoice.DeliveryRequired = !invoice.DeliveryRequired;
+                    invoiceService.UpdateStatus(invoice);
+                    LoadInvoices();
+                }
             }
         }
 

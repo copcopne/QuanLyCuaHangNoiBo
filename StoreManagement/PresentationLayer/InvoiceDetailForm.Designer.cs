@@ -164,6 +164,7 @@
             this.Controls.Add(this.label1);
             this.Name = "InvoiceDetailForm";
             this.Text = "InvoiceDetailForm";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.InvoiceDetailForm_FormClosed);
             this.Load += new System.EventHandler(this.InvoiceDetailForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
