@@ -113,6 +113,7 @@ namespace PresentationLayer
                 cmbProducts.Enabled = true;
                 cmbProducts.SelectedIndex = 0;
                 btnCancel.Text = "Hủy";
+                btnAdd.Text = "Thêm SP";
                 txtQuantity.Clear();
                 txtQuantity.Focus();
             }
@@ -151,6 +152,7 @@ namespace PresentationLayer
                     cmbProducts.SelectedIndex = 0;
                     existed.Quantity = quantity;
                     btnCancel.Text = "Hủy";
+                    btnAdd.Text = "Cập nhật";
                 }
                 else
                 {
@@ -247,6 +249,7 @@ namespace PresentationLayer
                 txtQuantity.Focus();
                 isEditMode = true;
                 btnCancel.Text = "Hủy chỉnh sửa";
+                btnAdd.Text = "Cập nhật";
 
             }
             else if (columnName == "btnDelete")

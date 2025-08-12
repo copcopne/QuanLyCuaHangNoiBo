@@ -42,9 +42,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.txtUnit = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.txtQuantity = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
             this.btnAdd = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtQuantity = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewDetails)).BeginInit();
             this.SuspendLayout();
             // 
@@ -113,7 +113,7 @@
             this.txtName.Enabled = false;
             this.txtName.Location = new System.Drawing.Point(118, 88);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(337, 26);
+            this.txtName.Size = new System.Drawing.Size(365, 26);
             this.txtName.TabIndex = 7;
             // 
             // btnAddNew
@@ -178,12 +178,16 @@
             this.label5.TabIndex = 13;
             this.label5.Text = "Đơn vị";
             // 
-            // txtQuantity
+            // btnAdd
             // 
-            this.txtQuantity.Location = new System.Drawing.Point(964, 91);
-            this.txtQuantity.Name = "txtQuantity";
-            this.txtQuantity.Size = new System.Drawing.Size(184, 26);
-            this.txtQuantity.TabIndex = 16;
+            this.btnAdd.AutoSize = true;
+            this.btnAdd.Location = new System.Drawing.Point(1048, 179);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(105, 35);
+            this.btnAdd.TabIndex = 17;
+            this.btnAdd.Text = "Thêm SP";
+            this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // label6
             // 
@@ -195,16 +199,12 @@
             this.label6.TabIndex = 15;
             this.label6.Text = "Số lượng";
             // 
-            // btnAdd
+            // txtQuantity
             // 
-            this.btnAdd.AutoSize = true;
-            this.btnAdd.Location = new System.Drawing.Point(1048, 179);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(105, 35);
-            this.btnAdd.TabIndex = 17;
-            this.btnAdd.Text = "Thêm SP";
-            this.btnAdd.UseVisualStyleBackColor = true;
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            this.txtQuantity.Location = new System.Drawing.Point(964, 91);
+            this.txtQuantity.Name = "txtQuantity";
+            this.txtQuantity.Size = new System.Drawing.Size(184, 26);
+            this.txtQuantity.TabIndex = 16;
             // 
             // StockInForm
             // 
@@ -255,8 +255,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtUnit;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox txtQuantity;
-        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txtQuantity;
     }
 }

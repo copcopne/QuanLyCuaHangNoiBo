@@ -35,11 +35,7 @@ namespace DataAccessLayer
         public void Create(int StockInID, List<StockInDetail> stockInDetails)
         {
             var stockIn = context.StockIns
-                .FirstOrDefault(s => s.StockInID == StockInID);
-            if (stockIn == null)
-            {
-                throw new Exception("Không tìm thấy StockInDetail!");
-            }
+                .FirstOrDefault(s => s.StockInID == StockInID) ?? throw new Exception("Không tìm thấy StockInDetail!");
             foreach (var s in stockInDetails)
             {
                 context.StockInDetails.Add(s);

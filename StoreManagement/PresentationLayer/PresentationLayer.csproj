@@ -205,6 +205,9 @@
     <EmbeddedResource Include="StockInForm.resx">
       <DependentUpon>StockInForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="StockRequestForm.resx">
+      <DependentUpon>StockRequestForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserAccountForm.resx">
       <DependentUpon>UserAccountForm.cs</DependentUpon>
     </EmbeddedResource>

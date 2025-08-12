@@ -94,7 +94,10 @@ namespace PresentationLayer
 
         private void btnStockRequest_Click(object sender, EventArgs e)
         {
+            StockRequestForm sForm = new StockRequestForm();
+            sForm.ShowDialog();
 
+            loadData();
         }
 
         private void txtSearch_Enter(object sender, EventArgs e)
