@@ -39,5 +39,18 @@ namespace DataAccessLayer
                 throw new Exception("Chi tiết hóa đơn không tồn tại.");
             }
         }
+        public void DeleteInvoiceDetail(int invoiceId, int productId)
+        {
+            var detail = context.InvoiceDetails.FirstOrDefault(id => id.InvoiceID == invoiceId && id.ProductID == productId);
+            if (detail != null)
+            {
+                context.InvoiceDetails.Remove(detail);
+                context.SaveChanges();
+            }
+            else
+            {
+                throw new Exception("Chi tiết hóa đơn không tồn tại.");
+            }
+        }
     }
 }

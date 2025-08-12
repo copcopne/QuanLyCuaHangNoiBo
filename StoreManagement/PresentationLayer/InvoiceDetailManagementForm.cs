@@ -11,13 +11,15 @@ namespace PresentationLayer
     public partial class InvoiceDetailManagementForm : Form
     {
         private readonly salesysdbEntities context = new salesysdbEntities();
-        private readonly InvoiceDetailBUS invoiceDetailService;
+        private readonly InvoiceDetailBUS invoiceDetailBUS;
+        private readonly ProductBUS productBUS;
         private Invoice invoice;
         public InvoiceDetailManagementForm(Invoice invoice)
         {
             InitializeComponent();
-            this.invoiceDetailService = new InvoiceDetailBUS(context);
+            this.invoiceDetailBUS = new InvoiceDetailBUS(context);
             this.invoice = invoice;
+            this.invoiceDetailBUS = new InvoiceDetailBUS(context);
         }
 
         private void InvoiceDetailForm_Load(object sender, EventArgs e)
@@ -35,6 +37,14 @@ namespace PresentationLayer
                 UseColumnTextForButtonValue = true,
                 Width = 100
             });
+            dataGridView.Columns.Add(new DataGridViewButtonColumn()
+            {
+                Name = "btnDelete",
+                HeaderText = "Hành động",
+                Text = "Xóa",
+                UseColumnTextForButtonValue = true,
+                Width = 100
+            });
             dataGridView.CellClick += DataGridView_CellClick;
         }
         private void setHeader()
@@ -46,7 +56,7 @@ namespace PresentationLayer
         }
         private void LoadInvoiceDetails(int invoiceId)
         {
-            List<InvoiceDetail> invoiceDetails = invoiceDetailService.GetInvoiceDetails(invoiceId);
+            List<InvoiceDetail> invoiceDetails = invoiceDetailBUS.GetInvoiceDetails(invoiceId);
             if (invoiceDetails == null || invoiceDetails.Count == 0)
             {
                 MessageBox.Show("Hóa đơn này không có chi tiết sản phẩm nào.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -74,6 +84,24 @@ namespace PresentationLayer
                 InvoiceDetailForm editForm = new InvoiceDetailForm(invoice, productID);
                 editForm.ShowDialog();
                 LoadInvoiceDetails(invoice.InvoiceID);
+            }
+            else if (dataGridView.Columns[e.ColumnIndex].Name == "btnDelete")
+            {
+                int productID = (int)dataGridView.Rows[e.RowIndex].Cells["ProductID"].Value;
+                var confirmResult = MessageBox.Show("Bạn có chắc chắn muốn xóa sản phẩm này khỏi hóa đơn không?", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (confirmResult == DialogResult.Yes)
+                {
+                    invoiceDetailBUS.DeleteInvoiceDetail(invoice.InvoiceID, productID);
+
+                    // Cập nhật số lượng tồn kho của sản phẩm
+                    var product = context.Products.FirstOrDefault(p => p.ProductID == productID);
+                    int quantity = (int)dataGridView.Rows[e.RowIndex].Cells["Quantity"].Value;
+                    if (product != null)
+                        this.productBUS.UpdateProductQuantity(productID, quantity);
+
+                    MessageBox.Show("Xóa chi tiết hóa đơn thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadInvoiceDetails(invoice.InvoiceID);
+                }
             }
         }
 
