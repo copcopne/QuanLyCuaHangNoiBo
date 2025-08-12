@@ -75,7 +75,7 @@
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.Location = new System.Drawing.Point(30, 144);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(71, 20);
+            this.label6.Size = new System.Drawing.Size(86, 25);
             this.label6.TabIndex = 32;
             this.label6.Text = "Ghi chú";
             // 
@@ -84,7 +84,7 @@
             this.txtUnit.Enabled = false;
             this.txtUnit.Location = new System.Drawing.Point(964, 20);
             this.txtUnit.Name = "txtUnit";
-            this.txtUnit.Size = new System.Drawing.Size(184, 26);
+            this.txtUnit.Size = new System.Drawing.Size(184, 30);
             this.txtUnit.TabIndex = 31;
             // 
             // label5
@@ -92,7 +92,7 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(905, 23);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(53, 20);
+            this.label5.Size = new System.Drawing.Size(67, 25);
             this.label5.TabIndex = 30;
             this.label5.Text = "Đơn vị";
             // 
@@ -101,7 +101,7 @@
             this.txtMinStock.Enabled = false;
             this.txtMinStock.Location = new System.Drawing.Point(631, 79);
             this.txtMinStock.Name = "txtMinStock";
-            this.txtMinStock.Size = new System.Drawing.Size(174, 26);
+            this.txtMinStock.Size = new System.Drawing.Size(174, 30);
             this.txtMinStock.TabIndex = 29;
             // 
             // label4
@@ -109,7 +109,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(499, 85);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(126, 20);
+            this.label4.Size = new System.Drawing.Size(156, 25);
             this.label4.TabIndex = 28;
             this.label4.Text = "Tồn kho tối thiểu";
             // 
@@ -118,7 +118,7 @@
             this.txtPrice.Enabled = false;
             this.txtPrice.Location = new System.Drawing.Point(628, 20);
             this.txtPrice.Name = "txtPrice";
-            this.txtPrice.Size = new System.Drawing.Size(177, 26);
+            this.txtPrice.Size = new System.Drawing.Size(177, 30);
             this.txtPrice.TabIndex = 27;
             // 
             // label3
@@ -126,7 +126,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(588, 23);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(34, 20);
+            this.label3.Size = new System.Drawing.Size(42, 25);
             this.label3.TabIndex = 26;
             this.label3.Text = "Giá";
             // 
@@ -146,7 +146,7 @@
             this.txtName.Enabled = false;
             this.txtName.Location = new System.Drawing.Point(118, 76);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(365, 26);
+            this.txtName.Size = new System.Drawing.Size(365, 30);
             this.txtName.TabIndex = 24;
             // 
             // label2
@@ -154,7 +154,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(51, 79);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(61, 20);
+            this.label2.Size = new System.Drawing.Size(79, 25);
             this.label2.TabIndex = 23;
             this.label2.Text = "Tên SP";
             // 
@@ -163,7 +163,7 @@
             this.cmbProducts.FormattingEnabled = true;
             this.cmbProducts.Location = new System.Drawing.Point(118, 15);
             this.cmbProducts.Name = "cmbProducts";
-            this.cmbProducts.Size = new System.Drawing.Size(207, 28);
+            this.cmbProducts.Size = new System.Drawing.Size(207, 33);
             this.cmbProducts.TabIndex = 22;
             this.cmbProducts.SelectedIndexChanged += new System.EventHandler(this.cmbProducts_SelectedIndexChanged);
             // 
@@ -172,7 +172,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(30, 18);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(82, 20);
+            this.label1.Size = new System.Drawing.Size(102, 25);
             this.label1.TabIndex = 21;
             this.label1.Text = "Sản phẩm";
             // 
@@ -193,7 +193,7 @@
             this.btnSave.BackColor = System.Drawing.Color.GreenYellow;
             this.btnSave.Location = new System.Drawing.Point(587, 167);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(218, 35);
+            this.btnSave.Size = new System.Drawing.Size(268, 35);
             this.btnSave.TabIndex = 19;
             this.btnSave.Text = "Lưu phiếu yêu cầu nhập kho";
             this.btnSave.UseVisualStyleBackColor = false;
@@ -201,6 +201,7 @@
             // 
             // gridViewDetails
             // 
+            this.gridViewDetails.BackgroundColor = System.Drawing.SystemColors.Window;
             this.gridViewDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridViewDetails.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.gridViewDetails.Location = new System.Drawing.Point(0, 220);
@@ -213,7 +214,7 @@
             // 
             this.txtQuantity.Location = new System.Drawing.Point(964, 82);
             this.txtQuantity.Name = "txtQuantity";
-            this.txtQuantity.Size = new System.Drawing.Size(184, 26);
+            this.txtQuantity.Size = new System.Drawing.Size(184, 30);
             this.txtQuantity.TabIndex = 36;
             // 
             // label7
@@ -222,13 +223,13 @@
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.Location = new System.Drawing.Point(878, 88);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(80, 20);
+            this.label7.Size = new System.Drawing.Size(98, 25);
             this.label7.TabIndex = 35;
             this.label7.Text = "Số lượng";
             // 
             // StockRequestForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1170, 608);
             this.Controls.Add(this.txtQuantity);

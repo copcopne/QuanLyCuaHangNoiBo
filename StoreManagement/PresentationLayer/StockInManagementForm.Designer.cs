@@ -74,8 +74,11 @@
             // 
             // gridViewStockIn
             // 
+            this.gridViewStockIn.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gridViewStockIn.BackgroundColor = System.Drawing.SystemColors.Window;
             this.gridViewStockIn.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.gridViewStockIn.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.gridViewStockIn.Location = new System.Drawing.Point(0, 65);
             this.gridViewStockIn.Name = "gridViewStockIn";
             this.gridViewStockIn.ReadOnly = true;

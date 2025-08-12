@@ -52,9 +52,9 @@
             this.btnAddEmployee.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btnAddEmployee.AutoSize = true;
             this.btnAddEmployee.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAddEmployee.Location = new System.Drawing.Point(1003, 10);
+            this.btnAddEmployee.Location = new System.Drawing.Point(994, 10);
             this.btnAddEmployee.Name = "btnAddEmployee";
-            this.btnAddEmployee.Size = new System.Drawing.Size(194, 34);
+            this.btnAddEmployee.Size = new System.Drawing.Size(203, 34);
             this.btnAddEmployee.TabIndex = 1;
             this.btnAddEmployee.Text = "Thêm nhân viên mới";
             this.btnAddEmployee.UseVisualStyleBackColor = true;
@@ -77,10 +77,12 @@
             this.gridViewEmployee.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gridViewEmployee.BackgroundColor = System.Drawing.SystemColors.Window;
             this.gridViewEmployee.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridViewEmployee.Location = new System.Drawing.Point(0, 59);
             this.gridViewEmployee.Name = "gridViewEmployee";
             this.gridViewEmployee.ReadOnly = true;
+            this.gridViewEmployee.RowHeadersWidth = 51;
             this.gridViewEmployee.Size = new System.Drawing.Size(1200, 633);
             this.gridViewEmployee.TabIndex = 1;
             // 

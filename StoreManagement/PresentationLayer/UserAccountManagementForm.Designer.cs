@@ -78,12 +78,13 @@
             this.gridViewUserAccount.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gridViewUserAccount.BackgroundColor = System.Drawing.SystemColors.Window;
             this.gridViewUserAccount.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.gridViewUserAccount.Location = new System.Drawing.Point(0, 64);
+            this.gridViewUserAccount.Location = new System.Drawing.Point(0, 65);
             this.gridViewUserAccount.Name = "gridViewUserAccount";
             this.gridViewUserAccount.ReadOnly = true;
             this.gridViewUserAccount.RowHeadersWidth = 51;
-            this.gridViewUserAccount.Size = new System.Drawing.Size(1200, 633);
+            this.gridViewUserAccount.Size = new System.Drawing.Size(1200, 638);
             this.gridViewUserAccount.TabIndex = 3;
             this.gridViewUserAccount.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridViewUserAccount_CellContentClick_1);
             // 
