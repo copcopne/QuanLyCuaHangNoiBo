@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dataGridView = new System.Windows.Forms.DataGridView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnCreateDelivery = new System.Windows.Forms.Button();
             this.btnAddToInvoice = new System.Windows.Forms.Button();
@@ -46,26 +46,26 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnAddInvoice = new System.Windows.Forms.Button();
+            this.btnCreateInvoice = new System.Windows.Forms.Button();
             this.labelTotalCost = new System.Windows.Forms.Label();
             this.btnPrintInvoice = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.txtAmountPaid = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.txtCashChange = new System.Windows.Forms.TextBox();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // dataGridView1
+            // dataGridView
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 12);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(613, 601);
-            this.dataGridView1.TabIndex = 25;
+            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView.Location = new System.Drawing.Point(12, 12);
+            this.dataGridView.Name = "dataGridView";
+            this.dataGridView.Size = new System.Drawing.Size(613, 601);
+            this.dataGridView.TabIndex = 25;
             // 
             // groupBox1
             // 
@@ -101,6 +101,7 @@
             this.btnAddToInvoice.TabIndex = 32;
             this.btnAddToInvoice.Text = "Thêm vào hóa đơn";
             this.btnAddToInvoice.UseVisualStyleBackColor = true;
+            this.btnAddToInvoice.Click += new System.EventHandler(this.btnAddToInvoice_Click);
             // 
             // label2
             // 
@@ -130,6 +131,7 @@
             this.txtAmount.Name = "txtAmount";
             this.txtAmount.Size = new System.Drawing.Size(179, 35);
             this.txtAmount.TabIndex = 39;
+            this.txtAmount.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtAmount_KeyPress);
             // 
             // label4
             // 
@@ -238,7 +240,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.ScrollBar;
-            this.panel1.Controls.Add(this.btnAddInvoice);
+            this.panel1.Controls.Add(this.btnCreateInvoice);
             this.panel1.Controls.Add(this.labelTotalCost);
             this.panel1.Controls.Add(this.btnPrintInvoice);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -247,14 +249,15 @@
             this.panel1.Size = new System.Drawing.Size(1200, 56);
             this.panel1.TabIndex = 32;
             // 
-            // btnAddInvoice
+            // btnCreateInvoice
             // 
-            this.btnAddInvoice.Location = new System.Drawing.Point(1004, 6);
-            this.btnAddInvoice.Name = "btnAddInvoice";
-            this.btnAddInvoice.Size = new System.Drawing.Size(186, 46);
-            this.btnAddInvoice.TabIndex = 32;
-            this.btnAddInvoice.Text = "Xác nhận thanh toán";
-            this.btnAddInvoice.UseVisualStyleBackColor = true;
+            this.btnCreateInvoice.Location = new System.Drawing.Point(1004, 6);
+            this.btnCreateInvoice.Name = "btnCreateInvoice";
+            this.btnCreateInvoice.Size = new System.Drawing.Size(186, 46);
+            this.btnCreateInvoice.TabIndex = 32;
+            this.btnCreateInvoice.Text = "Xác nhận thanh toán";
+            this.btnCreateInvoice.UseVisualStyleBackColor = true;
+            this.btnCreateInvoice.Click += new System.EventHandler(this.btnCreateInvoice_Click);
             // 
             // labelTotalCost
             // 
@@ -274,6 +277,7 @@
             this.btnPrintInvoice.TabIndex = 30;
             this.btnPrintInvoice.Text = "In hóa đơn";
             this.btnPrintInvoice.UseVisualStyleBackColor = true;
+            this.btnPrintInvoice.Click += new System.EventHandler(this.btnPrintInvoice_Click);
             // 
             // label5
             // 
@@ -293,6 +297,8 @@
             this.txtAmountPaid.Name = "txtAmountPaid";
             this.txtAmountPaid.Size = new System.Drawing.Size(412, 35);
             this.txtAmountPaid.TabIndex = 40;
+            this.txtAmountPaid.TextChanged += new System.EventHandler(this.txtAmountPaid_TextChanged);
+            this.txtAmountPaid.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtAmountPaid_KeyPress);
             // 
             // label8
             // 
@@ -326,13 +332,13 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.dataGridView);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "InvoiceForm";
             this.Text = "InvoiceForm";
             this.Load += new System.EventHandler(this.InvoiceForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -345,7 +351,7 @@
         }
 
         #endregion
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dataGridView;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cbCategory;
@@ -360,7 +366,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button btnAddToInvoice;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button btnAddInvoice;
+        private System.Windows.Forms.Button btnCreateInvoice;
         private System.Windows.Forms.Label labelTotalCost;
         private System.Windows.Forms.Button btnPrintInvoice;
         private System.Windows.Forms.Button btnAddNewCustomer;

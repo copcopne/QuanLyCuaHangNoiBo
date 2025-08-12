@@ -21,7 +21,10 @@ namespace DataAccessLayer
             var query = context.Customers.AsQueryable();
             if (!string.IsNullOrEmpty(searchTerm))
             {
-                query = query.Where(c => c.FullName.Contains(searchTerm) || c.PhoneNumber.Contains(searchTerm) || c.Email.Contains(searchTerm));
+                query = query.Where(c => c.FullName.Contains(searchTerm) || 
+                                         c.PhoneNumber.Contains(searchTerm) || 
+                                         c.Email.Contains(searchTerm) || 
+                                         c.CustomerID.ToString() == searchTerm);
             }
             return query.Where(c => c.IsDeleted == 0).ToList();
         }
