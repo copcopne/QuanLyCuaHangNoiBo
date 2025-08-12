@@ -14,10 +14,12 @@ namespace PresentationLayer
     public partial class StockInForm : Form
     {
         private List<Entity.StockInDetail> stockInDetails;
+        private List<Entity.StockInDetail> toDeleted;
         private BusinessLayer.StockInBUS stockInBUS;
         private BusinessLayer.ProductBUS productBUS;
         private Entity.StockIn stockIn;
         private Boolean isEditMode = false;
+        private Boolean isNewStockIn = false;
         public StockInForm(int stockInID)
         {
             stockInBUS = new BusinessLayer.StockInBUS();
@@ -30,15 +32,18 @@ namespace PresentationLayer
                 stockIn = stockInBUS.Get(stockInID);
                 if (stockIn != null)
                 {
-
+                    stockIn.EmployeeID = 1; // Assuming current user is always employee with ID 1
+                    stockInDetails = stockInBUS.GetStockInDetails(stockInID);
                 }
                 else
                 {
-
+                    MessageBox.Show("Không tìm thấy thông tin nhập hàng.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
             }
             else
             {
+                isNewStockIn = true;
                 stockIn = new Entity.StockIn();
                 stockIn.EmployeeID = 1;
                 stockInDetails = new List<Entity.StockInDetail>();
@@ -71,7 +76,8 @@ namespace PresentationLayer
 
         private void StockInForm_Load(object sender, EventArgs e)
         {
-
+            if (stockIn == null)
+                this.Close();
         }
 
         private void btnAddNew_Click(object sender, EventArgs e)
@@ -85,7 +91,7 @@ namespace PresentationLayer
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (stockInDetails.Count == 0)
+            if (isNewStockIn && stockInDetails.Count == 0)
             {
                 MessageBox.Show("Vui lòng thêm ít nhất một sản phẩm vào danh sách nhập hàng.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -94,7 +100,28 @@ namespace PresentationLayer
                 return;
             try
             {
-                stockInBUS.AddStockIn(stockIn, stockInDetails);
+                if (isNewStockIn)
+                {
+                    stockInBUS.AddStockIn(stockIn, stockInDetails);
+                }
+                else
+                {
+                    if (stockInDetails.Count == 0)
+                    {
+                        if (MessageBox.Show("Danh sách đang trống, đều này sẽ xóa toàn bộ đơn nhập hàng.\nTiếp tục?.", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                            return;
+                        stockInBUS.Delete(stockIn.StockInID);
+                    }
+                    else
+                    {
+                        stockInBUS.Update(stockIn, stockInDetails);
+                        if (toDeleted != null && toDeleted.Count > 0)
+                        {
+                            stockInBUS.Delete(toDeleted);
+                            toDeleted.Clear();
+                        }
+                    }
+                }
                 MessageBox.Show("Lưu thông tin nhập hàng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
@@ -107,7 +134,7 @@ namespace PresentationLayer
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            if(isEditMode)
+            if (isEditMode)
             {
                 isEditMode = false;
                 cmbProducts.Enabled = true;
@@ -261,6 +288,8 @@ namespace PresentationLayer
                     var detailToRemove = stockInDetails.FirstOrDefault(d => d.ProductID == productIdToDelete);
                     if (detailToRemove != null)
                     {
+                        toDeleted = new List<Entity.StockInDetail>();
+                        toDeleted.Add(detailToRemove);
                         stockInDetails.Remove(detailToRemove);
                         MessageBox.Show("Xóa sản phẩm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         load();

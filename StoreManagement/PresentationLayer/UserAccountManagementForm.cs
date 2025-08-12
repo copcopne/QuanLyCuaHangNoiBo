@@ -140,5 +140,15 @@ namespace PresentationLayer
                 this.txtSearch.Text = DEFAULT_SEARCH_TEXT;
             }
         }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void gridViewUserAccount_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

@@ -46,6 +46,15 @@ namespace DataAccessLayer
             stockInDAL.Update(stockIn);
         }
 
+        public void Create(StockIn stockIn, StockInDetail stockInDetail)
+        {
+            context.StockInDetails.Add(stockInDetail);
+            productDAL.UpdateStockQuantity(stockInDetail.ProductID, stockInDetail.Quantity);
+
+            context.SaveChanges();
+            stockInDAL.Update(stockIn);
+        }
+
         public void Update(List<StockInDetail> stockInDetails)
         {
             int stockInID = stockInDetails.FirstOrDefault()?.StockInID ?? 0;
@@ -55,6 +64,7 @@ namespace DataAccessLayer
             {
                 var existingDetail = context.StockInDetails
                 .FirstOrDefault(sid => sid.StockInID == s.StockInID && sid.ProductID == s.ProductID);
+                // Cập nhật số lượng sản phẩm đã có
                 if (existingDetail != null)
                 {
                     int difference = s.Quantity - existingDetail.Quantity;
@@ -62,27 +72,64 @@ namespace DataAccessLayer
                     stockInDAL.Update(stockInDAL.Get(existingDetail.StockInID));
                     productDAL.UpdateStockQuantity(existingDetail.ProductID, difference);
                 }
+                // Cập nhật sản phẩm mới
                 else
                 {
-                    throw new Exception("Không tìm thấy StockInDetail!");
+                    StockInDetail newDetail = new StockInDetail
+                    {
+                        StockInID = stockInID,
+                        ProductID = s.ProductID,
+                        Quantity = s.Quantity,
+                        UnitCost = s.UnitCost,
+                    };
+                    this.Create(stockIn, newDetail);
                 }
             }
             stockInDAL.Update(stockIn);
         }
 
-        public void Delete(StockInDetail stockInDetail)
+        public void Delete(List<StockInDetail> stockInDetails)
         {
-            var s = context.StockInDetails
-                .FirstOrDefault(sid => sid.StockInID == stockInDetail.StockInID && sid.ProductID == stockInDetail.ProductID);
-            if (stockInDetail != null)
+            foreach (var stockInDetail in stockInDetails)
             {
-                context.StockInDetails.Remove(s);
-                stockInDAL.Update(stockInDAL.Get(stockInDetail.StockInID));
+                var s = context.StockInDetails
+                    .FirstOrDefault(sid => sid.StockInID == stockInDetail.StockInID
+                                        && sid.ProductID == stockInDetail.ProductID);
+
+                if (s != null)
+                {
+                    context.StockInDetails.Remove(s);
+                    productDAL.UpdateStockQuantity(s.ProductID, -s.Quantity);
+                    var stockIn = stockInDAL.Get(stockInDetail.StockInID);
+                    if (stockIn != null)
+                    {
+                        stockInDAL.Update(stockIn);
+                    }
+                }
+                else
+                {
+                    throw new Exception($"Không tìm thấy StockInDetail cho ProductID={stockInDetail.ProductID}, StockInID={stockInDetail.StockInID}!");
+                }
             }
-            else
+
+            context.SaveChanges();
+        }
+
+        public void Delete(int stockInId)
+        {
+            var stockInDetails = context.StockInDetails
+                .Where(sid => sid.StockInID == stockInId)
+                .ToList();
+            if (stockInDetails.Count == 0)
             {
-                throw new Exception("Không tìm thấy StockInDetail!");
+                throw new Exception("Không tìm thấy StockInDetail nào để xóa!");
             }
+            foreach (var detail in stockInDetails)
+            {
+                context.StockInDetails.Remove(detail);
+                productDAL.UpdateStockQuantity(detail.ProductID, -detail.Quantity);
+            }
+            context.SaveChanges();
         }
     }
 }

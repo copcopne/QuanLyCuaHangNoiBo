@@ -60,6 +60,7 @@ namespace PresentationLayer
             gridViewProducts.Columns["InvoiceDetails"].Visible = false;
             gridViewProducts.Columns["StockRequestDetails"].Visible = false;
             gridViewProducts.Columns["StockInDetails"].Visible = false;
+            gridViewProducts.Columns["UnitPrice"].DefaultCellStyle.Format = "N0";
 
 
             var btnEdit = new DataGridViewButtonColumn
@@ -123,7 +124,7 @@ namespace PresentationLayer
 
         private void ProductManagementForm_Load(object sender, EventArgs e)
         {
-
+            gridViewProducts.RowPrePaint += GridViewProducts_RowPrePaint;
         }
 
         private void GridViewProduct_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -152,6 +153,27 @@ namespace PresentationLayer
                     MessageBox.Show("Xóa sản phẩm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     loadData();
                 }
+            }
+        }
+
+        private void GridViewProducts_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            var row = gridViewProducts.Rows[e.RowIndex];
+
+            int quantity = Convert.ToInt32(row.Cells["StockQuantity"].Value ?? 0);
+            int stock = Convert.ToInt32(row.Cells["MinStockLevel"].Value ?? 0);
+
+            if (quantity < stock)
+            {
+                row.DefaultCellStyle.BackColor = Color.IndianRed;
+                row.DefaultCellStyle.ForeColor = Color.White;
+            }
+            else
+            {
+                row.DefaultCellStyle.BackColor = gridViewProducts.DefaultCellStyle.BackColor;
+                row.DefaultCellStyle.ForeColor = gridViewProducts.DefaultCellStyle.ForeColor;
             }
         }
     }
