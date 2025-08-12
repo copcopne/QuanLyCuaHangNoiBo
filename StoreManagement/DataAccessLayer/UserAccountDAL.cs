@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,16 +19,17 @@ namespace DataAccessLayer
 
         }
 
-        public static Boolean Authenticate(String username, String password)
+        public static UserAccount Authenticate(String username, String password)
         {
             using (salesysdbEntities context = new salesysdbEntities())
             {
                 var user = context.UserAccounts.FirstOrDefault(u => u.Username == username);
                 if (user != null)
                 {
-                    return user.PasswordHash == password;
+                    if (user.PasswordHash == password)
+                        return user;
                 }
-                return false;
+                return null;
             }
         }
         public List<UserAccount> Get(String keyword)

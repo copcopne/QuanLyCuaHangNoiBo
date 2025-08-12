@@ -1,4 +1,5 @@
-﻿using Entity;
+﻿using BusinessLayer;
+using Entity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -45,7 +46,7 @@ namespace PresentationLayer
             {
                 isNewStockIn = true;
                 stockIn = new Entity.StockIn();
-                stockIn.EmployeeID = 1;
+                stockIn.EmployeeID = AuthenticateBUS.CurrentUser.EmployeeID;
                 stockInDetails = new List<Entity.StockInDetail>();
             }
             load();
