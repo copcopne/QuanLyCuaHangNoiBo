@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer;
+using Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,16 +17,11 @@ namespace BusinessLayer
             this.userDAL = new DataAccessLayer.UserAccountDAL();
         }
 
-        public Boolean Authenticate(string username, string password)
+        public UserAccount Authenticate(string username, string password)
         {
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
                 throw new Exception("Tên đăng nhập và mật khẩu là bắt buộc!");
-            }
-            var user = userDAL.GetByUsername(username);
-            if (user == null)
-            {
-                return false;
             }
             return UserAccountDAL.Authenticate(username, Utils.GetHashedString(password));
         }

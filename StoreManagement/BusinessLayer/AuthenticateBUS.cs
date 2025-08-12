@@ -23,7 +23,7 @@ namespace BusinessLayer
                 throw new Exception("Tên đăng nhập và mật khẩu là bắt buộc!");
             }
             var user = UserAccountDAL.Authenticate(username, password);
-            if (user == null)
+            if (user != null)
             {
                 currentUser = user;
                 return true;

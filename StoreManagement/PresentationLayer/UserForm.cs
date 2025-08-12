@@ -48,7 +48,7 @@ namespace PresentationLayer
                     MessageBox.Show("Mật khẩu mới và xác nhận không khớp.");
                     return;
                 }
-                if (userAccountBUS.Authenticate(userAccount.Username, this.txtOldPassword.Text) != true)
+                if (userAccountBUS.Authenticate(userAccount.Username, this.txtOldPassword.Text) == null)
                 {
                     MessageBox.Show("Mật khẩu cũ không đúng.");
                     return;
