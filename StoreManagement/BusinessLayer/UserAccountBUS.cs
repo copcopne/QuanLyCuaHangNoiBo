@@ -62,11 +62,38 @@ namespace BusinessLayer
             userDAL.Add(account, employee);
         }
 
-        public void Update(Entity.UserAccount account)
+        public void Add(Entity.UserAccount account)
         {
             if (account == null)
             {
                 throw new Exception("Đối tượng tài khoản là bắt buộc!");
+            }
+            if (string.IsNullOrWhiteSpace(account.PasswordHash))
+            {
+                throw new Exception("Mật khẩu là bắt buộc!");
+            }
+            if (userDAL.GetByUsername(account.Username) != null)
+            {
+                throw new Exception("Tài khoản đã tồn tại.");
+            }
+            account.IsActive = true;
+            account.PasswordHash = Utils.GetHashedString(account.PasswordHash);
+            userDAL.Add(account);
+        }
+
+        public void Update(Entity.UserAccount account, Boolean isUpdatePassword = false)
+        {
+            if (account == null)
+            {
+                throw new Exception("Đối tượng tài khoản là bắt buộc!");
+            }
+            if(isUpdatePassword && string.IsNullOrWhiteSpace(account.PasswordHash))
+            {
+                throw new Exception("Mật khẩu là bắt buộc khi cập nhật.");
+            }
+            if (isUpdatePassword)
+            {
+                account.PasswordHash = Utils.GetHashedString(account.PasswordHash);
             }
             userDAL.Update(account);
         }

@@ -73,7 +73,18 @@ namespace DataAccessLayer
                 context.UserAccounts.Add(account);
                 context.SaveChanges();
             }
-
+        }
+        public void Add(UserAccount account)
+        {
+            using (salesysdbEntities context = new salesysdbEntities())
+            {
+                if (account == null)
+                {
+                    throw new Exception("Đối tượng người dùng là bắt buộc!");
+                }
+                context.UserAccounts.Add(account);
+                context.SaveChanges();
+            }
         }
 
         public void Update(UserAccount account)
@@ -87,7 +98,6 @@ namespace DataAccessLayer
                 var existingUser = context.UserAccounts.FirstOrDefault(u => u.Username == account.Username);
                 if (existingUser != null)
                 {
-
                     existingUser.PasswordHash = account.PasswordHash;
                     existingUser.Role = account.Role;
                     existingUser.IsActive = account.IsActive;

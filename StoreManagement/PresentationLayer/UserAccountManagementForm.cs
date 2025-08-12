@@ -114,7 +114,10 @@ namespace PresentationLayer
 
         private void btnAddUserAccount_Click(object sender, EventArgs e)
         {
+            AddUserForm addUserForm = new AddUserForm();
+            addUserForm.ShowDialog();
 
+            loadData();
         }
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
