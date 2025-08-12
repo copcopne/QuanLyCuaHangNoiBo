@@ -55,3 +55,6 @@ nunit-*.xml
 **/.vs
 /StoreManagement/PresentationLayer/App.config
 /StoreManagement/Entity/App.Config
+/StoreManagement/PresentationLayer/Program.cs
+/StoreManagement/PresentationLayer/Program.cs
+/StoreManagement/PresentationLayer/.vs/PresentationLayer.csproj.dtbcache.json
