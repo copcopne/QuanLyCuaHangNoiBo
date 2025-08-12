@@ -11,15 +11,18 @@ namespace DataAccessLayer
     {
         private readonly salesysdbEntities context;
         private readonly StockInDAL stockInDAL;
+        private readonly ProductDAL productDAL;
         public StockInDetailDAL()
         {
             this.context = new salesysdbEntities();
             this.stockInDAL = new StockInDAL();
+            this.productDAL = new ProductDAL();
         }
         public StockInDetailDAL(salesysdbEntities context)
         {
             this.context = context;
             this.stockInDAL = new StockInDAL(context);
+            this.productDAL = new ProductDAL();
         }
 
         public List<StockInDetail> Get(int stockInId)
@@ -29,36 +32,46 @@ namespace DataAccessLayer
                 .ToList();
         }
 
-        public StockInDetail Create(StockInDetail stockInDetail)
+        public void Create(int StockInID, List<StockInDetail> stockInDetails)
         {
-            if (stockInDetail == null)
+            var stockIn = context.StockIns
+                .FirstOrDefault(s => s.StockInID == StockInID);
+            if (stockIn == null)
             {
                 throw new Exception("Không tìm thấy StockInDetail!");
             }
-            context.StockInDetails.Add(stockInDetail);
+            foreach (var s in stockInDetails)
+            {
+                context.StockInDetails.Add(s);
+                productDAL.UpdateStockQuantity(s.ProductID, s.Quantity);
+            }
+            ;
             context.SaveChanges();
-            return stockInDetail;
+            stockInDAL.Update(stockIn);
         }
 
-        public StockInDetail Update(StockInDetail stockInDetail)
+        public void Update(List<StockInDetail> stockInDetails)
         {
-            if (stockInDetail == null)
+            int stockInID = stockInDetails.FirstOrDefault()?.StockInID ?? 0;
+            var stockIn = context.StockIns
+                .FirstOrDefault(s => s.StockInID == stockInID);
+            foreach (var s in stockInDetails)
             {
-                throw new Exception("Không tìm thấy StockInDetail!");
+                var existingDetail = context.StockInDetails
+                .FirstOrDefault(sid => sid.StockInID == s.StockInID && sid.ProductID == s.ProductID);
+                if (existingDetail != null)
+                {
+                    int difference = s.Quantity - existingDetail.Quantity;
+                    existingDetail.Quantity = s.Quantity;
+                    stockInDAL.Update(stockInDAL.Get(existingDetail.StockInID));
+                    productDAL.UpdateStockQuantity(existingDetail.ProductID, difference);
+                }
+                else
+                {
+                    throw new Exception("Không tìm thấy StockInDetail!");
+                }
             }
-            var existingDetail = context.StockInDetails
-                .FirstOrDefault(sid => sid.StockInID == stockInDetail.StockInID && sid.ProductID == stockInDetail.ProductID);
-            if (existingDetail != null)
-            {
-                existingDetail.Quantity = stockInDetail.Quantity;
-                existingDetail.UnitCost = stockInDetail.UnitCost;
-                stockInDAL.Update(stockInDAL.Get(existingDetail.StockInID));
-                return existingDetail;
-            }
-            else
-            {
-                throw new Exception("Không tìm thấy StockInDetail!");
-            }
+            stockInDAL.Update(stockIn);
         }
 
         public void Delete(StockInDetail stockInDetail)
@@ -68,7 +81,7 @@ namespace DataAccessLayer
             if (stockInDetail != null)
             {
                 context.StockInDetails.Remove(s);
-                context.SaveChanges();
+                stockInDAL.Update(stockInDAL.Get(stockInDetail.StockInID));
             }
             else
             {

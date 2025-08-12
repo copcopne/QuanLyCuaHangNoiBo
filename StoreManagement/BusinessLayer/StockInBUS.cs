@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,34 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer
 {
-    internal class StockInBUS
+    public class StockInBUS
     {
+        private readonly DataAccessLayer.StockInDAL stockInDAL;
+        private readonly DataAccessLayer.StockInDetailDAL stockInDetailDAL;
+        private readonly salesysdbEntities context = new salesysdbEntities();
+        public StockInBUS() {
+            stockInDAL = new DataAccessLayer.StockInDAL(context);
+            stockInDetailDAL = new DataAccessLayer.StockInDetailDAL(context);
+        }
+
+        public StockIn Get(int id)
+        {
+            return stockInDAL.Get(id);
+        }
+
+        public void AddStockIn(Entity.StockIn stockIn, List<Entity.StockInDetail> stockInDetails)
+        {
+            if (stockIn == null || stockInDetails == null || !stockInDetails.Any())
+            {
+                throw new ArgumentException("Dữ liệu nhập hàng không hợp lệ.");
+            }
+            stockInDAL.Add(stockIn);
+            foreach (var d in stockInDetails)
+            {
+                d.StockInID = stockIn.StockInID;
+                d.Product = null;
+            }
+            stockInDetailDAL.Create(stockIn.StockInID, stockInDetails);
+        }
     }
 }

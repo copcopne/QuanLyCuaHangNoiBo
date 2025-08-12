@@ -21,16 +21,17 @@ namespace DataAccessLayer
 
         public List<StockIn> Get()
         {
-            return context.StockIns.ToList();
+            return context.StockIns.AsNoTracking().ToList();
         }
         public StockIn Get(int stockInId)
         {
-            return context.StockIns.FirstOrDefault(s => s.StockInID == stockInId)
+            return context.StockIns.AsNoTracking().FirstOrDefault(s => s.StockInID == stockInId)
                 ?? throw new Exception("Không tìm thấy đơn nhập hàng!");
         }
 
         public void Add(StockIn stockIn)
         {
+            stockIn.StockInDate = DateTime.Now;
             context.StockIns.Add(stockIn);
             context.SaveChanges();
         }

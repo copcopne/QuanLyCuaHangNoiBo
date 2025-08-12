@@ -17,6 +17,19 @@ namespace PresentationLayer
         private Entity.Product product;
         private readonly BusinessLayer.ProductBUS productBUS;
         private readonly salesysdbEntities context = new salesysdbEntities();
+
+        public ProductForm()
+        {
+            InitializeComponent();
+            productBUS = new BusinessLayer.ProductBUS(context);
+            // Load categories into the combo box
+            var categories = context.Categories.ToList();
+            categories.Insert(0, new Entity.Category { CategoryID = 0, CategoryName = "---Chọn danh mục---" });
+            cmbCategory.DataSource = categories;
+            cmbCategory.DisplayMember = "CategoryName";
+            cmbCategory.ValueMember = "CategoryId";
+            this.product = new Entity.Product();
+        }
         public ProductForm(int productID)
         {
             InitializeComponent();

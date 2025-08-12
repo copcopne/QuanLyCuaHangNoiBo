@@ -28,6 +28,7 @@ namespace PresentationLayer
             };
             debounceTimer.Tick += DebounceTimer_Tick;
             gridViewProducts.CellContentClick += GridViewProduct_CellContentClick;
+            gridViewProducts.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             loadData();
 
         }
@@ -85,7 +86,10 @@ namespace PresentationLayer
 
         private void btnStockIn_Click(object sender, EventArgs e)
         {
+            StockInForm sForm = new StockInForm(0);
+            sForm.ShowDialog();
 
+            loadData();
         }
 
         private void btnStockRequest_Click(object sender, EventArgs e)
@@ -121,7 +125,7 @@ namespace PresentationLayer
 
         private void GridViewProduct_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0)
+            if (e.RowIndex < 0 || e.ColumnIndex < 0)
                 return;
 
             string columnName = gridViewProducts.Columns[e.ColumnIndex].Name;
