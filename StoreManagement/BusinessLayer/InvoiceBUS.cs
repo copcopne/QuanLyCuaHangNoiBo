@@ -33,7 +33,11 @@ namespace BusinessLayer
         {
             if (invoice == null)
             {
-                throw new ArgumentNullException(nameof(invoice), "Mã đơn hàng không được null");
+                throw new ArgumentNullException(nameof(invoice), "Hóa đơn không được null");
+            }
+            if (invoice.InvoiceDetails == null || !invoice.InvoiceDetails.Any())
+            {
+                throw new ArgumentException("Hóa đơn phải có ít nhất một chi tiết.", nameof(invoice));
             }
             invoiceDAL.AddInvoice(invoice);
         }

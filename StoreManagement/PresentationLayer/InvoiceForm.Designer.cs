@@ -86,7 +86,7 @@
             // 
             // btnCreateDelivery
             // 
-            this.btnCreateDelivery.Location = new System.Drawing.Point(213, 225);
+            this.btnCreateDelivery.Location = new System.Drawing.Point(393, 227);
             this.btnCreateDelivery.Name = "btnCreateDelivery";
             this.btnCreateDelivery.Size = new System.Drawing.Size(133, 44);
             this.btnCreateDelivery.TabIndex = 41;
@@ -95,7 +95,7 @@
             // 
             // btnAddToInvoice
             // 
-            this.btnAddToInvoice.Location = new System.Drawing.Point(376, 225);
+            this.btnAddToInvoice.Location = new System.Drawing.Point(208, 227);
             this.btnAddToInvoice.Name = "btnAddToInvoice";
             this.btnAddToInvoice.Size = new System.Drawing.Size(162, 44);
             this.btnAddToInvoice.TabIndex = 32;
@@ -162,6 +162,7 @@
             this.cbProductName.Name = "cbProductName";
             this.cbProductName.Size = new System.Drawing.Size(530, 37);
             this.cbProductName.TabIndex = 37;
+            this.cbProductName.SelectedIndexChanged += new System.EventHandler(this.cbProductName_SelectedIndexChanged);
             // 
             // groupBox2
             // 
@@ -186,6 +187,7 @@
             this.btnAddNewCustomer.TabIndex = 34;
             this.btnAddNewCustomer.Text = "+";
             this.btnAddNewCustomer.UseVisualStyleBackColor = true;
+            this.btnAddNewCustomer.Click += new System.EventHandler(this.btnAddNewCustomer_Click);
             // 
             // btnFindCustomer
             // 

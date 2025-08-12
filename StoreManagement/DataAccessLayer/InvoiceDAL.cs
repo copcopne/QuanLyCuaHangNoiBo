@@ -10,7 +10,7 @@ namespace DataAccessLayer
 {
     public class InvoiceDAL
     {
-        DeliveryDAL deliveryDAL;
+        private readonly DeliveryDAL deliveryDAL;
         private readonly salesysdbEntities context;
         public InvoiceDAL(salesysdbEntities context)
         {
@@ -23,8 +23,43 @@ namespace DataAccessLayer
         }
         public void AddInvoice(Invoice invoice)
         {
-            context.Invoices.Add(invoice);
-            context.SaveChanges();
+            if (invoice == null)
+                throw new ArgumentNullException(nameof(invoice), "Hóa đơn không được null");
+
+            if (invoice.InvoiceDetails == null || !invoice.InvoiceDetails.Any())
+                throw new ArgumentException("Hóa đơn phải có ít nhất một chi tiết.", nameof(invoice));
+
+            using (var transaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    invoice.InvoiceDate = DateTime.Now;
+                    context.Invoices.Add(invoice);
+                    context.SaveChanges();
+                    // Cập nhật số lượng tồn kho cho từng chi tiết hóa đơn
+                    foreach (var detail in invoice.InvoiceDetails)
+                    {
+                        var product = context.Products.Find(detail.ProductID);
+                        if (product == null)
+                        {
+                            throw new ArgumentException($"Sản phẩm với ID {detail.ProductID} không tồn tại.");
+                        }
+                        if (product.StockQuantity < detail.Quantity)
+                        {
+                            throw new InvalidOperationException($"Số lượng tồn kho không đủ cho sản phẩm {product.ProductName}.");
+                        }
+                        product.StockQuantity -= detail.Quantity;
+                    }
+                    context.SaveChanges();
+                    transaction.Commit();
+
+                }
+                catch
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
         }
 
         public List<Invoice> GetInvoicesFiltered(string keyword, string employeeName, bool? deliveryRequired, DateTime? startDate, DateTime? endDate)
