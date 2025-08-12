@@ -69,9 +69,9 @@ namespace PresentationLayer
             else
             {
                 CustomerService.AddCustomer(customer);
+                Tag = customer;
                 MessageBox.Show("Thêm khách hàng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
             this.Close();
         }
 
