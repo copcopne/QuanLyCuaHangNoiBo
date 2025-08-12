@@ -63,5 +63,10 @@ namespace DataAccessLayer
                 throw new Exception("Customer not found");
             }
         }
+
+        public Customer GetCustomerByIdOrPhone(string identifier)
+        {
+            return context.Customers.FirstOrDefault(c => c.CustomerID.ToString() == identifier || c.PhoneNumber == identifier);
+        }
     }
 }

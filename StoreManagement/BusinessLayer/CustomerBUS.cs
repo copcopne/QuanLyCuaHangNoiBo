@@ -10,26 +10,30 @@ namespace BusinessLayer
 {
     public class CustomerBUS
     {
-        private readonly CustomerDAL customerRepository;
+        private readonly CustomerDAL customerDAL;
         public CustomerBUS(salesysdbEntities context)
         {
-            customerRepository = new CustomerDAL(context);
+            customerDAL = new CustomerDAL(context);
         }
         public List<Customer> GetCustomers(string searchTerm)
         {
-            return customerRepository.getCustomers(searchTerm);
+            return customerDAL.getCustomers(searchTerm);
         }
         public Customer AddCustomer(Customer customer)
         {
-            return customerRepository.createCustomer(customer);
+            return customerDAL.createCustomer(customer);
         }
         public Customer UpdateCustomer(Customer customer)
         {
-            return customerRepository.updateCustomer(customer);
+            return customerDAL.updateCustomer(customer);
         }
         public void DeleteCustomer(int customerId)
         {
-            customerRepository.deleteCustomer(customerId);
+            customerDAL.deleteCustomer(customerId);
+        }
+        public Customer GetCustomerByIdOrPhone(string searchTerm)
+        {
+            return customerDAL.GetCustomerByIdOrPhone(searchTerm);
         }
     }
 }
