@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Entity;
 
 namespace DataAccessLayer
 {
@@ -51,8 +50,33 @@ namespace DataAccessLayer
             {
                 query = query.Where(i => i.InvoiceDate <= endDate.Value);
             }
-            return query.ToList();
+            return query.AsNoTracking().ToList();
+        }
+        public void RecalculateTotalAmount(int invoiceId)
+        {
+            var invoice = context.Invoices.Include(i => i.InvoiceDetails).FirstOrDefault(i => i.InvoiceID == invoiceId);
+            if (invoice == null)
+            {
+                throw new ArgumentException("Hóa đơn không tồn tại", nameof(invoiceId));
+            }
+            long totalAmount = invoice.InvoiceDetails.Sum(id => id.Quantity * id.UnitPrice);
+            invoice.TotalAmount = totalAmount;
+            context.SaveChanges();
         }
 
+        public void UpdateStatus(Invoice invoice)
+        {
+            if (invoice == null)
+            {
+                throw new ArgumentNullException(nameof(invoice), "Hóa đơn không được null");
+            }
+            var existingInvoice = context.Invoices.Find(invoice.InvoiceID);
+            if (existingInvoice == null)
+            {
+                throw new ArgumentException("Hóa đơn không tồn tại", nameof(invoice.InvoiceID));
+            }
+            existingInvoice.DeliveryRequired = invoice.DeliveryRequired;
+            context.SaveChanges();
+        }
     }
 }

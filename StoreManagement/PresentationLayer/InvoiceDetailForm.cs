@@ -16,6 +16,7 @@ namespace PresentationLayer
     {
         private readonly salesysdbEntities context = new salesysdbEntities();
         private readonly InvoiceDetailBUS invoiceDetailBUS;
+        private readonly InvoiceBUS invoiceBUS;
         private readonly CategoryBUS categoryBUS;
         private readonly ProductBUS productBUS;
         private readonly Invoice invoice;
@@ -25,25 +26,27 @@ namespace PresentationLayer
         {
             InitializeComponent();
             this.invoice = invoice;
-            this.invoiceDetailBUS = new InvoiceDetailBUS(context);
-            this.categoryBUS = new CategoryBUS(context);
-            this.productBUS = new ProductBUS(context);
-            this.invoiceDetail = invoice.InvoiceDetails.FirstOrDefault(id => id.ProductID == productID);
+            invoiceDetailBUS = new InvoiceDetailBUS(context);
+            invoiceBUS = new InvoiceBUS(context);
+            categoryBUS = new CategoryBUS(context);
+            productBUS = new ProductBUS(context);
+            invoiceDetail = invoice.InvoiceDetails.FirstOrDefault(id => id.ProductID == productID);
         }
         public InvoiceDetailForm(Invoice invoice)
         {
             InitializeComponent();
             this.invoice = invoice;
-            this.invoiceDetailBUS = new InvoiceDetailBUS(context);
-            this.categoryBUS = new CategoryBUS(context);
-            this.productBUS = new ProductBUS(context);
+            invoiceDetailBUS = new InvoiceDetailBUS(context);
+            invoiceBUS = new InvoiceBUS(context);
+            categoryBUS = new CategoryBUS(context);
+            productBUS = new ProductBUS(context);
         }
 
         private void InvoiceDetailForm_Load(object sender, EventArgs e)
         {
             LoadComboBox();
             cbCategory.SelectedIndexChanged += cbCategory_SelectedIndexChanged;
-            if(this.invoiceDetail != null)
+            if(invoiceDetail != null)
             {
                 LoadInvoiceDetail(invoiceDetail);
                 cbCategory.Enabled = false;
@@ -95,11 +98,13 @@ namespace PresentationLayer
 
         private void btnReturn_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            Validate();
+            ActiveControl = null;
             if (cbProductName.SelectedItem == null)
             {
                 MessageBox.Show("Vui lòng chọn sản phẩm.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -157,10 +162,14 @@ namespace PresentationLayer
                 invoiceDetailBUS.UpdateInvoiceDetail(invoiceDetail);
                 if (difference != 0)
                     productBUS.UpdateProductQuantity(selectedProductId, -difference);
-
                 MessageBox.Show("Cập nhật chi tiết hóa đơn thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            this.Close();
+            Close();
+        }
+
+        private void InvoiceDetailForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            context.Dispose();
         }
     }
 }
