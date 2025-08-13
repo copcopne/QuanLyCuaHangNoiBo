@@ -244,6 +244,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="StockInForm.resx">
       <DependentUpon>StockInForm.cs</DependentUpon>
     </EmbeddedResource>

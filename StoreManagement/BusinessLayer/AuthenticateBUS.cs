@@ -15,6 +15,7 @@ namespace BusinessLayer
         public static Entity.UserAccount CurrentUser
         {
             get { return currentUser; }
+            set { currentUser = value; }
         }
 
         public static bool Authenticate(string username, string password)

@@ -28,7 +28,7 @@ namespace PresentationLayer
             gridViewDetails.CellContentClick += GridViewDetails_CellContentClick;
 
             stockRequest = new Entity.StockRequest();
-            stockRequest.RequestedBy = 1;
+            stockRequest.RequestedBy = AuthenticateBUS.CurrentUser.EmployeeID;
             stockRequestDetails = new List<Entity.StockRequestDetail>();
 
             load();

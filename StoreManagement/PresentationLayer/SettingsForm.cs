@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessLayer;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,18 @@ namespace PresentationLayer
         public SettingsForm()
         {
             InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e) // Cập nhật mật khẩu
+        {
+            UserForm userForm = new UserForm(AuthenticateBUS.CurrentUser.EmployeeID);
+            userForm.ShowDialog();
+
+        }
+
+        private void button2_Click(object sender, EventArgs e) // Đăng xuất
+        {
+            ((App)this.MdiParent)?.Logout();
         }
     }
 }

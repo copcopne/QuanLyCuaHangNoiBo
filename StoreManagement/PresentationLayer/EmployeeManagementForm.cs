@@ -20,6 +20,7 @@ namespace PresentationLayer
         private readonly EmployeeBUS employeeBUS;
         private readonly UserAccountBUS userAccountBUS;
         private Timer debounceTimer;
+        private Entity.UserAccount CurrentUser => AuthenticateBUS.CurrentUser;
         public EmployeeManagementForm()
         {
             employeeBUS = new EmployeeBUS();
@@ -52,15 +53,6 @@ namespace PresentationLayer
             this.gridViewEmployee.Columns["StockIns"].Visible = false;
             this.gridViewEmployee.Columns["StockRequests"].Visible = false;
 
-            var btnUserAcc = new DataGridViewButtonColumn
-            {
-                Name = "btnUserAcc",
-                HeaderText = "UserAccount",
-                Text = "Chỉnh sửa",
-                UseColumnTextForButtonValue = true,
-                Width = 80
-            };
-            gridViewEmployee.Columns.Add(btnUserAcc);
             var btnEdit = new DataGridViewButtonColumn
             {
                 Name = "btnEdit",
@@ -109,9 +101,21 @@ namespace PresentationLayer
             string columnName = gridViewEmployee.Columns[e.ColumnIndex].Name;
 
             var employeeId = gridViewEmployee.Rows[e.RowIndex].Cells["EmployeeID"].Value;
+            string currentUserRole = CurrentUser.Role.ToLower();
+            Entity.UserAccount userAccount = userAccountBUS.GetByEmployeeID((int)employeeId);
+            bool hasAccess = false;
+            if (userAccount == null)
+                hasAccess = true;
+            else 
+                hasAccess = currentUserRole == "admin" || (currentUserRole == "employee_manager" && userAccount.Role != "admin");
 
             if (columnName == "btnEdit")
             {
+                if (!hasAccess)
+                {
+                    MessageBox.Show("Bạn không có quyền chỉnh sửa nhân viên này!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
                 EmployeeForm eForm = new EmployeeForm((int)employeeId);
                 eForm.ShowDialog();
 
@@ -120,6 +124,11 @@ namespace PresentationLayer
             }
             else if (columnName == "btnDelete")
             {
+                if (!hasAccess)
+                {
+                    MessageBox.Show("Bạn không có quyền xóa nhân viên này!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
                 var confirm = MessageBox.Show($"Xác nhận xóa nhân viên với ID: {employeeId}?\nNếu có tài khoản cũng sẽ xóa luôn tài khoản.", "Xác nhận", MessageBoxButtons.YesNo);
                 if (confirm == DialogResult.Yes)
                 {
@@ -127,13 +136,6 @@ namespace PresentationLayer
                     MessageBox.Show("Xóa nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     loadData();
                 }
-            }
-            else if (columnName == "btnUserAcc")
-            {
-                UserForm uForm = new UserForm((int)employeeId);
-                uForm.ShowDialog();
-
-                loadData();
             }
         }
 

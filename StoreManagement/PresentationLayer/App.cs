@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessLayer;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -23,6 +24,7 @@ namespace PresentationLayer
         private readonly Color C_ACTIVE = Color.FromArgb(0, 110, 190);   // item active
         private readonly Color C_HOVER = Color.FromArgb(0, 160, 255);    // hover
         private readonly Color C_TEXT = Color.White;
+        private Entity.UserAccount CurrentUser => AuthenticateBUS.CurrentUser;
 
         public App()
         {
@@ -33,6 +35,17 @@ namespace PresentationLayer
 
         private void BuildSidebar()
         {
+            if (sidebar != null)
+            {
+                Controls.Remove(sidebar);
+                sidebar.Dispose();
+                sidebar = null;
+                navHost = null;
+                currentActive = null;
+            }
+
+            // Không có user -> không build (caller xử lý login)
+            if (CurrentUser == null) return;
             // panel trái
             sidebar = new Panel
             {
@@ -56,26 +69,42 @@ namespace PresentationLayer
             sidebar.Controls.Add(navHost);
 
 
-            // danh sách items
-            AddNavButton("Lập/xuất hóa đơn", () => OpenChild<InvoiceManagementForm>());
-            AddNavButton("Q.L khách hàng", () => OpenChild<CustomerManagementForm>());
-            AddNavButton("Q.L đơn nhập kho", () => OpenChild<StockInManagementForm>());
-            AddNavButton("Q.L nhân Viên", () => OpenChild<EmployeeManagementForm>());
-            AddNavButton("Q.L tài khoản", () => OpenChild<UserAccountManagementForm>());
+            if (CurrentUser == null)
+            {
+                Logout();
+            }
+            String role = CurrentUser.Role.ToLower();
+
+            if (role == "admin" || role == "stock_manager")
+            {
+                AddNavButton("Q.L đơn nhập kho", () => OpenChild<StockInManagementForm>());
+                AddNavButton("Q.L sản phẩm", () => OpenChild<ProductManagementForm>());
+            }
+
+            if (role == "admin" || role == "sales_manager")
+            {
+                AddNavButton("Lập/xuất hóa đơn", () => OpenChild<InvoiceManagementForm>());
+                AddNavButton("Q.L vận chuyển", () => OpenChild<DeliveryManagementForm>());
+            }
+
+            if (role == "admin" || role == "employee_manager")
+            {
+                AddNavButton("Q.L nhân Viên", () => OpenChild<EmployeeManagementForm>());
+                AddNavButton("Q.L tài khoản", () => OpenChild<UserAccountManagementForm>());
+            }
+            if (role == "admin")
+            {
+                AddNavButton("Q.L khách hàng", () => OpenChild<CustomerManagementForm>());
+            }
             AddNavButton("Thiết Lập", () => OpenChild<SettingsForm>());
-
-            // canh giữa lần đầu và khi resize
-            this.Shown += (_, __) => LayoutNav();
-            sidebar.SizeChanged += (_, __) => LayoutNav();
         }
-
 
         private void AddNavButton(string text, Action onClick)
         {
             var btn = new Button
             {
                 Height = 48,
-                Width = sidebar.Width - navHost.Padding.Left - navHost.Padding.Right, // set tạm, sẽ cập nhật lại ở LayoutNav()
+                Width = sidebar.Width - navHost.Padding.Left - navHost.Padding.Right,
                 Text = "   " + text,
                 TextAlign = ContentAlignment.MiddleLeft,
                 ImageAlign = ContentAlignment.MiddleLeft,
@@ -89,7 +118,6 @@ namespace PresentationLayer
                 Margin = new Padding(0, 6, 0, 6),
 
                 // khoảng trống TRONG tab (đẩy chữ/ảnh vào trong)
-                Padding = new Padding(14, 0, 10, 0)
             };
             btn.FlatAppearance.BorderSize = 0;
             btn.FlatAppearance.MouseOverBackColor = C_HOVER;
@@ -108,30 +136,6 @@ namespace PresentationLayer
 
             navHost.Controls.Add(btn); // THÊM VÀO navHost thay vì sidebar
         }
-
-        private void LayoutNav()
-        {
-            if (navHost == null || sidebar == null) return;
-
-            // set lại width cho tất cả nút theo độ rộng sidebar hiện tại
-            int maxWidth = sidebar.Width - navHost.Padding.Left - navHost.Padding.Right;
-            foreach (var b in navHost.Controls.OfType<Button>())
-                b.Width = maxWidth;
-
-            navHost.PerformLayout();
-            int contentH = navHost.PreferredSize.Height;
-
-            // tối thiểu đặt dưới logo, và canh giữa dọc phần còn lại
-            int minTop = 8;
-            int centerTop = (sidebar.ClientSize.Height - contentH) / 2;
-            navHost.Top = Math.Max(minTop, centerTop);
-
-            // canh trái
-            navHost.Left = 0; // đã có Padding.Left nên để 0 là ổn
-        }
-
-
-
         // Mở MDI child: nếu đã có thì kích hoạt, không mở trùng
         private void OpenChild<T>() where T : Form, new()
         {
@@ -153,6 +157,8 @@ namespace PresentationLayer
             { typeof(StockInManagementForm), "Q.L đơn nhập kho" },
             { typeof(EmployeeManagementForm), "Q.L nhân Viên" },
             { typeof(UserAccountManagementForm), "Q.L tài khoản" },
+            { typeof(ProductManagementForm), "Q.L sản phẩm" },
+            { typeof(DeliveryManagementForm), "Q.L vận chuyển" },
             { typeof(SettingsForm), "Thiết Lập" }
         };
 
@@ -168,6 +174,35 @@ namespace PresentationLayer
                 }
             }
         }
+
+        public void Logout()
+        {
+            // 1) clear session
+            AuthenticateBUS.Logout();
+
+            // 2) đóng tất cả form con
+            foreach (var f in this.MdiChildren) f.Close();
+
+            // 3) ẩn MDI, mở lại form đăng nhập dạng modal
+            this.Hide();
+            using (var login = new LoginForm())
+            {
+                login.StartPosition = FormStartPosition.CenterScreen;
+
+                // Nếu đăng nhập lại thành công -> hiện MDI và init lại state nếu cần
+                if (login.ShowDialog(this) == DialogResult.OK)
+                {
+                    BuildSidebar();
+                    this.Show();
+                }
+                else
+                {
+                    // Không đăng nhập -> thoát app
+                    this.Close();
+                }
+            }
+        }
+
 
         private void App_Load(object sender, EventArgs e)
         {

@@ -16,6 +16,7 @@ namespace PresentationLayer
         private const String DEFAULT_SEARCH_TEXT = "Tìm kiếm theo tên người dùng hoặc email nhân viên hoặc tên nhân viên...";
         private readonly UserAccountBUS userAccountBUS;
         private Timer debounceTimer;
+        private Entity.UserAccount CurrentUser => AuthenticateBUS.CurrentUser;
         public UserAccountManagementForm()
         {
             userAccountBUS = new UserAccountBUS();
@@ -85,8 +86,16 @@ namespace PresentationLayer
 
             var employeeId = gridViewUserAccount.Rows[e.RowIndex].Cells["EmployeeID"].Value;
 
+            string currentUserRole = CurrentUser.Role.ToLower();
+            Entity.UserAccount userAccount = userAccountBUS.GetByEmployeeID((int)employeeId);
+            bool hasAccess = currentUserRole == "admin" || (currentUserRole == "employee_manager" && userAccount.Role != "admin");
             if (columnName == "btnEdit")
             {
+                if (!hasAccess)
+                {
+                    MessageBox.Show("Bạn không có quyền chỉnh sửa tài khoản này!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
                 UserForm uForm = new UserForm((int)employeeId);
                 uForm.ShowDialog();
 
@@ -95,6 +104,11 @@ namespace PresentationLayer
             }
             else if (columnName == "btnDelete")
             {
+                if (!hasAccess)
+                {
+                    MessageBox.Show("Bạn không có quyền xóa tài khoản này!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
                 var confirm = MessageBox.Show($"Xác nhận xóa tài khoản với ID: {employeeId}?", "Xác nhận", MessageBoxButtons.YesNo);
                 if (confirm == DialogResult.Yes)
                 {
@@ -139,16 +153,6 @@ namespace PresentationLayer
                 this.txtSearch.ForeColor = Color.Gray;
                 this.txtSearch.Text = DEFAULT_SEARCH_TEXT;
             }
-        }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void gridViewUserAccount_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
-        {
-
         }
     }
 }

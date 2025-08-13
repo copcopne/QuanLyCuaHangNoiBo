@@ -43,7 +43,7 @@
             this.txtConfirm = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtPassword = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
+            this.labelOld = new System.Windows.Forms.Label();
             this.txtOldPassword = new System.Windows.Forms.TextBox();
             this.grpBoxAccount.SuspendLayout();
             this.groupPassword.SuspendLayout();
@@ -157,7 +157,7 @@
             this.groupPassword.Controls.Add(this.txtConfirm);
             this.groupPassword.Controls.Add(this.label2);
             this.groupPassword.Controls.Add(this.txtPassword);
-            this.groupPassword.Controls.Add(this.label3);
+            this.groupPassword.Controls.Add(this.labelOld);
             this.groupPassword.Controls.Add(this.txtOldPassword);
             this.groupPassword.Location = new System.Drawing.Point(35, 256);
             this.groupPassword.Name = "groupPassword";
@@ -199,14 +199,14 @@
             this.txtPassword.Size = new System.Drawing.Size(243, 30);
             this.txtPassword.TabIndex = 6;
             // 
-            // label3
+            // labelOld
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(26, 34);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(119, 25);
-            this.label3.TabIndex = 1;
-            this.label3.Text = "Mật khẩu cũ";
+            this.labelOld.AutoSize = true;
+            this.labelOld.Location = new System.Drawing.Point(26, 34);
+            this.labelOld.Name = "labelOld";
+            this.labelOld.Size = new System.Drawing.Size(119, 25);
+            this.labelOld.TabIndex = 1;
+            this.labelOld.Text = "Mật khẩu cũ";
             // 
             // txtOldPassword
             // 
@@ -257,7 +257,7 @@
         private System.Windows.Forms.TextBox txtConfirm;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtPassword;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label labelOld;
         private System.Windows.Forms.TextBox txtOldPassword;
         private System.Windows.Forms.CheckBox checkBoxIsActive;
     }
