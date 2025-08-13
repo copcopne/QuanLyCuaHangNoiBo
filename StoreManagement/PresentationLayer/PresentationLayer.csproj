@@ -74,6 +74,12 @@
     <Compile Include="CustomerManagementForm.Designer.cs">
       <DependentUpon>CustomerManagementForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="DeliveryManagement.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DeliveryManagement.Designer.cs">
+      <DependentUpon>DeliveryManagement.cs</DependentUpon>
+    </Compile>
     <Compile Include="FindCustomerForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -195,6 +201,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CustomerManagementForm.resx">
       <DependentUpon>CustomerManagementForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DeliveryManagement.resx">
+      <DependentUpon>DeliveryManagement.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FindCustomerForm.resx">
       <DependentUpon>FindCustomerForm.cs</DependentUpon>

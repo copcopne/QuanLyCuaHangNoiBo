@@ -1,24 +1,22 @@
 ﻿using Entity;
+using DataAccessLayer;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessLayer
 {
     public class DeliveryBUS
     {
-        private readonly DataAccessLayer.DeliveryDAL deliveryDAL;
+        private readonly DeliveryDAL deliveryDAL;
         public DeliveryBUS(salesysdbEntities context)
         {
             this.deliveryDAL = new DataAccessLayer.DeliveryDAL(context);
         }
-        public List<Entity.Delivery> GetDeliveries()
+        public List<Delivery> GetDeliveries(string keyword, DateTime? fromDate, DateTime? toDate, string status)
         {
-            return deliveryDAL.GetDeliveries();
+            return deliveryDAL.GetDeliveries(keyword, fromDate, toDate, status);
         }
-        public void AddDelivery(Entity.Delivery delivery)
+        public void AddDelivery(Delivery delivery)
         {
             if (delivery == null)
             {
