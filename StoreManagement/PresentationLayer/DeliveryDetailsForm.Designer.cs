@@ -52,6 +52,7 @@
             this.btnReturn.TabIndex = 16;
             this.btnReturn.Text = "Quay về";
             this.btnReturn.UseVisualStyleBackColor = false;
+            this.btnReturn.Click += new System.EventHandler(this.btnReturn_Click);
             // 
             // btnSave
             // 

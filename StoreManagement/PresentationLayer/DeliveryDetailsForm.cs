@@ -87,5 +87,10 @@ namespace PresentationLayer
             }
             Close();
         }
+
+        private void btnReturn_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 }
