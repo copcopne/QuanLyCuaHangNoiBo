@@ -41,7 +41,7 @@ namespace BusinessLayer
             }
             invoiceDAL.AddInvoice(invoice);
         }
-        public void recalculateTotalAmount(int invoiceId)
+        public void RecalculateTotalAmount(int invoiceId)
         {
             if (invoiceId <= 0)
             {
@@ -50,13 +50,13 @@ namespace BusinessLayer
             invoiceDAL.RecalculateTotalAmount(invoiceId);
         }
 
-        public void UpdateStatus(Invoice invoice)
+        public void UpdateInvoice(Invoice invoice)
         {
             if (invoice == null)
             {
                 throw new ArgumentNullException(nameof(invoice), "Hóa đơn không được null");
             }
-            invoiceDAL.UpdateStatus(invoice);
+            invoiceDAL.UpdateInvoice(invoice);
         }
 
     }

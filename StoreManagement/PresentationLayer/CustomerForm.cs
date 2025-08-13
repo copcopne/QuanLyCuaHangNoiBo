@@ -14,26 +14,23 @@ namespace PresentationLayer
 {
     public partial class CustomerForm : Form
     {
-        private CustomerBUS CustomerService;
+        private CustomerBUS CustomerBUS;
         private Customer customer = new Customer();
         private readonly salesysdbEntities context = new salesysdbEntities();
         public CustomerForm()
         {
             InitializeComponent();
-            this.CustomerService = new CustomerBUS(context);
+            CustomerBUS = new CustomerBUS(context);
         }
         public CustomerForm(Customer customer)
         {
             InitializeComponent();
-            this.CustomerService = new CustomerBUS(context);
-            this.txtFullName.Text = customer.FullName;
-            this.txtEmail.Text = customer.Email;
-            this.txtPhone.Text = customer.PhoneNumber;
+            CustomerBUS = new CustomerBUS(context);
+            txtFullName.Text = customer.FullName;
+            txtEmail.Text = customer.Email;
+            txtPhone.Text = customer.PhoneNumber;
             this.customer = customer;
-            this.label.Text = "Sửa thông tin khách hàng";
-            // Đặt tựa đề vào giữa màn hình
-
-
+            label.Text = "Sửa thông tin khách hàng";
         }
 
         private bool ValidateInput(TextBox txt, string message)
@@ -50,29 +47,28 @@ namespace PresentationLayer
         private void btnSave_Click(object sender, EventArgs e)
         {
             // Kiểm tra các trường nhập liệu
-            if (!ValidateInput(this.txtFullName, "Vui lòng nhập họ tên khách hàng.") ||
-                !ValidateInput(this.txtPhone, "Vui lòng nhập số điện thoại khách hàng.") ||
-                !ValidateInput(this.txtEmail, "Vui lòng nhập email khách hàng."))
+            if (!ValidateInput(txtFullName, "Vui lòng nhập họ tên khách hàng.") ||
+                !ValidateInput(txtPhone, "Vui lòng nhập số điện thoại khách hàng.") ||
+                !ValidateInput(txtEmail, "Vui lòng nhập email khách hàng."))
             {
                 return;
             }
-            customer.FullName = this.txtFullName.Text.Trim();
-            customer.Email = this.txtEmail.Text.Trim().ToLower();
-            customer.PhoneNumber = this.txtPhone.Text.Trim();
+            customer.FullName = txtFullName.Text.Trim();
+            customer.Email = txtEmail.Text.Trim().ToLower();
+            customer.PhoneNumber = txtPhone.Text.Trim();
 
 
-            if (this.btnSave.Text == "Cập nhật")
+            if (btnSave.Text == "Cập nhật")
             {
-                CustomerService.UpdateCustomer(customer);
+                CustomerBUS.UpdateCustomer(customer);
                 MessageBox.Show("Cập nhật thông tin khách hàng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
-                CustomerService.AddCustomer(customer);
-                Tag = customer;
+                Tag = CustomerBUS.AddCustomer(customer);
                 MessageBox.Show("Thêm khách hàng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            this.Close();
+            Close();
         }
 
         private void txtPhone_KeyPress(object sender, KeyPressEventArgs e)
@@ -85,7 +81,7 @@ namespace PresentationLayer
 
         private void btnReturn_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void CustomerForm_Load(object sender, EventArgs e)
@@ -93,13 +89,13 @@ namespace PresentationLayer
             // Nếu có dữ liệu được truyền vào, sửa tên tiêu đề của form
             if (!string.IsNullOrEmpty(txtFullName.Text) || !string.IsNullOrEmpty(txtEmail.Text) || !string.IsNullOrEmpty(txtPhone.Text))
             {
-                this.Text = "Sửa thông tin khách hàng";
-                this.btnSave.Text = "Cập nhật";
+                Text = "Sửa thông tin khách hàng";
+                btnSave.Text = "Cập nhật";
             }
             else
             {
-                this.Text = "Thêm khách hàng mới";
-                this.btnSave.Text = "Lưu";
+                Text = "Thêm khách hàng mới";
+                btnSave.Text = "Lưu";
             }
         }
     }

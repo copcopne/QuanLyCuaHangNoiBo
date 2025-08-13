@@ -11,15 +11,12 @@ namespace PresentationLayer
 {
     public partial class InvoiceManagementForm : Form
     {
-        private readonly salesysdbEntities context = new salesysdbEntities();
-        private readonly InvoiceBUS invoiceService;
         private Timer debounceTimer;
         private String defaultSearchText = "Tìm kiếm theo tên khách hàng, nhân viên hoặc mã hóa đơn...";
-
+        private InvoiceBUS invoiceBUS;
         public InvoiceManagementForm()
         {
             InitializeComponent();
-            this.invoiceService = new InvoiceBUS(context);
 
             debounceTimer = new Timer();
             debounceTimer.Interval = 300;
@@ -34,12 +31,11 @@ namespace PresentationLayer
 
         private void InvoiceManagement_Load(object sender, EventArgs e)
         {
-            LoadInvoices();
-            setHeader();
             LoadComboBox();
             LoadDateTimePicker();
+            LoadInvoices();
+            SetHeader();
             dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridView.CellFormatting += dataGridView_CellFormatting;
 
             txtKeyword.Text = defaultSearchText;
             txtKeyword.ForeColor = Color.Gray;
@@ -52,29 +48,32 @@ namespace PresentationLayer
             dataGridView.Columns.Add(new DataGridViewButtonColumn()
             {
                 Name = "btnDetails",
-                HeaderText = "Hành động",
+                HeaderText = "",
                 Text = "Xem chi tiết",
                 UseColumnTextForButtonValue = true,
                 Width = 100
             });
-            dataGridView.Columns.Add(new DataGridViewButtonColumn()
+            // Nút xóa
+            dataGridView.Columns.Add(new DataGridViewCheckBoxColumn()
             {
-                Name = "btnEdit",
-                HeaderText = "Hành động",
-                Text = "Sửa",
-                UseColumnTextForButtonValue = true,
-                Width = 100
+                Name = "btnDelete",
+                HeaderText = "",
+                Width = 120,
+                TrueValue = true,
+                FalseValue = false
             });
 
         }
-        private void setHeader()
+        private void SetHeader()
         {
             dataGridView.Columns["InvoiceID"].HeaderText = "Mã hóa đơn";
             dataGridView.Columns["CustomerName"].HeaderText = "Tên khách hàng";
             dataGridView.Columns["EmployeeName"].HeaderText = "Tên nhân viên";
             dataGridView.Columns["TotalAmount"].HeaderText = "Tổng tiền";
+            dataGridView.Columns["TotalAmount"].DefaultCellStyle.Format = "N0";
             dataGridView.Columns["DeliveryRequired"].HeaderText = "Cần giao hàng";
             dataGridView.Columns["InvoiceDate"].HeaderText = "Ngày lập hóa đơn";
+            dataGridView.Columns["InvoiceDate"].DefaultCellStyle.Format = "dd/MM/yyyy";
         }
         private void dataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -82,26 +81,133 @@ namespace PresentationLayer
             {
                 var selectedRow = dataGridView.Rows[e.RowIndex];
                 var invoiceId = (int)selectedRow.Cells["InvoiceID"].Value;
-                var invoice = invoiceService.GetInvoiceById(invoiceId);
-
-                var editForm = new InvoiceDetailManagementForm(invoice);
-                editForm.ShowDialog();
-
+                using(var context = new salesysdbEntities())
+                {
+                    invoiceBUS = new InvoiceBUS(context);
+                    Invoice invoice = invoiceBUS.GetInvoiceById(invoiceId);
+                    if (invoice == null)
+                    {
+                        MessageBox.Show("Không tìm thấy hóa đơn.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    var editForm = new InvoiceDetailManagementForm(invoice);
+                    editForm.ShowDialog();
+                }
                 LoadInvoices();
             }
+
             if (e.RowIndex >= 0 && e.ColumnIndex == dataGridView.Columns["DeliveryRequired"].Index)
             {
                 if (MessageBox.Show("Bạn có chắc chắn muốn thay đổi trạng thái giao hàng không?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                     return;
+
                 var selectedRow = dataGridView.Rows[e.RowIndex];
-                var invoiceId = (int)selectedRow.Cells["InvoiceID"].Value;
-                var invoice = invoiceService.GetInvoiceById(invoiceId);
-                if (invoice != null)
+                int invoiceId = (int)selectedRow.Cells["InvoiceID"].Value;
+
+                using (var context = new salesysdbEntities())
                 {
-                    invoice.DeliveryRequired = !invoice.DeliveryRequired;
-                    invoiceService.UpdateStatus(invoice);
-                    LoadInvoices();
+                    invoiceBUS = new InvoiceBUS(context);
+                    Invoice invoice = invoiceBUS.GetInvoiceById(invoiceId);
+
+                    if (invoice == null)
+                    {
+                        MessageBox.Show("Không tìm thấy hóa đơn.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    // BẬT hay TẮT yêu cầu giao
+                    bool willEnableDelivery = !invoice.DeliveryRequired;
+
+                    // Nếu user muốn TẮT yêu cầu giao (true -> false) thì kiểm tra xem đơn đã giao chưa
+                    if (!willEnableDelivery && invoice.DeliveryRequired)
+                    {
+                        bool alreadyDelivered = false;
+
+                        if (context.Deliveries.Any(d => d.InvoiceID == invoice.InvoiceID && d.Status == "Đã giao"))
+                            alreadyDelivered = true;
+
+                        if (alreadyDelivered)
+                        {
+                            MessageBox.Show("Không thể tắt yêu cầu giao: đơn này đã được giao.", "Không cho phép", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+                    }
+
+                    // Nếu người dùng định bật Delivery nhưng invoice chưa có customer thì yêu cầu chọn/tạo customer trước
+                    if (willEnableDelivery && invoice.Customer == null)
+                    {
+                        var action = MessageBox.Show(
+                            "Hóa đơn này chưa có thông tin khách hàng. Bạn muốn Chọn khách hàng có sẵn?\nChọn No để tạo khách hàng mới.",
+                            "Chọn hay tạo mới",
+                            MessageBoxButtons.YesNoCancel,
+                            MessageBoxIcon.Question
+                        );
+
+                        if (action == DialogResult.Yes)
+                        {
+                            using (var findCustomerForm = new FindCustomerForm())
+                            {
+                                if (findCustomerForm.ShowDialog() == DialogResult.OK)
+                                {
+                                    Customer selectedCustomer = findCustomerForm.Tag as Customer;
+                                    if (selectedCustomer != null)
+                                        invoice.CustomerID = selectedCustomer.CustomerID;
+                                    else
+                                    {
+                                        MessageBox.Show("Không tìm thấy khách hàng đã chọn.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                        return;
+                                    }
+                                }
+                                else
+                                    return; // user hủy tìm kiếm -> không thay đổi
+                            }
+                        }
+                        else if (action == DialogResult.No)
+                        {
+                            using (var createCustomerForm = new CustomerForm())
+                            {
+                                if (createCustomerForm.ShowDialog() == DialogResult.OK)
+                                {
+                                    if (createCustomerForm.Tag is Customer newCustomer)
+                                        invoice.CustomerID = newCustomer.CustomerID;
+                                    else
+                                    {
+                                        MessageBox.Show("Không thể tạo khách hàng mới.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                        return;
+                                    }
+                                }
+                                else
+                                {
+                                    return; // user hủy tạo -> không thay đổi
+                                }
+                            }
+                        }
+                        else // Cancel
+                        {
+                            MessageBox.Show("Vui lòng chọn hoặc tạo khách hàng trước khi bật giao hàng.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+                    }
+
+                    // Tại đây: hoặc invoice đã có customer, hoặc user vừa chọn/tạo customer, hoặc willEnableDelivery == false
+                    bool previousState = invoice.DeliveryRequired;
+                    invoice.DeliveryRequired = willEnableDelivery;
+
+                    invoiceBUS.UpdateInvoice(invoice);
+
+                    // Nếu vừa bật yêu cầu giao thì tạo Delivery; nếu tắt thì có thể huỷ delivery (tuỳ nghiệp vụ)
+                    if (willEnableDelivery && !previousState)
+                    {
+                        CreateDelivery(invoice.InvoiceID);
+                    }
+                    else if (!willEnableDelivery && previousState)
+                    {
+                        DeliveryBUS deliveryBUS = new DeliveryBUS(context);
+                        deliveryBUS.CancelDelivery(invoice);
+                    }
                 }
+
+                LoadInvoices(); // load lại sau khi xử lý
             }
         }
 
@@ -127,46 +233,42 @@ namespace PresentationLayer
             }
             DateTime? startDate = dtpFromDate.Value;
             DateTime? endDate = dtpToDay.Value;
-            var invoices = invoiceService.GetInvoicesFiltered(keyword, employeeName, deliveryRequired, startDate, endDate);
-            dataGridView.DataSource = invoices.Select(i => new
+            using(salesysdbEntities context = new salesysdbEntities())
             {
-                i.InvoiceID,
-                CustomerName =  i.Customer.FullName != null ? i.Customer.FullName : "Khách",
-                EmployeeName = i.Employee.FullName != null ? i.Employee.FullName : "Không rõ",
-                TotalAmount = i.TotalAmount,
-                i.DeliveryRequired,
-                InvoiceDate = i.InvoiceDate,
-            }).ToList();
-
-        }
-
-        private void dataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            if (dataGridView.Columns[e.ColumnIndex].Name == "InvoiceDate")
-            {
-                if (e.Value != null && e.Value is DateTime dateTime)
+                InvoiceBUS invoiceBUS = new InvoiceBUS(context);
+                var invoices = invoiceBUS.GetInvoicesFiltered(keyword, employeeName, deliveryRequired, startDate, endDate);
+                dataGridView.DataSource = invoices.Select(i => new
                 {
-                    e.Value = dateTime.ToString("dd/MM/yyyy");
-                    e.FormattingApplied = true;
-                }
+                    i.InvoiceID,
+                    CustomerName = i.Customer?.FullName ?? "Khách",
+                    EmployeeName = i.Employee?.FullName ?? "Không rõ",
+                    i.TotalAmount,
+                    i.DeliveryRequired,
+                    i.InvoiceDate,
+                }).ToList();
             }
+
         }
 
         private void LoadComboBox()
         {
-            var employees = context.Employees.AsNoTracking().Select(emp => emp.FullName).ToList();
-            employees.Insert(0, string.Empty);
-            cbEmployee.DataSource = employees;
+            using (salesysdbEntities context = new salesysdbEntities())
+            {
+                InvoiceBUS invoiceBUS = new InvoiceBUS(context);
+                var employees = context.Employees.AsNoTracking().Select(emp => emp.FullName).ToList();
+                employees.Insert(0, string.Empty);
+                cbEmployee.DataSource = employees;
 
-            var statuses = new List<string> { "Tất cả", "Cần giao hàng", "Không giao hàng" };
-            var selectedStatus = cbStatus.SelectedItem as string;
-            cbStatus.DataSource = statuses;
+                var statuses = new List<string> { "Tất cả", "Cần giao hàng", "Không giao hàng" };
+                var selectedStatus = cbStatus.SelectedItem as string;
+                cbStatus.DataSource = statuses;
 
-            if (selectedStatus != null)
-                cbStatus.SelectedItem = selectedStatus;
-            else
-                cbStatus.SelectedIndex = 0;
+                if (selectedStatus != null)
+                    cbStatus.SelectedItem = selectedStatus;
+                else
+                    cbStatus.SelectedIndex = 0;
 
+            }
         }
 
         private void DebounceTimer_Tick(object sender, EventArgs e)
@@ -208,6 +310,19 @@ namespace PresentationLayer
         private void FilterChanged(object sender, EventArgs e)
         {
             LoadInvoices();
+        }
+
+        private void CreateDelivery(int invoiceId)
+        {
+            // Mở form tạo giao hàng
+            using (salesysdbEntities context = new salesysdbEntities())
+            {
+                var deliveryForm = new DeliveryForm(invoiceId);
+                if (deliveryForm.ShowDialog() == DialogResult.OK)
+                {
+                    LoadInvoices();
+                }
+            }
         }
     }
 }

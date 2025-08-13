@@ -24,5 +24,25 @@ namespace BusinessLayer
             }
             deliveryDAL.AddDelivery(delivery);
         }
+        public void CancelDelivery(Invoice invoice)
+        {
+            if (invoice == null)
+            {
+                throw new ArgumentNullException(nameof(invoice), "Invoice cannot be null");
+            }
+            deliveryDAL.CancelDelivery(invoice);
+        }
+        public void UpdateDelivery(Delivery delivery)
+        {
+            if (delivery == null)
+            {
+                throw new ArgumentNullException(nameof(delivery), "Delivery cannot be null");
+            }
+            deliveryDAL.UpdateDelivery(delivery);
+        }
+        public void AutoAssignDelivery()
+        {
+            deliveryDAL.AutoAssignDelivery();
+        }
     }
 }

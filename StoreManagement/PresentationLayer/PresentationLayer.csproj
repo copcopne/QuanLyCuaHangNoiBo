@@ -74,11 +74,17 @@
     <Compile Include="CustomerManagementForm.Designer.cs">
       <DependentUpon>CustomerManagementForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="DeliveryManagement.cs">
+    <Compile Include="DeliveryForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DeliveryManagement.Designer.cs">
-      <DependentUpon>DeliveryManagement.cs</DependentUpon>
+    <Compile Include="DeliveryForm.Designer.cs">
+      <DependentUpon>DeliveryForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DeliveryManagementForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DeliveryManagementForm.Designer.cs">
+      <DependentUpon>DeliveryManagementForm.cs</DependentUpon>
     </Compile>
     <Compile Include="FindCustomerForm.cs">
       <SubType>Form</SubType>
@@ -193,8 +199,11 @@
     <EmbeddedResource Include="CustomerManagementForm.resx">
       <DependentUpon>CustomerManagementForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DeliveryManagement.resx">
-      <DependentUpon>DeliveryManagement.cs</DependentUpon>
+    <EmbeddedResource Include="DeliveryForm.resx">
+      <DependentUpon>DeliveryForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DeliveryManagementForm.resx">
+      <DependentUpon>DeliveryManagementForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FindCustomerForm.resx">
       <DependentUpon>FindCustomerForm.cs</DependentUpon>

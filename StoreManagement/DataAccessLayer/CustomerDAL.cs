@@ -29,7 +29,7 @@ namespace DataAccessLayer
             return query.Where(c => c.IsDeleted == 0).ToList();
         }
 
-        public Customer CreateCustomer(in Customer customer)
+        public Customer CreateCustomer(Customer customer)
         {
             context.Customers.Add(customer);
             context.SaveChanges();

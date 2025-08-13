@@ -98,7 +98,7 @@ namespace PresentationLayer
                 using (var context = new salesysdbEntities())
                 {
                     invoiceBUS = new InvoiceBUS(context);
-                    invoiceBUS.recalculateTotalAmount(invoice.InvoiceID);
+                    invoiceBUS.RecalculateTotalAmount(invoice.InvoiceID);
                 }
                 LoadInvoiceDetails(invoice.InvoiceID);
                 ReloadTotalPrice();
@@ -126,7 +126,7 @@ namespace PresentationLayer
                         if (product != null)
                             productBUS.UpdateProductQuantity(productID, quantity);
 
-                        invoiceBUS.recalculateTotalAmount(invoice.InvoiceID);
+                        invoiceBUS.RecalculateTotalAmount(invoice.InvoiceID);
                         context.SaveChanges();
                     }
                     ReloadTotalPrice();
@@ -144,7 +144,7 @@ namespace PresentationLayer
             using (var context = new salesysdbEntities())
             {
                 invoiceBUS = new InvoiceBUS(context);
-                invoiceBUS.recalculateTotalAmount(invoice.InvoiceID);
+                invoiceBUS.RecalculateTotalAmount(invoice.InvoiceID);
             }
             ReloadTotalPrice();
             LoadInvoiceDetails(invoice.InvoiceID);

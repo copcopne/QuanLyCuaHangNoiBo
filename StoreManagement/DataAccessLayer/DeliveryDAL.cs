@@ -23,12 +23,12 @@ namespace DataAccessLayer
         {
             var existingDelivery = context.Deliveries.FirstOrDefault(d => d.DeliveryID == delivery.DeliveryID);
         }
-
-        public void DeleteDelivery(Delivery delivery) {
-            var existingDelivery = context.Deliveries.FirstOrDefault(d => d.DeliveryID == delivery.DeliveryID);
-            if (existingDelivery != null)
+        public void CancelDelivery(Invoice invoice)
+        {
+            var delivery = context.Deliveries.FirstOrDefault(d => d.InvoiceID == invoice.InvoiceID);
+            if (delivery != null)
             {
-                context.Deliveries.Remove(existingDelivery);
+                delivery.Status = "Đã hủy";
                 context.SaveChanges();
             }
         }
@@ -54,6 +54,37 @@ namespace DataAccessLayer
                 query = query.Where(d => d.Status == status);
             }
             return query.ToList();
+        }
+        public void AutoAssignDelivery()
+        {
+            List<Employee> staffList = context.Employees.Where(e => e.Position == "delivery").ToList();
+            if (!staffList.Any())
+                return;
+
+            List<Delivery> pendingAssign = context.Deliveries
+                .Where(d => d.Status == "Chưa phân công" && d.Employee == null)
+                .ToList();
+            foreach (var delivery in pendingAssign)
+            {
+                var staffLoad = staffList
+                    .Select(s => new
+                    {
+                        Staff = s,
+                        ActiveDeliveries = context.Deliveries.Count(d =>
+                            d.AssignedStaffID == s.EmployeeID &&
+                            (d.Status == "Chưa giao" || d.Status == "Đang giao"))
+                    })
+                    .OrderBy(x => x.ActiveDeliveries) // nhân viên ít đơn nhất
+                    .ThenBy(x => x.Staff.EmployeeID)
+                    .FirstOrDefault();
+                if (staffLoad != null)
+                {
+                    delivery.AssignedStaffID = staffLoad.Staff.EmployeeID;
+                    delivery.Status = "Chưa giao";
+                }
+            }
+            
+            context.SaveChanges();
         }
     }
 }

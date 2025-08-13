@@ -1,6 +1,6 @@
 ﻿namespace PresentationLayer
 {
-    partial class DeliveryManagement
+    partial class DeliveryManagementForm
     {
         /// <summary>
         /// Required designer variable.
@@ -105,15 +105,12 @@
             // 
             // dataGridView
             // 
-            this.dataGridView.AllowUserToAddRows = false;
-            this.dataGridView.AllowUserToDeleteRows = false;
             this.dataGridView.BackgroundColor = System.Drawing.SystemColors.Window;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView.Location = new System.Drawing.Point(0, 0);
+            this.dataGridView.Location = new System.Drawing.Point(0, 118);
             this.dataGridView.Name = "dataGridView";
-            this.dataGridView.ReadOnly = true;
-            this.dataGridView.Size = new System.Drawing.Size(1200, 692);
+            this.dataGridView.Size = new System.Drawing.Size(1200, 574);
             this.dataGridView.TabIndex = 10;
             // 
             // DeliveryManagement
@@ -121,8 +118,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1200, 692);
-            this.Controls.Add(this.panel1);
             this.Controls.Add(this.dataGridView);
+            this.Controls.Add(this.panel1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "DeliveryManagement";
@@ -138,11 +135,11 @@
         #endregion
 
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.DataGridView dataGridView;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DateTimePicker dtpToDay;
         private System.Windows.Forms.ComboBox cbStatus;
         private System.Windows.Forms.TextBox txtKeyword;
         private System.Windows.Forms.DateTimePicker dtpFromDate;
+        private System.Windows.Forms.DataGridView dataGridView;
     }
 }

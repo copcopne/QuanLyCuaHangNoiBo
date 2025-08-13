@@ -1,20 +1,21 @@
-﻿using System;
-using BusinessLayer;
+﻿using BusinessLayer;
 using Entity;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace PresentationLayer
 {
-    public partial class DeliveryManagement : Form
+    public partial class DeliveryManagementForm : Form
     {
         private DeliveryBUS deliveryBUS;
         private Timer debounceTimer;
         private String defaultSearchText = "Tìm kiếm theo địa chỉ giao hàng, nhân viên hoặc mã hóa đơn...";
-        public DeliveryManagement()
+        public DeliveryManagementForm()
         {
             InitializeComponent();
             debounceTimer = new Timer();
@@ -23,7 +24,6 @@ namespace PresentationLayer
         }
         private void DeliveryManagement_Load(object sender, EventArgs e)
         {
-            LoadDeliveries();
             LoadDateTimePicker();
             LoadComboBox();
             cbStatus.SelectedIndexChanged += FilterChanged;
@@ -35,7 +35,9 @@ namespace PresentationLayer
             txtKeyword.Leave += txtKeyword_Leave;
             txtKeyword.TextChanged += txtKeyword_TextChanged;
             dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            LoadComboBox();
+            AutoAssignDelivery();
+            SetHeaderText();
+            
         }
         private void DebounceTimer_Tick(object sender, EventArgs e)
         {
@@ -52,6 +54,15 @@ namespace PresentationLayer
             dtpToDay.Value = DateTime.Today;
             dtpFromDate.Value = DateTime.Today.AddDays(-30);
         }
+        private void SetHeaderText()
+        {
+            dataGridView.Columns["DeliveryID"].HeaderText = "Mã giao hàng";
+            dataGridView.Columns["InvoiceID"].HeaderText = "Mã hóa đơn";
+            dataGridView.Columns["Staff"].HeaderText = "Nhân viên giao hàng";
+            dataGridView.Columns["DeliveryDate"].HeaderText = "Ngày giao hàng";
+            dataGridView.Columns["DeliveryAddress"].HeaderText = "Địa chỉ giao hàng";
+            dataGridView.Columns["Status"].HeaderText = "Trạng thái";
+        }
         private void LoadDeliveries()
         {
             var keyword = txtKeyword.Text.Trim();
@@ -60,7 +71,10 @@ namespace PresentationLayer
             DateTime? fromDate = dtpFromDate.Value.Date;
             DateTime? toDate = dtpToDay.Value.Date;
 
-            string status = cbStatus.SelectedItem?.ToString();
+            string selected = cbStatus.SelectedItem?.ToString();
+            string status = null;
+            if (!string.IsNullOrEmpty(selected) && selected != "Tất cả")
+                status = selected;
 
             using (salesysdbEntities context = new salesysdbEntities())
             {
@@ -113,6 +127,15 @@ namespace PresentationLayer
         private void FilterChanged(object sender, EventArgs e)
         {
             LoadDeliveries();
+        }
+        private void AutoAssignDelivery()
+        {
+            using (salesysdbEntities context = new salesysdbEntities())
+            {
+                deliveryBUS = new DeliveryBUS(context);
+                deliveryBUS.AutoAssignDelivery();
+                LoadDeliveries();
+            }
         }
     }
 }

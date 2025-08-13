@@ -99,17 +99,15 @@ namespace DataAccessLayer
             context.SaveChanges();
         }
 
-        public void UpdateStatus(Invoice invoice)
+        public void UpdateInvoice(Invoice invoice)
         {
-            if (invoice == null)
-            {
-                throw new ArgumentNullException(nameof(invoice), "Hóa đơn không được null");
-            }
-            var existingInvoice = context.Invoices.Find(invoice.InvoiceID);
+            // Chỉ cập nhật thông tin chung
+            var existingInvoice = context.Invoices.Include(i => i.InvoiceDetails).FirstOrDefault(i => i.InvoiceID == invoice.InvoiceID);
             if (existingInvoice == null)
             {
                 throw new ArgumentException("Hóa đơn không tồn tại", nameof(invoice.InvoiceID));
             }
+            existingInvoice.CustomerID = invoice.CustomerID;
             existingInvoice.DeliveryRequired = invoice.DeliveryRequired;
             context.SaveChanges();
         }
