@@ -21,7 +21,16 @@ namespace DataAccessLayer
         }
         public void UpdateDelivery(Delivery delivery)
         {
-            var existingDelivery = context.Deliveries.FirstOrDefault(d => d.DeliveryID == delivery.DeliveryID);
+            var existing = context.Deliveries.FirstOrDefault(d => d.DeliveryID == delivery.DeliveryID);
+            if (existing == null)
+                throw new ArgumentException("Delivery not found", nameof(delivery));
+
+            existing.DeliveryAddress = delivery.DeliveryAddress;
+            existing.Notes = delivery.Notes;
+            existing.AssignedStaffID = delivery.AssignedStaffID;
+            existing.Status = delivery.Status;
+
+            context.SaveChanges();
         }
         public void CancelDelivery(Invoice invoice)
         {
@@ -85,6 +94,10 @@ namespace DataAccessLayer
             }
             
             context.SaveChanges();
+        }
+        public Delivery GetDeliveryById(int deliveryID)
+        {
+            return context.Deliveries.FirstOrDefault(d => d.DeliveryID == deliveryID);
         }
     }
 }

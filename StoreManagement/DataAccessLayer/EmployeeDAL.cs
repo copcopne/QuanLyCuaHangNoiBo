@@ -92,6 +92,15 @@ namespace DataAccessLayer
                 }
             }
         }
+        public List<Employee> GetEmployeesByPosition(string position)
+        {
+            using (salesysdbEntities context = new salesysdbEntities())
+            {
+                return context.Employees
+                    .Where(e => e.Position.Equals(position, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+        }
 
     }
 }

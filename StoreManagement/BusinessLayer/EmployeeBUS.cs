@@ -68,5 +68,13 @@ namespace BusinessLayer
             }
             employeeDAL.Delete(employeeId);
         }
+        public List<Entity.Employee> GetEmployeesByPosition(string role)
+        {
+            if (string.IsNullOrWhiteSpace(role))
+            {
+                throw new Exception("Vai trò không được để trống.");
+            }
+            return employeeDAL.GetEmployeesByPosition(role);
+        }
     }
 }

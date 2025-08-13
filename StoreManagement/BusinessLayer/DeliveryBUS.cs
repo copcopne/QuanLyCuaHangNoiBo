@@ -44,5 +44,14 @@ namespace BusinessLayer
         {
             deliveryDAL.AutoAssignDelivery();
         }
-    }
+        public Delivery GetDeliveryById(int deliveryId)
+        {
+            if (deliveryId <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(deliveryId), "Delivery ID must be greater than zero");
+
+            }
+            return deliveryDAL.GetDeliveryById(deliveryId);
+        }
+    }   
 }

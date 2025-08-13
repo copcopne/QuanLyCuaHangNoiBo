@@ -53,15 +53,6 @@ namespace PresentationLayer
                 UseColumnTextForButtonValue = true,
                 Width = 100
             });
-            // Nút xóa
-            dataGridView.Columns.Add(new DataGridViewCheckBoxColumn()
-            {
-                Name = "btnDelete",
-                HeaderText = "",
-                Width = 120,
-                TrueValue = true,
-                FalseValue = false
-            });
 
         }
         private void SetHeader()
@@ -195,7 +186,6 @@ namespace PresentationLayer
 
                     invoiceBUS.UpdateInvoice(invoice);
 
-                    // Nếu vừa bật yêu cầu giao thì tạo Delivery; nếu tắt thì có thể huỷ delivery (tuỳ nghiệp vụ)
                     if (willEnableDelivery && !previousState)
                     {
                         CreateDelivery(invoice.InvoiceID);
@@ -254,8 +244,11 @@ namespace PresentationLayer
         {
             using (salesysdbEntities context = new salesysdbEntities())
             {
-                InvoiceBUS invoiceBUS = new InvoiceBUS(context);
-                var employees = context.Employees.AsNoTracking().Select(emp => emp.FullName).ToList();
+                EmployeeBUS employeeBUS = new EmployeeBUS();
+                // Lọc employee có role là cashier
+                var employees = employeeBUS.GetEmployeesByPosition("cashier")
+                                           .Select(e => e.FullName)
+                                           .ToList();
                 employees.Insert(0, string.Empty);
                 cbEmployee.DataSource = employees;
 

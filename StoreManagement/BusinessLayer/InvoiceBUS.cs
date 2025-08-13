@@ -29,7 +29,7 @@ namespace BusinessLayer
             }
             return invoiceDAL.GetInvoiceById(invoiceId);
         }
-        public void AddInvoice(Invoice invoice)
+        public Invoice AddInvoice(Invoice invoice)
         {
             if (invoice == null)
             {
@@ -39,7 +39,7 @@ namespace BusinessLayer
             {
                 throw new ArgumentException("Hóa đơn phải có ít nhất một chi tiết.", nameof(invoice));
             }
-            invoiceDAL.AddInvoice(invoice);
+            return invoiceDAL.AddInvoice(invoice);
         }
         public void RecalculateTotalAmount(int invoiceId)
         {

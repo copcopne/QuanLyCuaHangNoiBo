@@ -30,7 +30,6 @@
         {
             this.dataGridView = new System.Windows.Forms.DataGridView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnCreateDelivery = new System.Windows.Forms.Button();
             this.btnAddToInvoice = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.cbCategory = new System.Windows.Forms.ComboBox();
@@ -46,6 +45,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.checkBoxDeliveryRequired = new System.Windows.Forms.CheckBox();
             this.btnCreateInvoice = new System.Windows.Forms.Button();
             this.labelTotalCost = new System.Windows.Forms.Label();
             this.btnPrintInvoice = new System.Windows.Forms.Button();
@@ -69,7 +69,6 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.btnCreateDelivery);
             this.groupBox1.Controls.Add(this.btnAddToInvoice);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.cbCategory);
@@ -83,15 +82,6 @@
             this.groupBox1.TabIndex = 30;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Thông tin SP";
-            // 
-            // btnCreateDelivery
-            // 
-            this.btnCreateDelivery.Location = new System.Drawing.Point(393, 227);
-            this.btnCreateDelivery.Name = "btnCreateDelivery";
-            this.btnCreateDelivery.Size = new System.Drawing.Size(133, 44);
-            this.btnCreateDelivery.TabIndex = 41;
-            this.btnCreateDelivery.Text = "Có giao hàng";
-            this.btnCreateDelivery.UseVisualStyleBackColor = true;
             // 
             // btnAddToInvoice
             // 
@@ -172,7 +162,7 @@
             this.groupBox2.Controls.Add(this.txtCustomerName);
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.label7);
-            this.groupBox2.Location = new System.Drawing.Point(644, 0);
+            this.groupBox2.Location = new System.Drawing.Point(644, 3);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(544, 232);
             this.groupBox2.TabIndex = 31;
@@ -242,6 +232,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.ScrollBar;
+            this.panel1.Controls.Add(this.checkBoxDeliveryRequired);
             this.panel1.Controls.Add(this.btnCreateInvoice);
             this.panel1.Controls.Add(this.labelTotalCost);
             this.panel1.Controls.Add(this.btnPrintInvoice);
@@ -250,6 +241,17 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1200, 56);
             this.panel1.TabIndex = 32;
+            // 
+            // checkBoxDeliveryRequired
+            // 
+            this.checkBoxDeliveryRequired.AutoSize = true;
+            this.checkBoxDeliveryRequired.Location = new System.Drawing.Point(858, 18);
+            this.checkBoxDeliveryRequired.Name = "checkBoxDeliveryRequired";
+            this.checkBoxDeliveryRequired.Size = new System.Drawing.Size(122, 24);
+            this.checkBoxDeliveryRequired.TabIndex = 33;
+            this.checkBoxDeliveryRequired.Text = "Có giao hàng";
+            this.checkBoxDeliveryRequired.UseVisualStyleBackColor = true;
+            this.checkBoxDeliveryRequired.CheckedChanged += new System.EventHandler(this.checkBoxDeliveryRequired_CheckedChanged);
             // 
             // btnCreateInvoice
             // 
@@ -273,7 +275,7 @@
             // 
             // btnPrintInvoice
             // 
-            this.btnPrintInvoice.Location = new System.Drawing.Point(852, 6);
+            this.btnPrintInvoice.Location = new System.Drawing.Point(691, 6);
             this.btnPrintInvoice.Name = "btnPrintInvoice";
             this.btnPrintInvoice.Size = new System.Drawing.Size(128, 46);
             this.btnPrintInvoice.TabIndex = 30;
@@ -375,8 +377,8 @@
         private System.Windows.Forms.Button btnFindCustomer;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txtAmountPaid;
-        private System.Windows.Forms.Button btnCreateDelivery;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox txtCashChange;
+        private System.Windows.Forms.CheckBox checkBoxDeliveryRequired;
     }
 }

@@ -21,7 +21,7 @@ namespace DataAccessLayer
         {
             return context.Invoices.Include(i => i.Customer).Include(i => i.Employee).FirstOrDefault(i => i.InvoiceID == invoiceId);
         }
-        public void AddInvoice(Invoice invoice)
+        public Invoice AddInvoice(Invoice invoice)
         {
             if (invoice == null)
                 throw new ArgumentNullException(nameof(invoice), "Hóa đơn không được null");
@@ -52,7 +52,7 @@ namespace DataAccessLayer
                     }
                     context.SaveChanges();
                     transaction.Commit();
-
+                    return invoice;
                 }
                 catch
                 {

@@ -18,7 +18,7 @@ namespace PresentationLayer
         private Customer customer;
         private int printRowIndex = 0;
         private long totalAmount = 0;
-
+        private bool requiredDelivery = false;
         public InvoiceForm()
         {
             InitializeComponent();
@@ -165,7 +165,7 @@ namespace PresentationLayer
 
         private void btnAddToInvoice_Click(object sender, EventArgs e)
         {
-            if (cbProductName.SelectedItem is Product selectedProduct && 
+            if (cbProductName.SelectedItem is Product selectedProduct &&
                 int.TryParse(txtAmount.Text, out int quantity))
             {
                 if (quantity <= 0)
@@ -181,7 +181,7 @@ namespace PresentationLayer
                 // Nếu tồn tại sẵn trong DataGridView, cập nhật số lượng và giá + thông báo nếu số lượng vượt quá tồn kho
                 foreach (DataGridViewRow row in dataGridView.Rows)
                 {
-                    if (row.Cells["ProductID"].Value != null && 
+                    if (row.Cells["ProductID"].Value != null &&
                         Convert.ToInt32(row.Cells["ProductID"].Value) == selectedProduct.ProductID)
                     {
 
@@ -387,6 +387,7 @@ namespace PresentationLayer
 
         private void btnCreateInvoice_Click(object sender, EventArgs e)
         {
+
             if (dataGridView.Rows.Cast<DataGridViewRow>().All(r => r.IsNewRow))
             {
                 MessageBox.Show("Không có sản phẩm nào trong hóa đơn.");
@@ -404,7 +405,7 @@ namespace PresentationLayer
                 InvoiceDate = DateTime.Now,
                 CustomerID = this.customer?.CustomerID,
                 InvoiceDetails = new List<InvoiceDetail>(),
-                EmployeeID = AuthenticateBUS.CurrentUser.EmployeeID,
+                EmployeeID = AuthenticateBUS.CurrentUser.EmployeeID
             };
 
             // Tạo chi tiết hóa đơn từ DataGridView
@@ -426,11 +427,44 @@ namespace PresentationLayer
             }
             currentInvoice.TotalAmount = total;
 
-            // Lưu
             using (var context = new salesysdbEntities())
             {
                 invoiceBUS = new InvoiceBUS(context);
-                invoiceBUS.AddInvoice(currentInvoice);
+                if (requiredDelivery)
+                {
+                    if (currentInvoice.CustomerID == null)
+                    {
+                        MessageBox.Show("Cần có thông tin khách hàng để tạo yêu cầu giao hàng", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    var deliveryForm = new DeliveryForm();
+
+                    if (deliveryForm.ShowDialog() == DialogResult.OK)
+                    {
+                        // Lấy địa chỉ giao hàng và ghi chú từ DeliveryForm
+                        var delivery = new Delivery
+                        {
+                            InvoiceID = invoiceBUS.AddInvoice(currentInvoice).InvoiceID,
+                            DeliveryAddress = deliveryForm.Tag?.GetType().GetProperty("Address")?.GetValue(deliveryForm.Tag)?.ToString(),
+                            Notes = deliveryForm.Tag?.GetType().GetProperty("Notes")?.GetValue(deliveryForm.Tag)?.ToString(),
+                            Status = "Chưa phân công"
+                        };
+                        // Thêm yêu cầu giao hàng
+                        var deliveryBUS = new DeliveryBUS(context);
+                        deliveryBUS.AddDelivery(delivery);
+                        deliveryBUS.AutoAssignDelivery();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Yêu cầu giao hàng không được tạo. Hóa đơn đã bị xóa.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                }
+                else
+                {
+                    invoiceBUS.AddInvoice(currentInvoice);
+                }
             }
 
             MessageBox.Show("Hóa đơn đã được tạo thành công!");
@@ -465,6 +499,18 @@ namespace PresentationLayer
                     txtCustomer.Text = this.customer.CustomerID.ToString();
                     txtCustomerName.Text = this.customer.FullName;
                 }
+            }
+        }
+
+        private void checkBoxDeliveryRequired_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxDeliveryRequired.Checked)
+            {
+                this.requiredDelivery = true;
+            }
+            else
+            {
+                this.requiredDelivery = false;
             }
         }
     }

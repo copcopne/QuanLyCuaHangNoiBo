@@ -25,6 +25,18 @@ namespace PresentationLayer
             this.deliveryBUS = new DeliveryBUS(context);
             this.invoiceBUS = new InvoiceBUS(context);
             this.invoice = invoiceBUS.GetInvoiceById(invoiceId);
+            if (invoice == null)
+            {
+                MessageBox.Show("Hóa đơn không tồn tại.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Close();
+            }
+        }
+        public DeliveryForm()
+        {
+            InitializeComponent();
+            this.context = new salesysdbEntities();
+            this.deliveryBUS = new DeliveryBUS(context);
+            this.invoiceBUS = new InvoiceBUS(context);
         }
 
         private void DeliveryForm_Load(object sender, EventArgs e)
@@ -39,26 +51,35 @@ namespace PresentationLayer
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (invoice == null)
-            {
-                MessageBox.Show("Không tìm thấy hóa đơn để giao hàng.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
             if (string.IsNullOrWhiteSpace(txtAddress.Text))
             {
                 MessageBox.Show("Vui lòng nhập địa chỉ giao hàng.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            deliveryBUS.AddDelivery(new Delivery
+            if (invoice == null)
             {
-                InvoiceID = invoice.InvoiceID,
-                DeliveryAddress = txtAddress.Text.Trim(),
-                DeliveryDate = DateTime.Now,
-                Notes = txtNote.Text.Trim(),
-                Status = "Chưa phân công",
-            });
-            deliveryBUS.AutoAssignDelivery();
-            Close();
+                // Nếu không có hóa đơn, chỉ trả địa chỉ và ghi chú
+                Tag = new
+                {
+                    Address = txtAddress.Text.Trim(),
+                    Notes = txtNote.Text.Trim()
+                };
+                this.DialogResult = DialogResult.OK;
+                Close();
+            }
+            else
+            {
+                deliveryBUS.AddDelivery(new Delivery
+                {
+                    InvoiceID = invoice.InvoiceID,
+                    DeliveryAddress = txtAddress.Text.Trim(),
+                    Notes = txtNote.Text.Trim(),
+                    Status = "Chưa phân công",
+                });
+                deliveryBUS.AutoAssignDelivery();
+                this.DialogResult = DialogResult.OK;
+                Close();
+            }
         }
     }
 }

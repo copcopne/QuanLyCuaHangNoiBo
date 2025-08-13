@@ -37,7 +37,29 @@ namespace PresentationLayer
             dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             AutoAssignDelivery();
             SetHeaderText();
-            
+
+            dataGridView.Columns.Add(new DataGridViewButtonColumn()
+            {
+                Name = "btnDetails",
+                HeaderText = "",
+                Text = "Sửa",
+                UseColumnTextForButtonValue = true,
+                Width = 100
+            });
+            dataGridView.CellClick += DataGridView_CellClick;
+
+        }
+        private void DataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.ColumnIndex < 0)
+                return;
+            if (dataGridView.Columns[e.ColumnIndex].Name == "btnDetails")
+            {
+                int deliveryId = Convert.ToInt32(dataGridView.Rows[e.RowIndex].Cells["DeliveryID"].Value);
+                DeliveryDetailsForm detailsForm = new DeliveryDetailsForm(deliveryId);
+                detailsForm.ShowDialog();
+                LoadDeliveries();
+            }
         }
         private void DebounceTimer_Tick(object sender, EventArgs e)
         {
@@ -87,7 +109,8 @@ namespace PresentationLayer
                     Staff = d.Employee != null  ? d.Employee.FullName : "Chưa phân công",
                     DeliveryDate = d.DeliveryDate.HasValue ? d.DeliveryDate.Value.ToString("dd/MM/yyyy") : "Chưa giao",
                     d.DeliveryAddress,
-                    d.Status
+                    d.Status,
+                    d.Notes
                 }).ToList();
             }
         }
