@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessLayer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +17,12 @@ namespace PresentationLayer
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new InvoiceForm());
+
+            using (var login = new LoginForm())
+            {
+                if (login.ShowDialog() == DialogResult.OK)
+                    Application.Run(new App());
+            }
         }
     }
 }
