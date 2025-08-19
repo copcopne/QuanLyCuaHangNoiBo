@@ -23,33 +23,28 @@ namespace DataAccessLayer
         {
             if (string.IsNullOrEmpty(keyword))
             {
-                return context.Products.AsNoTracking().ToList();
+                return context.Products.AsNoTracking()
+                    .Where(p => p.isDeleted == 0)
+                    .ToList();
             }
             else
             {
                 return context.Products
                     .AsNoTracking()
-                    .Where(p => p.ProductName.Contains(keyword))
+                    .Where(p => p.ProductName.Contains(keyword) && p.isDeleted == 0)
                     .ToList();
             }
         }
 
-        public List<Product> GetActiveProduct()
-        {
-            return context.Products
-                .Where(p => p.isDeleted == 0)
-                .ToList();
-        }
-
         public Product GetProductById(int productId)
         {
-            return context.Products.FirstOrDefault(p => p.ProductID == productId);
+            return context.Products.FirstOrDefault(p => p.ProductID == productId && p.isDeleted == 0);
         }
 
         public List<Product> GetProductsByCategory(int categoryId)
         {
             return context.Products
-                .Where(p => p.CategoryID == categoryId)
+                .Where(p => p.CategoryID == categoryId && p.isDeleted == 0)
                 .ToList();
         }
 

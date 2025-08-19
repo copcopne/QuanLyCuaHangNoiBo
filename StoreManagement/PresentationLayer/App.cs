@@ -83,9 +83,16 @@ namespace PresentationLayer
 
             if (role == "admin" || role == "sales_manager")
             {
-                AddNavButton("Lập/xuất hóa đơn", () => OpenChild<InvoiceManagementForm>());
+                AddNavButton("Q.L hóa đơn", () => OpenChild<InvoiceManagementForm>());
                 AddNavButton("Q.L vận chuyển", () => OpenChild<DeliveryManagementForm>());
             }
+
+            if (role == "admin" || role == "cashier" || role == "sales_manager")
+            {
+                AddNavButton("Lập/xuất hóa đơn", () => OpenChild<InvoiceForm>());
+            }
+
+
 
             if (role == "admin" || role == "employee_manager")
             {
@@ -152,14 +159,15 @@ namespace PresentationLayer
             var child = this.ActiveMdiChild;
             if (child == null) return;
             var map = new Dictionary<Type, string> {
-            { typeof(InvoiceManagementForm), "Lập/xuất hóa đơn" },
+            { typeof(InvoiceManagementForm), "Q.L hóa đơn" },
             { typeof(CustomerManagementForm), "Q.L khách hàng" },
             { typeof(StockInManagementForm), "Q.L đơn nhập kho" },
             { typeof(EmployeeManagementForm), "Q.L nhân Viên" },
             { typeof(UserAccountManagementForm), "Q.L tài khoản" },
             { typeof(ProductManagementForm), "Q.L sản phẩm" },
             { typeof(DeliveryManagementForm), "Q.L vận chuyển" },
-            { typeof(SettingsForm), "Thiết Lập" }
+            { typeof(SettingsForm), "Thiết Lập" },
+            { typeof(InvoiceForm), "Lập/xuất hóa đơn" }
         };
 
             if (map.TryGetValue(child.GetType(), out var title))

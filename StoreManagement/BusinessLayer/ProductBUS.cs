@@ -23,7 +23,7 @@ namespace BusinessLayer
         }
         public List<Product> GetActiveProducts()
         {
-            return productDAL.GetActiveProduct();
+            return productDAL.GetProducts(null);
         }
         public Product GetProductById(int productId)
         {

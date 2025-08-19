@@ -4,19 +4,19 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="98de7dc38bf04d11a0122021b45052d8" Name="Diagram1">
-        <EntityTypeShape EntityType="salesysdbModel.Category" Width="1.5" PointX="3.75" PointY="2.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="salesysdbModel.Customer" Width="1.5" PointX="3.75" PointY="5.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="salesysdbModel.Delivery" Width="1.5" PointX="3" PointY="9" IsExpanded="true" />
-        <EntityTypeShape EntityType="salesysdbModel.Employee" Width="1.5" PointX="0.75" PointY="8.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="salesysdbModel.InvoiceDetail" Width="1.5" PointX="8.25" PointY="9.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="salesysdbModel.Invoice" Width="1.5" PointX="6" PointY="8.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="salesysdbModel.Product" Width="1.5" PointX="6" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="salesysdbModel.StockIn" Width="1.5" PointX="3" PointY="13.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="salesysdbModel.StockInDetail" Width="1.5" PointX="5.25" PointY="13.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="salesysdbModel.StockRequestDetail" Width="1.5" PointX="5.25" PointY="16.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="salesysdbModel.StockRequest" Width="1.5" PointX="3" PointY="16.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="salesysdbModel.UserAccount" Width="1.5" PointX="3" PointY="19.5" IsExpanded="true" />
+      <Diagram DiagramId="98de7dc38bf04d11a0122021b45052d8" Name="Diagram1" ZoomLevel="106">
+        <EntityTypeShape EntityType="salesysdbModel.Category" Width="1.5" PointX="8.875" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="salesysdbModel.Customer" Width="1.5" PointX="5.375" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="salesysdbModel.Delivery" Width="1.5" PointX="4.875" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="salesysdbModel.Employee" Width="1.5" PointX="1.25" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="salesysdbModel.InvoiceDetail" Width="1.5" PointX="10.625" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="salesysdbModel.Invoice" Width="1.5" PointX="7.875" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="salesysdbModel.Product" Width="1.5" PointX="12.125" PointY="9.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="salesysdbModel.StockIn" Width="1.5" PointX="5.625" PointY="11.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="salesysdbModel.StockInDetail" Width="1.5" PointX="8.875" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="salesysdbModel.StockRequestDetail" Width="1.75" PointX="10.125" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="salesysdbModel.StockRequest" Width="1.5" PointX="3.375" PointY="13.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="salesysdbModel.UserAccount" Width="1.5" PointX="2.625" PointY="4.375" IsExpanded="true" />
         <AssociationConnector Association="salesysdbModel.FK__Products__Catego__4CA06362" ManuallyRouted="false" />
         <AssociationConnector Association="salesysdbModel.FK__Invoices__Custom__44FF419A" ManuallyRouted="false" />
         <AssociationConnector Association="salesysdbModel.FK__Deliverie__Assig__571DF1D5" ManuallyRouted="false" />
